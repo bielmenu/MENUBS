@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "🔹Menu Mini City BIEL BS | Removed Lag + New Auto Revistar + Safe Arma🔸",
+	Name = "💥Menu Mini City BIEL BS | Removed Lag + Removed Dano De Queda💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -353,7 +353,7 @@ local function LoadAR()
 
 	getgenv().AutoRevistarLoad = true
 	while true do
-		task.wait(.05)
+		task.wait(1)
 		if not getgenv().AutoRevistar then return end
 		if not player:FindFirstChild("RevistaPlayer") or player:FindFirstChild("RevistaPlayer").Value == "" then
 
@@ -386,6 +386,35 @@ local ww = rev:CreateToggle({
 	Callback = function(Value)
 		getgenv().AutoRevistar = Value
 		LoadAR()
+	end,
+
+})
+
+getgenv().RemoveDanoLoad = false
+getgenv().RemoveDano = false
+
+local function LoadDano()
+	if getgenv().RemoveDanoLoad then return end
+	local player = game.Players.LocalPlayer
+
+	getgenv().RemoveDanoLoad = true
+	while true do
+		task.wait()
+		if player.Character:FindFirstChild("DanoDeQueda") and player.Character:FindFirstChild("DanoDeQueda"):IsA("LocalScript") then
+			player.Character:FindFirstChild("DanoDeQueda").Enabled = getgenv().RemoveDano
+		end
+		
+
+	end
+end
+
+local ww = rev:CreateToggle({
+	Name = "Dano De Queda",
+	CurrentValue = false,
+	Flag = "Danooooooo",
+	Callback = function(Value)
+		getgenv().RemoveDanoLoad = Value
+		LoadDano()
 	end,
 
 })
