@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Removed Lag + Dano De Queda Arrumado💥",
+	Name = "💥Menu Mini City BIEL BS | Removed Lag + Dano De Queda💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -390,38 +390,68 @@ local ww = rev:CreateToggle({
 
 })
 
-getgenv().RemoveDanoLoad = false
-getgenv().RemoveDano = false
 
-local function LoadDano()
-	if getgenv().RemoveDanoLoad then return end
+--[[getgenv().AntiStaffLoad = false
+getgenv().AntiStaff = false
+
+local function LoadAR()
+	if getgenv().AntiStaffLoad then return end
 	local player = game.Players.LocalPlayer
 
-	getgenv().RemoveDanoLoad = true
+	getgenv().AntiStaffLoad = true
 	while true do
-		task.wait()
-		if player.Character:FindFirstChild("DanoDeQueda") and player.Character:FindFirstChild("DanoDeQueda"):IsA("LocalScript") then
-			player.Character:FindFirstChild("DanoDeQueda").Enabled = getgenv().RemoveDano
-		end
+		task.wait(1)
+		if not getgenv().AntiStaff then return end
 		
-
+		
+		
 	end
 end
 
+local ww = rev:CreateToggle({
+	Name = "Auto Revistar",
+	CurrentValue = false,
+	Flag = "rvstAuto",
+	Callback = function(Value)
+		getgenv().AntiStaff = Value
+		LoadAR()
+	end,
+
+})]]
+-- Variáveis globais para controle
+getgenv().RemoveDanoLoad = false
+getgenv().RemoveDano = false
+
+-- Função que desativa ou ativa o script de dano de queda
+local function LoadDano()
+	if getgenv().RemoveDanoLoad then return end
+	getgenv().RemoveDanoLoad = true
+
+	local player = game.Players.LocalPlayer
+
+	while true do
+		task.wait(0.1) -- reduz o uso de CPU
+		local character = player.Character
+		if character then
+			local danoScript = character:FindFirstChild("DanoDeQueda")
+			if danoScript and danoScript:IsA("LocalScript") then
+				danoScript.Enabled = not getgenv().RemoveDano
+			end
+		end
+	end
+end
+
+-- Toggle UI usando RevLib (presumidamente)
 local ww = rev:CreateToggle({
 	Name = "Dano De Queda",
 	CurrentValue = false,
 	Flag = "Danooooooo",
 	Callback = function(Value)
-		if Value == true then
-			getgenv().RemoveDano = false
-		else
-			getgenv().RemoveDano = true
-		end
+		getgenv().RemoveDano = not Value
 		LoadDano()
 	end,
-
 })
+
 
 local Button = rev:CreateButton({
 	Name = "Anti-AFK (20 Minutos)",
