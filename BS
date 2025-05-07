@@ -173,7 +173,7 @@ local Button = rev:CreateButton({
 				local Tools = ToolsFolder:GetChildren()
 
 				for i, item in ipairs(Tools) do
-					if i <= 16 then
+					--if i <= 16 then
 						local args = {}
 						args[1] = "mudaInv"
 						args[2] = tostring(i)
@@ -185,12 +185,12 @@ local Button = rev:CreateButton({
 							invRequest:InvokeServer(unpack(args))
 						end)
 					end
-				end
+				--end
 			else
 				warn("Pasta 'Tools' não encontrada em ReplicatedStorage.")
 			end
 			
-			task.wait()
+			task.wait(.05)
 			
 		end
 
