@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Removed Lag + Removed Dano De Queda💥",
+	Name = "💥Menu Mini City BIEL BS | Removed Lag + Dano De Queda Arrumado💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -413,7 +413,11 @@ local ww = rev:CreateToggle({
 	CurrentValue = false,
 	Flag = "Danooooooo",
 	Callback = function(Value)
-		getgenv().RemoveDanoLoad = Value
+		if Value == true then
+			getgenv().RemoveDano = false
+		else
+			getgenv().RemoveDano = true
+		end
 		LoadDano()
 	end,
 
