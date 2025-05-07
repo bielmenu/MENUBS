@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Removed Lag + All Guns + Safe Arma💥",
+	Name = "🔹Menu Mini City BIEL BS | Removed Lag + Auto Revistar + Safe Arma🔸",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -162,7 +162,7 @@ local Button = rev:CreateButton({
 			end
 		end
 
-		--deletarNotifyGui()
+		deletarNotifyGui()
 
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 		local ToolsFolder = ReplicatedStorage:FindFirstChild("Tools")
@@ -242,7 +242,7 @@ local Button = rev:CreateButton({
 		-- Loop principal
 		while true do
 			-- Deletar todas as NotifyGui antes de pegar os itens
-			--deletarNotifyGui()
+			
 
 			-- Pegar itens
 			for i, item in ipairs(itens) do
@@ -343,51 +343,34 @@ local Button = rev:CreateButton({
 
 local Section = rev:CreateSection("RISCO DE BAN")
 
-local Button = rev:CreateButton({
-	Name = "Auto Revistar (Para Desativar Precisa Sair)",
-	Callback = function()
-		local Players = game:GetService("Players")
-		local LocalPlayer = Players.LocalPlayer
-		local TextChatService = game:GetService("TextChatService")
-		local RunService = game:GetService("RunService")
 
-		-- Função para deletar todas as NotifyGui
-		local function deletarNotifyGui()
-			local playerGui = LocalPlayer:WaitForChild("PlayerGui")
-			for _, gui in ipairs(playerGui:GetChildren()) do
-				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
-					gui:Destroy()
-				end
-			end
-		end
+getgenv().AutoRevistarLoad = false
+getgenv().AutoRevistar = false
 
-		local function sendRevistarMessage()
+local function LoadAR()
+	if getgenv().AutoRevistarLoad then return end
+	local player = game.Players.LocalPlayer
+
+	getgenv().AutoRevistarLoad = true
+	while true do
+		task.wait(.05)
+		if not getgenv().AutoRevistar then return end
+		if not player:FindFirstChild("RevistaPlayer") or player:FindFirstChild("RevistaPlayer").Value == "" then
 			game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+			
 		end
+	end
+end
 
-		-- Loop principal
-		while true do
-			wait(1) -- Espera 1 segundo entre verificações
-
-			local character = LocalPlayer.Character
-			if character and character:FindFirstChild("HumanoidRootPart") then
-				local myPosition = character.HumanoidRootPart.Position
-
-				for _, player in pairs(Players:GetPlayers()) do
-					if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("HumanoidRootPart") then
-						local humanoid = player.Character.Humanoid
-						local distance = (player.Character.HumanoidRootPart.Position - myPosition).Magnitude
-
-						if humanoid.Health <= 0 and distance <= 5 then
-							sendRevistarMessage()
-							--deletarNotifyGui()
-							break -- Evita múltiplos envios se mais de um morto estiver perto
-						end
-					end
-				end
-			end
-		end
+local ww = rev:CreateToggle({
+	Name = "Auto Revistar",
+	CurrentValue = false,
+	Flag = "rvstAuto",
+	Callback = function(Value)
+		getgenv().AutoRevistar = Value
+		LoadAR()
 	end,
+
 })
 
 local Button = rev:CreateButton({
