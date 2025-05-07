@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "🔹Menu Mini City BIEL BS | Removed Lag + All Guns + Safe Arma🔸",
+	Name = "💥Menu Mini City BIEL BS | Removed Lag + All Guns + Safe Arma💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -162,7 +162,7 @@ local Button = rev:CreateButton({
 			end
 		end
 
-		deletarNotifyGui()
+		--deletarNotifyGui()
 
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 		local ToolsFolder = ReplicatedStorage:FindFirstChild("Tools")
