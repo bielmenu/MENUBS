@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "🔹Menu Mini City BIEL BS | Fixed Furto Carro + All Guns + Safe Arma🔸",
+	Name = "🔹Menu Mini City BIEL BS | Removed Lag + All Guns + Safe Arma🔸",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -72,8 +72,7 @@ local Button = rev:CreateButton({
 
 		-- Loop principal
 		while true do
-			-- Deletar todas as NotifyGui antes de pegar os itens
-			--deletarNotifyGui()
+			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
 
 			-- Pegar itens
 			for i, item in ipairs(itens) do
@@ -87,6 +86,7 @@ local Button = rev:CreateButton({
 						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
 					end)
 				end
+			end
 			end
 
 			task.wait()  -- Espera um frame para evitar lag
@@ -128,7 +128,7 @@ local Button = rev:CreateButton({
 		local playerName = localPlayer and localPlayer.Name or "Desconhecido"
 
 		while true do
-
+			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
 			for i, item in ipairs(itens) do
 				if i <= 16 then  -- Só tenta alocar até 16 slots
 					args[3] = item  -- Atualiza o item para o valor da vez
@@ -142,7 +142,7 @@ local Button = rev:CreateButton({
 					end)
 				end
 			end
-
+end
 			task.wait(.05)  -- Espera um frame para evitar lag
 		end
 	end,
@@ -168,6 +168,8 @@ local Button = rev:CreateButton({
 		local ToolsFolder = ReplicatedStorage:FindFirstChild("Tools")
 
 		while true do
+			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
+				
 			
 			if ToolsFolder then
 				local Tools = ToolsFolder:GetChildren()
@@ -188,6 +190,7 @@ local Button = rev:CreateButton({
 				--end
 			else
 				warn("Pasta 'Tools' não encontrada em ReplicatedStorage.")
+			end
 			end
 			
 			task.wait(.05)
