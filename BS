@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Removed Lag + Dano De Queda💥",
+	Name = "💥Menu Mini City BIEL BS | Removed Lag + Fix Dano De Queda💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -433,7 +433,7 @@ local function LoadDano()
 		task.wait(0.1) -- reduz o uso de CPU
 		local character = player.Character
 		if character then
-			local danoScript = character:FindFirstChild("DanoDeQueda")
+			local danoScript = character:FindFirstChild("DanoQueda")
 			if danoScript and danoScript:IsA("LocalScript") then
 				danoScript.Enabled = not getgenv().RemoveDano
 			end
