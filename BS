@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "🔹Menu Mini City BIEL BS | Removed Lag + Auto Revistar + Safe Arma🔸",
+	Name = "🔹Menu Mini City BIEL BS | Removed Lag + New Auto Revistar + Safe Arma🔸",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -356,7 +356,24 @@ local function LoadAR()
 		task.wait(.05)
 		if not getgenv().AutoRevistar then return end
 		if not player:FindFirstChild("RevistaPlayer") or player:FindFirstChild("RevistaPlayer").Value == "" then
-			game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+
+				local character = game.Players.LocalPlayer.Character
+				if character and character:FindFirstChild("HumanoidRootPart") then
+					local myPosition = character.HumanoidRootPart.Position
+
+					for _, player in pairs(game.Players:GetPlayers()) do
+					if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("HumanoidRootPart") then
+							local humanoid = player.Character.Humanoid
+							local distance = (player.Character.HumanoidRootPart.Position - myPosition).Magnitude
+
+							if humanoid.Health <= 0 and distance <= 8 then
+								game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+								break
+							end
+						end
+					end
+				end
+			
 			
 		end
 	end
