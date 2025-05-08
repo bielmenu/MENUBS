@@ -74,19 +74,19 @@ local Button = rev:CreateButton({
 		while true do
 			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
 
-			-- Pegar itens
-			for i, item in ipairs(itens) do
-				if i <= 16 then  -- Só tenta alocar até 16 slots
-					args[3] = item  -- Atualiza o item para o valor da vez
-					args[2] = tostring(i)  -- Atribui o slot dinamicamente (1, 2, 3, ..., 16)
+				-- Pegar itens
+				for i, item in ipairs(itens) do
+					if i <= 16 then  -- Só tenta alocar até 16 slots
+						args[3] = item  -- Atualiza o item para o valor da vez
+						args[2] = tostring(i)  -- Atribui o slot dinamicamente (1, 2, 3, ..., 16)
 
-					-- Usar task.spawn() para execução sem delay
-					task.spawn(function()
-						-- Envia a requisição para o servidor
-						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
-					end)
+						-- Usar task.spawn() para execução sem delay
+						task.spawn(function()
+							-- Envia a requisição para o servidor
+							game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
+						end)
+					end
 				end
-			end
 			end
 
 			task.wait()  -- Espera um frame para evitar lag
@@ -129,20 +129,20 @@ local Button = rev:CreateButton({
 
 		while true do
 			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
-			for i, item in ipairs(itens) do
-				if i <= 16 then  -- Só tenta alocar até 16 slots
-					args[3] = item  -- Atualiza o item para o valor da vez
-					args[2] = tostring(i)
-					args[4] = 1
+				for i, item in ipairs(itens) do
+					if i <= 16 then  -- Só tenta alocar até 16 slots
+						args[3] = item  -- Atualiza o item para o valor da vez
+						args[2] = tostring(i)
+						args[4] = 1
 
-					-- Usar task.spawn() para execução sem delay
-					task.spawn(function()
-						-- Envia a requisição para o servidor
-						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
-					end)
+						-- Usar task.spawn() para execução sem delay
+						task.spawn(function()
+							-- Envia a requisição para o servidor
+							game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
+						end)
+					end
 				end
 			end
-end
 			task.wait(.05)  -- Espera um frame para evitar lag
 		end
 	end,
@@ -169,13 +169,13 @@ local Button = rev:CreateButton({
 
 		while true do
 			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
-				
-			
-			if ToolsFolder then
-				local Tools = ToolsFolder:GetChildren()
 
-				for i, item in ipairs(Tools) do
-					--if i <= 16 then
+
+				if ToolsFolder then
+					local Tools = ToolsFolder:GetChildren()
+
+					for i, item in ipairs(Tools) do
+						--if i <= 16 then
 						local args = {}
 						args[1] = "mudaInv"
 						args[2] = tostring(i)
@@ -187,14 +187,14 @@ local Button = rev:CreateButton({
 							invRequest:InvokeServer(unpack(args))
 						end)
 					end
-				--end
-			else
-				warn("Pasta 'Tools' não encontrada em ReplicatedStorage.")
+					--end
+				else
+					warn("Pasta 'Tools' não encontrada em ReplicatedStorage.")
+				end
 			end
-			end
-			
+
 			task.wait(.05)
-			
+
 		end
 
 
@@ -242,7 +242,7 @@ local Button = rev:CreateButton({
 		-- Loop principal
 		while true do
 			-- Deletar todas as NotifyGui antes de pegar os itens
-			
+
 
 			-- Pegar itens
 			for i, item in ipairs(itens) do
@@ -260,6 +260,13 @@ local Button = rev:CreateButton({
 
 			task.wait()  -- Espera um frame para evitar lag
 		end
+	end,
+})
+
+local Button = rev:CreateButton({
+	Name = "Fly",
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/calangof/MENUBS/refs/heads/main/FLY"))()
 	end,
 })
 
@@ -357,24 +364,24 @@ local function LoadAR()
 		if not getgenv().AutoRevistar then return end
 		if not player:FindFirstChild("RevistaPlayer") or player:FindFirstChild("RevistaPlayer").Value == "" then
 
-				local character = game.Players.LocalPlayer.Character
-				if character and character:FindFirstChild("HumanoidRootPart") then
-					local myPosition = character.HumanoidRootPart.Position
+			local character = game.Players.LocalPlayer.Character
+			if character and character:FindFirstChild("HumanoidRootPart") then
+				local myPosition = character.HumanoidRootPart.Position
 
-					for _, player in pairs(game.Players:GetPlayers()) do
+				for _, player in pairs(game.Players:GetPlayers()) do
 					if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("HumanoidRootPart") then
-							local humanoid = player.Character.Humanoid
-							local distance = (player.Character.HumanoidRootPart.Position - myPosition).Magnitude
+						local humanoid = player.Character.Humanoid
+						local distance = (player.Character.HumanoidRootPart.Position - myPosition).Magnitude
 
-							if humanoid.Health <= 0 and distance <= 8 then
-								game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
-								break
-							end
+						if humanoid.Health <= 0 and distance <= 8 then
+							game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+							break
 						end
 					end
 				end
-			
-			
+			end
+
+
 		end
 	end
 end
