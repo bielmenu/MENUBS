@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Removed Lag + Fix Dano De Queda💥",
+	Name = "💥Menu Mini City BIEL BS | Fly + Item + Esp💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -143,7 +143,7 @@ local Button = rev:CreateButton({
 					end
 				end
 			end
-			task.wait(.05)  -- Espera um frame para evitar lag
+			task.wait()  -- Espera um frame para evitar lag
 		end
 	end,
 })
@@ -193,7 +193,7 @@ local Button = rev:CreateButton({
 				end
 			end
 
-			task.wait(.05)
+			task.wait()
 
 		end
 
@@ -201,67 +201,6 @@ local Button = rev:CreateButton({
 	end,
 })
 
-
-
-local Button = rev:CreateButton({
-	Name = "Farm Trata",
-	Callback = function()
-
-		Rayfield:Notify({
-			Title = "Aviso",
-			Content = "Auto Puxar Itens Ativado, Não Pegara Comida!",
-			Duration = 6.5,
-			Image = 4483362458,
-		})
-		-- Função para deletar todas as NotifyGui
-		local function deletarNotifyGui()
-			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-			for _, gui in ipairs(playerGui:GetChildren()) do
-				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
-					gui:Destroy() -- Deleta a NotifyGui		
-				end
-			end
-		end
-
-		deletarNotifyGui()
-		-- Lista de itens para pegar
-
-
-		local itens = {"Tratamento", "Planta Suja"}
-
-		-- Argumentos para a requisição
-		local args = {
-			[1] = "mudaInv",
-			[2] = "2",
-			[4] = "1"
-		}
-
-		local localPlayer = game.Players.LocalPlayer
-		local playerName = localPlayer and localPlayer.Name or "Desconhecido"
-
-		-- Loop principal
-		while true do
-			-- Deletar todas as NotifyGui antes de pegar os itens
-
-
-			-- Pegar itens
-			for i, item in ipairs(itens) do
-				if i <= 16 then  -- Só tenta alocar até 16 slots
-					args[3] = item  -- Atualiza o item para o valor da vez
-					args[2] = tostring(i)  -- Atribui o slot dinamicamente (1, 2, 3, ..., 16)
-
-					-- Usar task.spawn() para execução sem delay
-					task.spawn(function()
-						-- Envia a requisição para o servidor
-						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
-					end)
-				end
-			end
-
-			task.wait()  -- Espera um frame para evitar lag
-		end
-	end,
-})
 
 local Button = rev:CreateButton({
 	Name = "Fly",
@@ -270,86 +209,10 @@ local Button = rev:CreateButton({
 	end,
 })
 
-
-
-					--[[local Button = rev:CreateButton({
-						Name = "ESP",
-						Callback = function()
-							local Players = game:GetService("Players")
-							local LocalPlayer = Players.LocalPlayer
-
-							-- Cria ou atualiza o Highlight e o nome acima da cabeça
-							local function updateESP(player)
-								if not player.Character then return end
-
-								-- Highlight
-								local oldHighlight = player.Character:FindFirstChild("ESP_Highlight")
-								if oldHighlight then oldHighlight:Destroy() end
-
-								local highlight = Instance.new("Highlight")
-								highlight.Name = "ESP_Highlight"
-								highlight.FillTransparency = 0.4
-								highlight.OutlineTransparency = .3
-								highlight.FillColor = player.Team and player.Team.TeamColor.Color or Color3.new(1, 1, 1)
-								highlight.OutlineColor = player.Team and player.Team.TeamColor.Color or Color3.new(1, 1, 1)
-								highlight.Adornee = player.Character
-								highlight.Parent = player.Character
-
-								-- Nome (BillboardGui)
-								local head = player.Character:FindFirstChild("Head")
-								if head and not head:FindFirstChild("ESP_NameGui") then
-									local billboard = Instance.new("BillboardGui")
-									billboard.Name = "ESP_NameGui"
-									billboard.Size = UDim2.new(0, 200, 0, 50)
-									billboard.StudsOffset = Vector3.new(0, 2.5, 0)
-									billboard.AlwaysOnTop = true
-									billboard.Adornee = head
-									billboard.Parent = head
-
-									local textLabel = Instance.new("TextLabel")
-									textLabel.Size = UDim2.new(1, 0, 1, 0)
-									textLabel.BackgroundTransparency = 1
-									textLabel.TextColor3 = Color3.new(1, 1, 1)
-									textLabel.TextStrokeTransparency = 0
-									textLabel.Text = player.Name
-									textLabel.Font = Enum.Font.FredokaOne
-									textLabel.TextScaled = true
-									textLabel.Parent = billboard
-								end
-							end
-
-							-- Conecta eventos para manter tudo atualizado
-							local function setupPlayer(player)
-								if player == LocalPlayer then return end
-
-								player.CharacterAdded:Connect(function()
-									task.wait(0.5) -- Espera o personagem carregar
-									updateESP(player)
-								end)
-
-								if player.Character then
-									updateESP(player)
-								end
-
-								player:GetPropertyChangedSignal("Team"):Connect(function()
-									updateESP(player)
-								end)
-							end
-
-							-- Configura todos os players atuais
-							for _, player in ipairs(Players:GetPlayers()) do
-								setupPlayer(player)
-							end
-
-							-- Quando um novo jogador entrar
-							Players.PlayerAdded:Connect(setupPlayer)
-						end,
-					})]]
-
-local Tps = Window:CreateTab("Teletransportes")
+local Tps = Window:CreateTab("TELETRANSPORTERS")
 local Section = Tps:CreateSection("Teletransporte")
 
-local Visuals = Window:CreateTab("Teletransportes")
+local Visuals = Window:CreateTab("VISUAL")
 local Section = Visuals:CreateSection("Visuals")
 
 local function loadScript()
@@ -511,6 +374,168 @@ local Veritem = Visuals:CreateButton({
 		else
 			warn("UI já foi criada.")
 		end
+	end
+})
+
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local runService = game:GetService("RunService")
+
+local ESPColor = Color3.new(1, 0, 0) -- Cor padrão
+local ESPEnabled = false
+local tracers = {}
+local espInstances = {}
+
+-- CRIA O ESP COMPLETO (NOME + TRACER + INFORMAÇÕES)
+local function createESP(player)
+	local function setup()
+		local character = player.Character or player.CharacterAdded:Wait()
+		local head = character:WaitForChild("Head", 5)
+		if not head or head:FindFirstChild("ESP") then return end
+
+		-- GUI com nome, HP e distância
+		local billboard = Instance.new("BillboardGui")
+		billboard.Name = "ESP"
+		billboard.Size = UDim2.new(0, 200, 0, 50)
+		billboard.StudsOffset = Vector3.new(0, 3, 0)
+		billboard.Adornee = head
+		billboard.AlwaysOnTop = true
+		billboard.Parent = head
+
+		local textLabel = Instance.new("TextLabel")
+		textLabel.Size = UDim2.new(1, 0, 1, 0)
+		textLabel.BackgroundTransparency = 1
+		textLabel.TextColor3 = ESPColor
+		textLabel.TextStrokeTransparency = 0.5
+		textLabel.Font = Enum.Font.SourceSansBold
+		textLabel.TextScaled = true
+		textLabel.Text = ""
+		textLabel.Parent = billboard
+
+		-- Nome flutuante separado
+		local nameBillboard = Instance.new("BillboardGui")
+		nameBillboard.Name = "ESPName"
+		nameBillboard.Adornee = head
+		nameBillboard.Size = UDim2.new(27, 0, 2, 0)
+		nameBillboard.StudsOffset = Vector3.new(0, 3, 0)
+		nameBillboard.AlwaysOnTop = true
+		nameBillboard.Parent = character
+
+		local nameLabel = Instance.new("TextLabel", nameBillboard)
+		nameLabel.Text = player.Name
+		nameLabel.Size = UDim2.new(1, 0, 1, 0)
+		nameLabel.BackgroundTransparency = 1
+		nameLabel.TextColor3 = Color3.new(1, 1, 1)
+		nameLabel.TextStrokeTransparency = 0.2
+		nameLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+		nameLabel.Font = Enum.Font.SourceSansBold
+		nameLabel.TextSize = 27
+		nameLabel.TextScaled = false
+
+		espInstances[player] = nameBillboard
+
+		-- Criação do tracer (linha)
+		local tracer = Drawing.new("Line")
+		tracer.Color = ESPColor
+		tracer.Thickness = 1
+		tracer.Transparency = 1
+		tracer.Visible = true
+		tracers[player] = tracer
+
+		-- Atualiza a cada frame
+		runService.RenderStepped:Connect(function()
+			if not ESPEnabled then return end
+			if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("Head") and localPlayer.Character and localPlayer.Character:FindFirstChild("Head") then
+				local hp = math.floor(character.Humanoid.Health)
+				local distance = math.floor((head.Position - localPlayer.Character.Head.Position).Magnitude)
+				textLabel.Text = player.Name .. "\nHP: " .. hp .. "\nDIST: " .. distance
+				textLabel.TextColor3 = ESPColor
+
+				local screenPos1, onScreen1 = workspace.CurrentCamera:WorldToViewportPoint(localPlayer.Character.Head.Position)
+				local screenPos2, onScreen2 = workspace.CurrentCamera:WorldToViewportPoint(head.Position)
+
+				if onScreen1 and onScreen2 then
+					tracer.From = Vector2.new(screenPos1.X, screenPos1.Y)
+					tracer.To = Vector2.new(screenPos2.X, screenPos2.Y)
+					tracer.Color = ESPColor
+					tracer.Visible = true
+				else
+					tracer.Visible = false
+				end
+			end
+		end)
+	end
+
+	task.spawn(setup)
+end
+
+-- REMOVE O ESP DE UM JOGADOR
+local function removeESP(player)
+	if player.Character then
+		local head = player.Character:FindFirstChild("Head")
+		if head then
+			local esp = head:FindFirstChild("ESP")
+			if esp then esp:Destroy() end
+		end
+		local nameESP = player.Character:FindFirstChild("ESPName")
+		if nameESP then nameESP:Destroy() end
+	end
+
+	if tracers[player] then
+		tracers[player]:Remove()
+		tracers[player] = nil
+	end
+
+	if espInstances[player] then
+		espInstances[player]:Destroy()
+		espInstances[player] = nil
+	end
+end
+
+-- ATIVA OU DESATIVA O ESP
+local function toggleESP(active)
+	ESPEnabled = active
+
+	for _, player in ipairs(players:GetPlayers()) do
+		if player ~= localPlayer then
+			if active then
+				createESP(player)
+			else
+				removeESP(player)
+			end
+		end
+	end
+end
+
+-- MONITORA ENTRADA E SAÍDA DE JOGADORES
+players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(function()
+		if ESPEnabled then
+			createESP(player)
+		end
+	end)
+end)
+
+players.PlayerRemoving:Connect(function(player)
+	removeESP(player)
+end)
+
+-- INTEGRAÇÃO COM UI DA HAWKLIB
+Visuals:CreateToggle({
+	Name = "Exibir ESP",
+	CurrentValue = false,
+	Flag = "ESPInfo",
+	Callback = function(Value)
+		toggleESP(Value)
+	end
+})
+
+Visuals:CreateColorPicker({
+	Name = "Cor do ESP",
+	Color = Color3.fromRGB(255, 0, 0),
+	Flag = "ESPColor",
+	Callback = function(color)
+		ESPColor = color
 	end
 })
 
