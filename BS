@@ -346,7 +346,36 @@ local Button = rev:CreateButton({
 						end,
 					})]]
 
-
+local Section = rev:CreateSection("Teletransporte")
+local function addTeleportButton(name, cframe)
+	rev:CreateButton({
+		Name = name,
+		Callback = function()
+			local player = game.Players.LocalPlayer
+			if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+				player.Character:MoveTo(cframe.Position + Vector3.new(0, 3, 0))
+			end
+		end,
+	})
+end
+addTeleportButton("Teleport Praça", CFrame.new(-291.579559, 3.26299787, 342.192535))
+addTeleportButton("Teleport Gás", CFrame.new(-469.959015, 3.25349784, -54.3936005))
+addTeleportButton("Teleport HP", CFrame.new(-543.439941, 3.26299858, 645.16864))
+addTeleportButton("Teleport Tabacaria", CFrame.new(-83.1141129, 13.1430578, 74.7073364))
+addTeleportButton("Teleport Garagem", CFrame.new(-466.870148, 7.64567232, 350.242737))
+addTeleportButton("Teleport Concessionaria", CFrame.new(-91.3902893, 8.07136822, 520.355347))
+addTeleportButton("Teleport Gari", CFrame.new(-518.672852, 3.16749811, -1.16962147, 0, 0, -1, 0, 1, 0, 1, 0, 0))
+addTeleportButton("Teleport Imobiliaria", CFrame.new(-284.904785, 8.26088619, -72.2896194, 0, 0, -1, 0, 1, 0, 1, 0, 0))
+addTeleportButton("Teleport PM", CFrame.new(-980.181458, 2.27553082, 467.080536, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+addTeleportButton("Teleport PRF", CFrame.new(6662.24512, 36.6637421, 5047.83838, 0.707134247, 0, 0.707079291, 0, 1, 0, -0.707079291, 0, 0.707134247))
+addTeleportButton("Teleport Mineração", CFrame.new(201.932144, 2.76136589, 145.50531, 0, 0, 1, 0, 1, -0, -1, 0, 0))
+addTeleportButton("Teleport Mecânica", CFrame.new(-180.608261, 3.29813337, -532.4151, 0.422592998, -0, -0.906319618, 0, 1, -0, 0.906319618, 0, 0.422592998))
+addTeleportButton("Teleport Fazenda", CFrame.new(817.243225, 3.26249814, -87.316864, 0, 0, 1, 0, 1, 0, -1, 0, 0))
+addTeleportButton("Teleport Prefeitura", CFrame.new(-289.5747375488281, 20.34406089782715, 117.11897277832031))
+addTeleportButton("Teleport Banco", CFrame.new(-27.2709007, 11.5685892, 418.200653, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+addTeleportButton("Teleport Ilegal", CFrame.new(11969.873046875, 38.66408157348633, 12782.341796875))
+addTeleportButton("Teleport predio 1", CFrame.new(-1618.034912109375, 4.741213321685791, 552.136962890625))
+addTeleportButton("Teleport Devs Mini City", CFrame.new(2555.44263, 303.167755, -1004.13763, -0.422592998, 0, 0.906319618, 0, 1, 0, -0.906319618, 0, -0.422592998))
 
 local Section = rev:CreateSection("RISCO DE BAN")
 
