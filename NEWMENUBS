@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp💥",
+	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp Arrumado💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -759,7 +759,7 @@ local function loadScript()
 	end
 
 	while true do
-		task.wait(5)
+		task.wait(1)
 		updateUI()
 	end
 end
@@ -781,83 +781,13 @@ local players = game:GetService("Players")
 local localPlayer = players.LocalPlayer
 local runService = game:GetService("RunService")
 
-local ESPColor = Color3.new(1, 0, 0) -- Cor padrão
+local ESPColor = Color3.new(1, 0, 0)
 local ESPEnabled = false
 local tracers = {}
 local espInstances = {}
+local connections = {}
 
--- CRIA O ESP COMPLETO (NOME + TRACER + INFORMAÇÕES)
-local function createESP(player)
-	local function setup()
-		local character = player.Character or player.CharacterAdded:Wait()
-		local head = character:WaitForChild("Head", 5)
-		if not head or head:FindFirstChild("ESP") then return end
-
-		-- GUI com nome, HP e distância
-		local billboard = Instance.new("BillboardGui")
-		billboard.Name = "ESP"
-		billboard.Size = UDim2.new(0, 200, 0, 50)
-		billboard.StudsOffset = Vector3.new(0, 3, 0)
-		billboard.Adornee = head
-		billboard.AlwaysOnTop = true
-		billboard.Parent = head
-
-		local textLabel = Instance.new("TextLabel")
-		textLabel.Size = UDim2.new(1, 0, 1, 0)
-		textLabel.BackgroundTransparency = 1
-		textLabel.TextColor3 = ESPColor
-		textLabel.TextStrokeTransparency = 0.5
-		textLabel.Font = Enum.Font.SourceSansBold
-		textLabel.TextScaled = true
-		textLabel.Text = ""
-		textLabel.Parent = billboard
-
-		-- Nome flutuante separado
-		local nameBillboard = Instance.new("BillboardGui")
-		nameBillboard.Name = "ESPName"
-		nameBillboard.Adornee = head
-		nameBillboard.Size = UDim2.new(27, 0, 2, 0)
-		nameBillboard.StudsOffset = Vector3.new(0, 3, 0)
-		nameBillboard.AlwaysOnTop = true
-		nameBillboard.Parent = character
-
-		espInstances[player] = nameBillboard
-
-		-- Criação do tracer (linha)
-		local tracer = Drawing.new("Line")
-		tracer.Color = ESPColor
-		tracer.Thickness = 1
-		tracer.Transparency = 1
-		tracer.Visible = true
-		tracers[player] = tracer
-
-		-- Atualiza a cada frame
-		runService.RenderStepped:Connect(function()
-			if not ESPEnabled then return end
-			if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("Head") and localPlayer.Character and localPlayer.Character:FindFirstChild("Head") then
-				local hp = math.floor(character.Humanoid.Health)
-				local distance = math.floor((head.Position - localPlayer.Character.Head.Position).Magnitude)
-				textLabel.Text = player.Name .. "\nHP: " .. hp .. "\nDIST: " .. distance
-				textLabel.TextColor3 = ESPColor
-
-				local screenPos1, onScreen1 = workspace.CurrentCamera:WorldToViewportPoint(localPlayer.Character.Head.Position)
-				local screenPos2, onScreen2 = workspace.CurrentCamera:WorldToViewportPoint(head.Position)
-
-				if onScreen1 and onScreen2 then
-					tracer.From = Vector2.new(screenPos1.X, screenPos1.Y)
-					tracer.To = Vector2.new(screenPos2.X, screenPos2.Y)
-					tracer.Color = ESPColor
-					tracer.Visible = true
-				else
-					tracer.Visible = false
-				end
-			end
-		end)
-	end
-
-	task.spawn(setup)
-end
-
+-- REMOVE O ESP DO PLAYER
 local function removeESP(player)
 	if player.Character then
 		local head = player.Character:FindFirstChild("Head")
@@ -878,6 +808,91 @@ local function removeESP(player)
 		espInstances[player]:Destroy()
 		espInstances[player] = nil
 	end
+
+	if connections[player] then
+		connections[player]:Disconnect()
+		connections[player] = nil
+	end
+end
+
+-- CRIA O ESP COMPLETO
+local function createESP(player)
+	task.spawn(function()
+		local character = player.Character or player.CharacterAdded:Wait()
+		local head = character:WaitForChild("Head", 5)
+		if not head or head:FindFirstChild("ESP") then return end
+
+		removeESP(player)
+
+		-- GUI com nome, HP e distância
+		local billboard = Instance.new("BillboardGui")
+		billboard.Name = "ESP"
+		billboard.Size = UDim2.new(0, 200, 0, 50)
+		billboard.StudsOffset = Vector3.new(0, 3, 0)
+		billboard.Adornee = head
+		billboard.AlwaysOnTop = true
+		billboard.Parent = head
+
+		local textLabel = Instance.new("TextLabel")
+		textLabel.Size = UDim2.new(1, 0, 1, 0)
+		textLabel.BackgroundTransparency = 1
+		textLabel.TextColor3 = ESPColor
+		textLabel.TextStrokeTransparency = 0.5
+		textLabel.Font = Enum.Font.SourceSansBold
+		textLabel.TextScaled = true
+		textLabel.Text = ""
+		textLabel.Parent = billboard
+
+		local nameBillboard = Instance.new("BillboardGui")
+		nameBillboard.Name = "ESPName"
+		nameBillboard.Adornee = head
+		nameBillboard.Size = UDim2.new(27, 0, 2, 0)
+		nameBillboard.StudsOffset = Vector3.new(0, 3, 0)
+		nameBillboard.AlwaysOnTop = true
+		nameBillboard.Parent = character
+
+		espInstances[player] = nameBillboard
+
+		local tracer = Drawing.new("Line")
+		tracer.Color = ESPColor
+		tracer.Thickness = 1
+		tracer.Transparency = 1
+		tracer.Visible = true
+		tracers[player] = tracer
+
+		-- Conexão do RenderStepped
+		local connection
+		connection = runService.RenderStepped:Connect(function()
+			if not ESPEnabled or not player.Character or not player.Character:FindFirstChild("Humanoid") or player.Character.Humanoid.Health <= 0 then
+				if tracer then tracer.Visible = false end
+				return
+			end
+
+			if localPlayer.Character and localPlayer.Character:FindFirstChild("Head") then
+				local hp = math.floor(player.Character.Humanoid.Health)
+				local distance = math.floor((head.Position - localPlayer.Character.Head.Position).Magnitude)
+				textLabel.Text = player.Name .. "\nHP: " .. hp .. "\nDIST: " .. distance
+				textLabel.TextColor3 = ESPColor
+
+				local screenPos1, onScreen1 = workspace.CurrentCamera:WorldToViewportPoint(localPlayer.Character.Head.Position)
+				local screenPos2, onScreen2 = workspace.CurrentCamera:WorldToViewportPoint(head.Position)
+
+				if onScreen1 and onScreen2 then
+					tracer.From = Vector2.new(screenPos1.X, screenPos1.Y)
+					tracer.To = Vector2.new(screenPos2.X, screenPos2.Y)
+					tracer.Visible = true
+				else
+					tracer.Visible = false
+				end
+			end
+		end)
+
+		connections[player] = connection
+
+		character:WaitForChild("Humanoid").Died:Connect(function()
+			removeESP(player)
+		end)
+	end)
 end
 
 -- ATIVA OU DESATIVA O ESP
@@ -895,7 +910,7 @@ local function toggleESP(active)
 	end
 end
 
--- MONITORA ENTRADA E SAÍDA DE JOGADORES
+-- MONITORA NOVOS JOGADORES
 players.PlayerAdded:Connect(function(player)
 	player.CharacterAdded:Connect(function()
 		if ESPEnabled then
@@ -904,11 +919,22 @@ players.PlayerAdded:Connect(function(player)
 	end)
 end)
 
+-- MONITORA JOGADORES EXISTENTES
+for _, player in ipairs(players:GetPlayers()) do
+	if player ~= localPlayer then
+		player.CharacterAdded:Connect(function()
+			if ESPEnabled then
+				createESP(player)
+			end
+		end)
+	end
+end
+
 players.PlayerRemoving:Connect(function(player)
 	removeESP(player)
 end)
 
--- INTEGRAÇÃO COM UI DA HAWKLIB
+-- BOTÃO DA HAWKLIB
 Visuals:CreateToggle({
 	Name = "Exibir ESP",
 	CurrentValue = false,
@@ -917,6 +943,7 @@ Visuals:CreateToggle({
 		toggleESP(Value)
 	end
 })
+
 
 Visuals:CreateToggle({
 	Name = "Noclip",
