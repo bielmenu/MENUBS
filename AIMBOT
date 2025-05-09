@@ -1,0 +1,74 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+
+local isMobile = true
+
+local AimbotSettings = {
+	TeamCheck = false,
+	AliveCheck = true,
+	LockPart = "Head",
+	FOV = 120,
+	FOVColor = Color3.fromRGB(255, 0, 0),
+	LockedColor = Color3.fromRGB(0, 255, 0),
+	Sensitivity = 0
+}
+
+local FOVCircle = Drawing.new("Circle")
+FOVCircle.Visible = true
+FOVCircle.Radius = AimbotSettings.FOV
+FOVCircle.Thickness = 2
+FOVCircle.Transparency = 1
+FOVCircle.Color = AimbotSettings.FOVColor
+FOVCircle.Filled = false
+
+local function GetClosestTarget()
+	local closestPlayer = nil
+	local shortestDistance = AimbotSettings.FOV
+
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
+			if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
+			if AimbotSettings.AliveCheck then
+				local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+				if humanoid and humanoid.Health <= 0 then continue end
+			end
+
+			local part = player.Character[AimbotSettings.LockPart]
+			local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
+			if onScreen then
+				local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+				local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
+				if distance < shortestDistance then
+					shortestDistance = distance
+					closestPlayer = player
+				end
+			end
+		end
+	end
+
+	return closestPlayer
+end
+
+RunService.RenderStepped:Connect(function()
+	FOVCircle.Position = isMobile
+		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+
+	local target = GetClosestTarget()
+
+	if target and target.Character and target.Character:FindFirstChild(AimbotSettings.LockPart) then
+		FOVCircle.Color = AimbotSettings.LockedColor
+		local part = target.Character[AimbotSettings.LockPart]
+		local direction = CFrame.new(Camera.CFrame.Position, part.Position)
+		local tween = TweenService:Create(Camera, TweenInfo.new(AimbotSettings.Sensitivity, Enum.EasingStyle.Sine), {
+			CFrame = direction
+		})
+		tween:Play()
+	else
+		FOVCircle.Color = AimbotSettings.FOVColor
+	end
+end)
