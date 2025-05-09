@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp💥",
+	Name = "💥Menu Mini City BIEL BS | Fly + AimBot-Novo + Esp💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -2132,14 +2132,14 @@ local AimbotSettings = {
 	TeamCheck = false,
 	AliveCheck = true,
 	LockPart = "Head",
-	FOV = 120,
+	FOV = 90,
 	FOVColor = Color3.fromRGB(255, 0, 0),
 	LockedColor = Color3.fromRGB(0, 255, 0),
 	Sensitivity = 0 
 }
 
 local FOVCircle = Drawing.new("Circle")
-FOVCircle.Visible = true
+FOVCircle.Visible = false
 FOVCircle.Radius = AimbotSettings.FOV
 FOVCircle.Thickness = 2
 FOVCircle.Transparency = 1
@@ -2224,7 +2224,7 @@ local SliderFOV = Misc:CreateSlider({
 	Range = {10, 200},
 	Increment = 10,
 	Suffix = "°",
-	CurrentValue = 90,
+	CurrentValue = AimbotSettings.FOV,
 	Flag = "FovBot",
 	Callback = function(Value)
 		FOVCircle.Radius = Value
