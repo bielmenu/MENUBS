@@ -24,9 +24,10 @@ local Window = Rayfield:CreateWindow({
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
+-- Lista de usuários autorizados com data de expiração (timestamp)
 local whitelist = {
 	[1870794034] = {
-		timestamp = 1746889199 -- 10/05/2025 12:00:00
+		timestamp = 1746889199
 	},
 	[8244173048] = {
 		timestamp = 1746889199
@@ -36,9 +37,26 @@ local whitelist = {
 -- Verifica se ainda está autorizado
 local function podeUsar(userId)
 	local dados = whitelist[userId]
-	if not dados or not dados.timestamp then return false, 0 end
+	if not dados or not dados.timestamp then
+		return false, 0
+	end
 
 	return os.time() <= dados.timestamp, dados.timestamp
+end
+
+-- Converte segundos restantes em dias, horas, minutos e segundos
+local function formatarTempoRestante(timestampFuturo)
+	local segundosRestantes = timestampFuturo - os.time()
+	if segundosRestantes <= 0 then
+		return "Expirado"
+	end
+
+	local dias = math.floor(segundosRestantes / 86400)
+	local horas = math.floor((segundosRestantes % 86400) / 3600)
+	local minutos = math.floor((segundosRestantes % 3600) / 60)
+	local segundos = segundosRestantes % 60
+
+	return string.format("Faltam %d dias, %02d:%02d:%02d", dias, horas, minutos, segundos)
 end
 
 -- Verifica acesso
@@ -49,20 +67,10 @@ if not permitido then
 	return
 end
 
--- Formata timestamp para string legível
-local function formatarTimestamp(timestamp)
-	local data = os.date("*t", timestamp)
-	local dia = string.format("%02d", data.day)
-	local mes = string.format("%02d", data.month)
-	local ano = tostring(data.year):sub(3)
-	local hora = string.format("%02d:%02d:%02d", data.hour, data.min, data.sec)
-	return string.format("Tempo Restante: %s/%s/%s, Horario: %s", dia, mes, ano, hora)
-end
-
--- Notificação
+-- Exibe notificação com tempo restante
 Rayfield:Notify({
 	Title = "MENU - MINI CITY",
-	Content = formatarTimestamp(expiraEm),
+	Content = formatarTempoRestante(expiraEm),
 	Duration = 6.5,
 	Image = 4483362458,
 })
