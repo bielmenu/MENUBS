@@ -21,13 +21,16 @@ local Window = Rayfield:CreateWindow({
 
 })
 
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
 local whitelist = {
 	[1870794034] = {
 		tempo = "24h",
 		autorizadoEm = os.time()
 	},
-	[1234567890] = {
-		tempo = "2d",
+	[8244173048] = {
+		tempo = "5m",
 		autorizadoEm = os.time()
 	}
 }
@@ -49,20 +52,39 @@ end
 
 local function podeUsar(userId)
 	local dados = whitelist[userId]
-	if not dados then return false end
+	if not dados then return false, 0 end
 
 	local tempoExpira = tempoParaSegundos(dados.tempo)
 	local expiraEm = dados.autorizadoEm + tempoExpira
 
-	return os.time() <= expiraEm
+	return os.time() <= expiraEm, expiraEm
 end
 
-if podeUsar(game.Players.LocalPlayer.UserId) then
-	print("Acesso autorizado")
-else
-	game.Players.LocalPlayer:Kick("Acesso expirado ou negado")
+-- Verifica acesso
+local permitido, expiraEm = podeUsar(player.UserId)
+
+if not permitido then
+	player:Kick("Acesso expirado ou negado")
+	return
 end
 
+-- Formata o tempo restante
+local function formatarTimestamp(timestamp)
+	local data = os.date("*t", timestamp)
+	local dia = string.format("%02d", data.day)
+	local mes = string.format("%02d", data.month)
+	local ano = tostring(data.year):sub(3)
+	local hora = string.format("%02d:%02d:%02d", data.hour, data.min, data.sec)
+	return string.format("Tempo Restante: %s/%s/%s, Horario: %s", dia, mes, ano, hora)
+end
+
+-- Notificação
+Rayfield:Notify({
+	Title = "MENU - MINI CITY",
+	Content = formatarTimestamp(expiraEm),
+	Duration = 6.5,
+	Image = 4483362458,
+})
 
 
 Rayfield:Notify({
