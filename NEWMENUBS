@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Fly + AimBot + Esp💥",
+	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -2221,12 +2221,12 @@ local ToggleTeamCheck = Misc:CreateToggle({
 
 local SliderFOV = Misc:CreateSlider({
 	Name = "Fov Aim",
-	Range = {90, 200},
+	Range = {10, 200},
 	Increment = 10,
 	Suffix = "°",
 	CurrentValue = 90,
 	Flag = "FovBot",
 	Callback = function(Value)
-		AimbotSettings.FOV = Value
+		FOVCircle.Radius = Value
 	end,
 })
