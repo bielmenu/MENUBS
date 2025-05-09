@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
 
 	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp Arrumado💥",
-	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
+	LoadingTitle = "MENU MINI CITY | V2 BETA | Time💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
 	ConfigurationSaving = {
