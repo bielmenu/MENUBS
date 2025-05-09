@@ -2117,9 +2117,7 @@ local mob = Misc:CreateButton({
 	end,
 })
 
--- AIMBOT
 
--- AIMBOT
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
@@ -2128,6 +2126,7 @@ local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
 local isMobile = true
+local Ativado = false
 
 local AimbotSettings = {
 	TeamCheck = false,
@@ -2136,7 +2135,7 @@ local AimbotSettings = {
 	FOV = 120,
 	FOVColor = Color3.fromRGB(255, 0, 0),
 	LockedColor = Color3.fromRGB(0, 255, 0),
-	Sensitivity = 0
+	Sensitivity = 0 
 }
 
 local FOVCircle = Drawing.new("Circle")
@@ -2163,6 +2162,8 @@ local function GetClosestTarget()
 			local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
 			if onScreen then
 				local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+
+
 				local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
 				if distance < shortestDistance then
 					shortestDistance = distance
@@ -2176,6 +2177,11 @@ local function GetClosestTarget()
 end
 
 RunService.RenderStepped:Connect(function()
+	if not Ativado then
+		FOVCircle.Visible = false
+		
+		return
+	end
 	FOVCircle.Position = isMobile
 		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
 		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
@@ -2186,6 +2192,7 @@ RunService.RenderStepped:Connect(function()
 		FOVCircle.Color = AimbotSettings.LockedColor
 		local part = target.Character[AimbotSettings.LockPart]
 		local direction = CFrame.new(Camera.CFrame.Position, part.Position)
+
 		local tween = TweenService:Create(Camera, TweenInfo.new(AimbotSettings.Sensitivity, Enum.EasingStyle.Sine), {
 			CFrame = direction
 		})
@@ -2195,40 +2202,21 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
-if not getgenv().Aimbot then
-	getgenv().Aimbot = {
-		Settings = {
-			Enabled = false,
-			AliveCheck = false,
-			TeamCheck = false,
-			Sensitivity = 0,
-			LockPart = "Head",
-			FOVColor = Color3.fromRGB(255, 0, 0),
-			LockedColor = Color3.fromRGB(0, 255, 0),
-		},
-		FOVSettings = {
-			Enabled = true,
-			Color = "255, 255, 255",
-			Amount = 100
-		}
-	}
-end
-
 local ToggleAimbot = Misc:CreateToggle({
 	Name = "AimBot",
-	CurrentValue = getgenv().Aimbot.Settings.Enabled,
+	CurrentValue = false,
 	Flag = "AtivarEDesativarAimbot", 
 	Callback = function(Value)
-		getgenv().Aimbot.Settings.Enabled = Value
+		Ativado = Value
 	end,
 })
 
 local ToggleTeamCheck = Misc:CreateToggle({
 	Name = "Team Check",
-	CurrentValue = getgenv().Aimbot.Settings.TeamCheck,
+	CurrentValue = false,
 	Flag = "CheckTeam", 
 	Callback = function(Value)
-		getgenv().Aimbot.Settings.TeamCheck = Value
+		AimbotSettings.TeamCheck = Value
 	end,
 })
 
@@ -2237,9 +2225,9 @@ local SliderFOV = Misc:CreateSlider({
 	Range = {90, 200},
 	Increment = 10,
 	Suffix = "°",
-	CurrentValue = getgenv().Aimbot.FOVSettings.Amount,
+	CurrentValue = 90,
 	Flag = "FovBot",
 	Callback = function(Value)
-		getgenv().Aimbot.FOVSettings.Amount = Value
+		AimbotSettings.FOV = Value
 	end,
 })
