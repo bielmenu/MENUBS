@@ -1,3 +1,7 @@
+-- Verifica se a config global existe
+if not getgenv().Aimbot then return end
+
+-- Serviços
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
@@ -5,42 +9,36 @@ local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
+-- Verificação de plataforma (mantenha true se for mobile)
 local isMobile = true
 
-local AimbotSettings = {
-	TeamCheck = false,
-	AliveCheck = true,
-	LockPart = "Head",
-	FOV = 120,
-	FOVColor = Color3.fromRGB(255, 0, 0),
-	LockedColor = Color3.fromRGB(0, 255, 0),
-	Sensitivity = 0
-}
-
+-- Círculo do FOV
 local FOVCircle = Drawing.new("Circle")
 FOVCircle.Visible = true
-FOVCircle.Radius = AimbotSettings.FOV
+FOVCircle.Radius = getgenv().Aimbot.FOVSettings.Amount
 FOVCircle.Thickness = 2
 FOVCircle.Transparency = 1
-FOVCircle.Color = AimbotSettings.FOVColor
+FOVCircle.Color = getgenv().Aimbot.Settings.FOVColor
 FOVCircle.Filled = false
 
+-- Função para encontrar o alvo mais próximo dentro do FOV
 local function GetClosestTarget()
 	local closestPlayer = nil
-	local shortestDistance = AimbotSettings.FOV
+	local shortestDistance = getgenv().Aimbot.FOVSettings.Amount
 
 	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
-			if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
-			if AimbotSettings.AliveCheck then
+		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(getgenv().Aimbot.Settings.LockPart) then
+			if getgenv().Aimbot.Settings.TeamCheck and player.Team == LocalPlayer.Team then continue end
+			if getgenv().Aimbot.Settings.AliveCheck then
 				local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
 				if humanoid and humanoid.Health <= 0 then continue end
 			end
 
-			local part = player.Character[AimbotSettings.LockPart]
+			local part = player.Character[getgenv().Aimbot.Settings.LockPart]
 			local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
 			if onScreen then
 				local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+					or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
 				local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
 				if distance < shortestDistance then
 					shortestDistance = distance
@@ -53,22 +51,28 @@ local function GetClosestTarget()
 	return closestPlayer
 end
 
+-- Loop principal
 RunService.RenderStepped:Connect(function()
+	-- Atualiza posição e raio do FOV
 	FOVCircle.Position = isMobile
 		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
 		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
 
+	FOVCircle.Radius = getgenv().Aimbot.FOVSettings.Amount
+
 	local target = GetClosestTarget()
 
-	if target and target.Character and target.Character:FindFirstChild(AimbotSettings.LockPart) then
-		FOVCircle.Color = AimbotSettings.LockedColor
-		local part = target.Character[AimbotSettings.LockPart]
+	if target and target.Character and target.Character:FindFirstChild(getgenv().Aimbot.Settings.LockPart) and getgenv().Aimbot.Settings.Enabled then
+		FOVCircle.Color = getgenv().Aimbot.Settings.LockedColor
+		local part = target.Character[getgenv().Aimbot.Settings.LockPart]
 		local direction = CFrame.new(Camera.CFrame.Position, part.Position)
-		local tween = TweenService:Create(Camera, TweenInfo.new(AimbotSettings.Sensitivity, Enum.EasingStyle.Sine), {
+
+		-- Suaviza a rotação da câmera em direção ao alvo
+		local tween = TweenService:Create(Camera, TweenInfo.new(getgenv().Aimbot.Settings.Sensitivity, Enum.EasingStyle.Sine), {
 			CFrame = direction
 		})
 		tween:Play()
 	else
-		FOVCircle.Color = AimbotSettings.FOVColor
+		FOVCircle.Color = getgenv().Aimbot.Settings.FOVColor
 	end
 end)
