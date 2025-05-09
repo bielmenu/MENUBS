@@ -21,6 +21,50 @@ local Window = Rayfield:CreateWindow({
 
 })
 
+local whitelist = {
+	[1870794034] = {
+		tempo = "24h",
+		autorizadoEm = os.time()
+	},
+	[1234567890] = {
+		tempo = "2d",
+		autorizadoEm = os.time()
+	}
+}
+
+local function tempoParaSegundos(str)
+	local valor, unidade = str:match("(%d+)([hdm])")
+	valor = tonumber(valor)
+	if not valor or not unidade then return 0 end
+
+	if unidade == "h" then
+		return valor * 3600
+	elseif unidade == "d" then
+		return valor * 86400
+	elseif unidade == "m" then
+		return valor * 60
+	end
+	return 0
+end
+
+local function podeUsar(userId)
+	local dados = whitelist[userId]
+	if not dados then return false end
+
+	local tempoExpira = tempoParaSegundos(dados.tempo)
+	local expiraEm = dados.autorizadoEm + tempoExpira
+
+	return os.time() <= expiraEm
+end
+
+if podeUsar(game.Players.LocalPlayer.UserId) then
+	print("Acesso autorizado")
+else
+	game.Players.LocalPlayer:Kick("Acesso expirado ou negado")
+end
+
+
+
 Rayfield:Notify({
 	Title = "MENU - MINI CITY LOADED",
 	Content = "Owner: @bielbs09_22\nProgrammer: ???\nLast Update: 25/04/2025",
