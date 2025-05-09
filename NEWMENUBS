@@ -2178,8 +2178,6 @@ end
 
 RunService.RenderStepped:Connect(function()
 	if not Ativado then
-		FOVCircle.Visible = false
-		
 		return
 	end
 	FOVCircle.Position = isMobile
@@ -2208,6 +2206,7 @@ local ToggleAimbot = Misc:CreateToggle({
 	Flag = "AtivarEDesativarAimbot", 
 	Callback = function(Value)
 		Ativado = Value
+		FOVCircle.Visible = Value
 	end,
 })
 
