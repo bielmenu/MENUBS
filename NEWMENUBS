@@ -820,7 +820,7 @@ local function createESP(player)
 		nameBillboard.StudsOffset = Vector3.new(0, 3, 0)
 		nameBillboard.AlwaysOnTop = true
 		nameBillboard.Parent = character
-		
+
 		espInstances[player] = nameBillboard
 
 		-- Criação do tracer (linha)
@@ -2114,5 +2114,59 @@ local mob = Misc:CreateButton({
 	Name = "Atualizar Menu",
 	Callback = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/calangof/biel-ne-vida2/refs/heads/main/BielV2"))()
+	end,
+})
+
+-- AIMBOT
+
+-- AIMBOT
+loadstring(game:HttpGet('https://raw.githubusercontent.com/calangof/MENUBS/refs/heads/main/AIMBOT'))()
+
+if not getgenv().Aimbot then
+	getgenv().Aimbot = {
+		Settings = {
+			Enabled = false,
+			AliveCheck = false,
+			TeamCheck = false,
+			Sensitivity = 0,
+			LockPart = "Head",
+			FOVColor = Color3.fromRGB(255, 0, 0),
+			LockedColor = Color3.fromRGB(0, 255, 0),
+		},
+		FOVSettings = {
+			Enabled = true,
+			Color = "255, 255, 255",
+			Amount = 100
+		}
+	}
+end
+
+local ToggleAimbot = Misc:CreateToggle({
+	Name = "AimBot",
+	CurrentValue = getgenv().Aimbot.Settings.Enabled,
+	Flag = "AtivarEDesativarAimbot", 
+	Callback = function(Value)
+		getgenv().Aimbot.Settings.Enabled = Value
+	end,
+})
+
+local ToggleTeamCheck = Misc:CreateToggle({
+	Name = "Team Check",
+	CurrentValue = getgenv().Aimbot.Settings.TeamCheck,
+	Flag = "CheckTeam", 
+	Callback = function(Value)
+		getgenv().Aimbot.Settings.TeamCheck = Value
+	end,
+})
+
+local SliderFOV = Misc:CreateSlider({
+	Name = "Fov Aim",
+	Range = {90, 200},
+	Increment = 10,
+	Suffix = "°",
+	CurrentValue = getgenv().Aimbot.FOVSettings.Amount,
+	Flag = "FovBot",
+	Callback = function(Value)
+		getgenv().Aimbot.FOVSettings.Amount = Value
 	end,
 })
