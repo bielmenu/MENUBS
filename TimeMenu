@@ -26,17 +26,21 @@ local player = Players.LocalPlayer
 
 local whitelist = {
 	[1870794034] = {
-		tempo = "10/05/25, 12:00:00"
+		Dia = "10/05/25",
+		Hora = "12:00:00"
 	},
 	[8244173048] = {
-		tempo = "09/05/25, 05:50:00"
+		Dia = "09/05/25",
+		Hora = "05:50:00"
 	}
 }
 
--- Converte "dd/mm/yy, HH:MM:SS" para timestamp
-local function stringParaTimestamp(str)
-	local dia, mes, ano, hora, min, seg = str:match("(%d+)/(%d+)/(%d+),%s*(%d+):(%d+):(%d+)")
-	if not dia then return 0 end
+-- Converte "dd/mm/yy" e "HH:MM:SS" para timestamp
+local function stringParaTimestamp(diaStr, horaStr)
+	local dia, mes, ano = diaStr:match("(%d+)/(%d+)/(%d+)")
+	local hora, min, seg = horaStr:match("(%d+):(%d+):(%d+)")
+	if not dia or not hora then return 0 end
+
 	local data = {
 		day = tonumber(dia),
 		month = tonumber(mes),
@@ -51,9 +55,9 @@ end
 -- Verifica se ainda está autorizado
 local function podeUsar(userId)
 	local dados = whitelist[userId]
-	if not dados or not dados.tempo then return false, 0 end
+	if not dados or not dados.Dia or not dados.Hora then return false, 0 end
 
-	local expiraEm = stringParaTimestamp(dados.tempo)
+	local expiraEm = stringParaTimestamp(dados.Dia, dados.Hora)
 	return os.time() <= expiraEm, expiraEm
 end
 
@@ -82,6 +86,7 @@ Rayfield:Notify({
 	Duration = 6.5,
 	Image = 4483362458,
 })
+
 
 
 Rayfield:Notify({
