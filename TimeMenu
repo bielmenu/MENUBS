@@ -26,37 +26,34 @@ local player = Players.LocalPlayer
 
 local whitelist = {
 	[1870794034] = {
-		tempo = "24h",
-		autorizadoEm = os.time()
+		tempo = "10/05/25, 12:00:00"
 	},
 	[8244173048] = {
-		tempo = "5m",
-		autorizadoEm = os.time()
+		tempo = "09/05/25, 05:50:00"
 	}
 }
 
-local function tempoParaSegundos(str)
-	local valor, unidade = str:match("(%d+)([hdm])")
-	valor = tonumber(valor)
-	if not valor or not unidade then return 0 end
-
-	if unidade == "h" then
-		return valor * 3600
-	elseif unidade == "d" then
-		return valor * 86400
-	elseif unidade == "m" then
-		return valor * 60
-	end
-	return 0
+-- Converte "dd/mm/yy, HH:MM:SS" para timestamp
+local function stringParaTimestamp(str)
+	local dia, mes, ano, hora, min, seg = str:match("(%d+)/(%d+)/(%d+),%s*(%d+):(%d+):(%d+)")
+	if not dia then return 0 end
+	local data = {
+		day = tonumber(dia),
+		month = tonumber(mes),
+		year = 2000 + tonumber(ano),
+		hour = tonumber(hora),
+		min = tonumber(min),
+		sec = tonumber(seg)
+	}
+	return os.time(data)
 end
 
+-- Verifica se ainda está autorizado
 local function podeUsar(userId)
 	local dados = whitelist[userId]
-	if not dados then return false, 0 end
+	if not dados or not dados.tempo then return false, 0 end
 
-	local tempoExpira = tempoParaSegundos(dados.tempo)
-	local expiraEm = dados.autorizadoEm + tempoExpira
-
+	local expiraEm = stringParaTimestamp(dados.tempo)
 	return os.time() <= expiraEm, expiraEm
 end
 
@@ -68,7 +65,7 @@ if not permitido then
 	return
 end
 
--- Formata o tempo restante
+-- Formata timestamp para string legível
 local function formatarTimestamp(timestamp)
 	local data = os.date("*t", timestamp)
 	local dia = string.format("%02d", data.day)
