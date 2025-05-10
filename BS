@@ -1,1 +1,1 @@
-discord.gg/8aEWpHma
+game.ReplicatedStorage.Remotes.spawnRemote:FireServer()
