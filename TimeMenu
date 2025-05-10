@@ -26,8 +26,8 @@ local player = Players.LocalPlayer
 
 -- Lista de usuários autorizados com data de expiração (timestamp)
 local whitelist = {
-	[1747346644] = {
-		timestamp = 1746889199
+	[8216598369] = {
+		timestamp = 1747346644
 	},
 	[8244173048] = {
 		timestamp = 1746889199
