@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + HitBox 2💥",
+	Name = "💥Menu Mini City BIEL BS | Staff Lista + AimBot Novo + HitBox 2💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -1561,174 +1561,103 @@ local SliderFOV = cam:CreateSlider({
 })
 
 
---[[
--- Global toggle
-getgenv().VenduStaffs = false
-
-
-
--- GUI Elements
-local function CreateStaffGUI()
-	local gui = Instance.new("ScreenGui")
-	gui.Name = "StaffList"
-	gui.ResetOnSpawn = false
-
-	local frame = Instance.new("Frame")
-	frame.Size = UDim2.new(0, 150, 0, 200)
-	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	frame.BackgroundTransparency = 0.15
-	frame.Active = true
-	frame.Draggable = true
-	frame.BorderSizePixel = 0
-	frame.Parent = gui
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 7)
-	corner.Parent = frame
-
-	local title = Instance.new("TextLabel")
-	title.Name = "Title"
-	title.Text = "STAFFS: 0"
-	title.TextColor3 = Color3.fromRGB(255, 255, 255)
-	title.TextScaled = true
-	title.Size = UDim2.new(1, 0, 0.1, 0)
-	title.Font = Enum.Font.MontserratBold
-	title.BackgroundTransparency = 1
-	title.Parent = frame
-
-	local scroll = Instance.new("ScrollingFrame")
-	scroll.Name = "Scroll"
-	scroll.Size = UDim2.new(1, 0, 0.85, 0)
-	scroll.Position = UDim2.new(0, 0, 0.15, 0)
-	scroll.BackgroundTransparency = 1
-	scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-	scroll.ScrollBarThickness = 2
-	scroll.CanvasSize = UDim2.new(0, 0, 1, 0)
-	scroll.Parent = frame
-
-	local listLayout = Instance.new("UIListLayout")
-	listLayout.Parent = scroll
-	listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-	gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-
-	return gui, title, scroll
-end
-
--- Atualiza a lista de staffs
-local function UpdateStaffList(titleLabel, scrollFrame)
-	local count = 0
-	for _, child in ipairs(scrollFrame:GetChildren()) do
-		if child:IsA("TextLabel") then
-			child:Destroy()
-		end
-	end
-
-	for _, player in ipairs(Players:GetPlayers()) do
-		local folder = player:FindFirstChild("RecrutaVals")
-		if folder and folder:FindFirstChild("Patente") and folder.Patente:IsA("StringValue") then
-			local patente = folder.Patente.Value
-			if patente:lower() == "staff" then
-				count += 1
-
-				local nameLabel = Instance.new("TextLabel")
-				nameLabel.Size = UDim2.new(1, 0, 0.1, 0)
-				nameLabel.BackgroundTransparency = 1
-				nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-				nameLabel.Font = Enum.Font.MontserratMedium
-				nameLabel.TextScaled = true
-
-				local myChar = LocalPlayer.Character
-				local theirChar = player.Character
-				local distanceText = "Desconhecido"
-
-				if myChar and myChar:FindFirstChild("HumanoidRootPart") and theirChar and theirChar:FindFirstChild("HumanoidRootPart") then
-					local myPos = myChar.HumanoidRootPart.Position
-					local theirPos = theirChar.HumanoidRootPart.Position
-					local distance = (myPos - theirPos).Magnitude
-					distanceText = string.format("%.0fM", distance)
-				end
-
-				nameLabel.Text = player.Name .. " | " .. distanceText
-				nameLabel.Parent = scrollFrame
-			end
-		end
-	end
-
-	titleLabel.Text = "STAFFS: " .. count
-end
-
--- Monitor de ativação
-task.spawn(function()
-	local gui, title, scroll
-
-	while true do
-		if getgenv().VenduStaffs then
-			if not LocalPlayer.PlayerGui:FindFirstChild("StaffList") then
-				gui, title, scroll = CreateStaffGUI()
-				UpdateStaffList(title, scroll)
-
-				-- Atualiza sempre que alguém entra ou sai
-				Players.PlayerAdded:Connect(function()
-					UpdateStaffList(title, scroll)
-				end)
-				Players.PlayerRemoving:Connect(function()
-					UpdateStaffList(title, scroll)
-				end)
-			end
-		else
-			local existing = LocalPlayer.PlayerGui:FindFirstChild("StaffList")
-			if existing then
-				existing:Destroy()
-			end
-		end
-
-		task.wait(1) -- Atualiza a cada segundo
-	end
-end)
-
--- Botão de toggle
-local ToggleTeamCheck = cam:CreateToggle({
-	Name = "Check Staff",
-	CurrentValue = false,
-	Flag = "VerStaffs", 
-	Callback = function(Value)
-		getgenv().VenduStaffs = Value
-	end,
-})
-]]
-
-
-
-
-
---[[local Button = cam:CreateButton({
-	Name = "AimBot",
+local mob = cam:CreateButton({
+	Name = "Lista De Staffs",
 	Callback = function()
 
+		local gui = Instance.new("ScreenGui")
+		local frame = Instance.new("Frame")
+		local scroll = Instance.new("ScrollingFrame")
+		local title = Instance.new("TextLabel")
 
-		Rayfield:Notify({
-			Title = "Aviso",
-			Content = "Aimbot Ativado!",
-			Duration = 6.5,
-			Image = 4483362458,
-		})
+		local Uilist = Instance.new("UIListLayout")
+		local Uicorner = Instance.new("UICorner")
 
-		-- Função para deletar todas as NotifyGui
-		local function deletarNotifyGui()
-			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-			for _, gui in ipairs(playerGui:GetChildren()) do
-				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
-					gui:Destroy() -- Deleta a NotifyGui
+		Uicorner.CornerRadius = UDim.new(0, 7)
+		gui.Name = "StaffList"
+
+		frame.Size = UDim2.new(0,150, 0,200)
+		frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		frame.BackgroundTransparency = 0.15
+		frame.Active = true
+		frame.Draggable = true
+		frame.BorderSizePixel = 0
+
+		scroll.Size = UDim2.new(1,0, 0.85,0)
+		scroll.Position = UDim2.new(0,0, 0.15,0)
+		scroll.BackgroundTransparency = 1
+		scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+		scroll.ScrollBarThickness = 2
+
+		title.Text = "STAFFS: 0"
+		title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		title.TextScaled = true
+		title.Size = UDim2.new(1,0, 0.1,0)
+		title.Font = Enum.Font.MontserratBold
+		title.BackgroundTransparency = 1
+
+		gui.Parent = game.Players.LocalPlayer.PlayerGui
+		frame.Parent = gui
+		title.Parent = frame
+		scroll.Parent = frame
+		Uicorner.Parent = frame
+		Uilist.Parent = scroll
+
+		local localPlayer = game.Players.LocalPlayer
+
+		local function GetStaff()
+			local count = 0
+			scroll:ClearAllChildren()
+			for _,Remove in ipairs(scroll:GetChildren()) do
+				if Remove:IsA("TextLabel") then
+					Remove:Destroy()
 				end
 			end
+
+			for _, player in ipairs(game.Players:GetPlayers()) do
+				local folder = player:FindFirstChild("RecrutaVals")
+				if folder and folder:FindFirstChild("Patente") and folder.Patente:IsA("StringValue") then
+					local patente = folder.Patente.Value
+					if patente == "Staff" or patente == "STAFF" then
+						count += 1
+
+						local nameLabel = Instance.new("TextLabel")
+						nameLabel.Size = UDim2.new(1, 0, 0.1, 0)
+						nameLabel.BackgroundTransparency = 1
+						nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+						nameLabel.Font = Enum.Font.MontserratMedium
+						nameLabel.TextScaled = true
+
+						-- Cálculo da distância
+						local distanceText = "Desconhecido"
+						local myChar = localPlayer.Character
+						local theirChar = player.Character
+
+						if myChar and myChar:FindFirstChild("HumanoidRootPart") and theirChar and theirChar:FindFirstChild("HumanoidRootPart") then
+							local myPos = myChar.HumanoidRootPart.Position
+							local theirPos = theirChar.HumanoidRootPart.Position
+							local distance = (myPos - theirPos).Magnitude
+							distanceText = string.format("%.0fM", distance)
+						end
+
+						nameLabel.Text = player.Name .. " | " .. distanceText
+						nameLabel.Parent = scroll
+					end
+				end
+			end
+
+			title.Text = "STAFFS: " .. count
 		end
 
-		loadstring(game:HttpGet('https://raw.githubusercontent.com/yzeedw/Mortalv2-main/main/universal%20silent%20aim%20by%20Mortalexploits'))()
+
+		GetStaff()
+
+		game.Players.PlayerAdded:Connect(GetStaff)
+		game.Players.PlayerRemoving:Connect(GetStaff)
 
 
 	end,
-})]]
+})
 
 
 local mob = cam:CreateButton({
