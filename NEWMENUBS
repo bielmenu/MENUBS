@@ -1498,7 +1498,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 -- Variáveis globais
 getgenv().BigHeadGG = false
-getgenv().TamanhoDaCabecaH = 8
+getgenv().TamanhoDaCabecaH = 6
 
 -- Tamanho padrão da cabeça
 local tamanhoPadrao = Vector3.new(1, 1, 1)
@@ -1550,10 +1550,10 @@ local ToggleTeamCheck = cam:CreateToggle({
 -- UI: Slider para tamanho da cabeça
 local SliderFOV = cam:CreateSlider({
 	Name = "Cabeça",
-	Range = {2, 15},
+	Range = {2, 6},
 	Increment = 1,
 	Suffix = "°",
-	CurrentValue = 8,
+	CurrentValue = 6,
 	Flag = "SizeHead",
 	Callback = function(Value)
 		getgenv().TamanhoDaCabecaH = Value
