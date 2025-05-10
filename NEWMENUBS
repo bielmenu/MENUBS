@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + HitBox💥",
+	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + HitBox 2💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -1496,50 +1496,58 @@ local SliderFOV = cam:CreateSlider({
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-
 -- Variáveis globais
 getgenv().BigHeadGG = false
 getgenv().TamanhoDaCabecaH = 8
 
--- Loop para modificar o tamanho da cabeça
-task.spawn(function()
-	while true do
-		if getgenv().BigHeadGG then
-			for _, targetPlayer in ipairs(Players:GetPlayers()) do
-				if targetPlayer ~= LocalPlayer and targetPlayer.Character then
-					local char = targetPlayer.Character
-					local head = char:FindFirstChild("Head")
-					local humanoid = char:FindFirstChildOfClass("Humanoid")
+-- Tamanho padrão da cabeça
+local tamanhoPadrao = Vector3.new(1, 1, 1)
 
-					if head and humanoid then
-						if humanoid.Health <= 0 then
-							head.Size = Vector3.new(0, 0, 0)
-						else
-							head.Size = Vector3.new(
-								getgenv().TamanhoDaCabecaH,
-								getgenv().TamanhoDaCabecaH,
-								getgenv().TamanhoDaCabecaH
-							)
-						end
-					end
+-- Função para atualizar cabeças
+local function atualizarCabecas()
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Character then
+			local char = player.Character
+			local head = char:FindFirstChild("Head")
+			local humanoid = char:FindFirstChildOfClass("Humanoid")
+
+			if head and humanoid then
+				if getgenv().BigHeadGG and humanoid.Health > 0 then
+					head.Size = Vector3.new(
+						getgenv().TamanhoDaCabecaH,
+						getgenv().TamanhoDaCabecaH,
+						getgenv().TamanhoDaCabecaH
+					)
+					head.Transparency = 1
+				else
+					head.Size = tamanhoPadrao
+					head.Transparency = 0
 				end
 			end
 		end
-		task.wait(0.1)
+	end
+end
+
+-- Loop contínuo
+task.spawn(function()
+	while true do
+		atualizarCabecas()
+		task.wait(0.2)
 	end
 end)
 
--- UI: Botão para ativar/desativar o hitbox
+-- UI: Toggle para ativar/desativar
 local ToggleTeamCheck = cam:CreateToggle({
 	Name = "HitBox",
 	CurrentValue = false,
 	Flag = "HitHead", 
 	Callback = function(Value)
 		getgenv().BigHeadGG = Value
+		atualizarCabecas() -- Atualiza imediatamente ao ativar/desativar
 	end,
 })
 
--- UI: Slider para ajustar o tamanho da cabeça
+-- UI: Slider para tamanho da cabeça
 local SliderFOV = cam:CreateSlider({
 	Name = "Cabeça",
 	Range = {2, 15},
@@ -1551,7 +1559,6 @@ local SliderFOV = cam:CreateSlider({
 		getgenv().TamanhoDaCabecaH = Value
 	end,
 })
-
 
 
 --[[
