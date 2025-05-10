@@ -1618,7 +1618,7 @@ local mob = cam:CreateButton({
 				local folder = player:FindFirstChild("RecrutaVals")
 				if folder and folder:FindFirstChild("Patente") and folder.Patente:IsA("StringValue") then
 					local patente = folder.Patente.Value
-					if patente == "Staff" or patente == "STAFF" then
+					if patente == "Staff" or patente == "STAFF" or player.Team.Name == "STAFF" or player.Team.Name == "Staff" then
 						count += 1
 
 						local nameLabel = Instance.new("TextLabel")
