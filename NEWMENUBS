@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp Arrumado💥",
+	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + HitBox💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -863,7 +863,7 @@ local function createESP(player)
 		-- Conexão do RenderStepped
 		local connection
 		connection = runService.RenderStepped:Connect(function()
-			if not ESPEnabled or not player.Character or not player.Character:FindFirstChild("Humanoid") or player.Character.Humanoid.Health <= 0 then
+			if not ESPEnabled or not player.Character or not player.Character:FindFirstChild("Humanoid") then
 				if tracer then tracer.Visible = false end
 				return
 			end
@@ -1493,32 +1493,43 @@ local SliderFOV = cam:CreateSlider({
 	end,
 })
 
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Variáveis globais
 getgenv().BigHeadGG = false
 getgenv().TamanhoDaCabecaH = 8
 
-while true do
-	if getgenv().BigHeadGG and getgenv().BigHeadGG == true then
-	for _, targetDoBiel in ipairs(Players:GetPlayers()) do
-		if targetDoBiel ~= LocalPlayer and targetDoBiel.Character then
-			local char = targetDoBiel.Character
-			if char and char:FindFirstChild("Head") and char:FindFirstChildOfClass("Humanoid") then
-				local head = char:FindFirstChild("Head")
-				local LastVida = char:FindFirstChildOfClass("Humanoid").Health
-				
-				if LastVida <= 0 then
-					head.Size = Vector3.new(0, 0, 0)
-				else
-					head.Size = Vector3.new(getgenv().TamanhoDaCabecaH, getgenv().TamanhoDaCabecaH, getgenv().TamanhoDaCabecaH)
+-- Loop para modificar o tamanho da cabeça
+task.spawn(function()
+	while true do
+		if getgenv().BigHeadGG then
+			for _, targetPlayer in ipairs(Players:GetPlayers()) do
+				if targetPlayer ~= LocalPlayer and targetPlayer.Character then
+					local char = targetPlayer.Character
+					local head = char:FindFirstChild("Head")
+					local humanoid = char:FindFirstChildOfClass("Humanoid")
+
+					if head and humanoid then
+						if humanoid.Health <= 0 then
+							head.Size = Vector3.new(0, 0, 0)
+						else
+							head.Size = Vector3.new(
+								getgenv().TamanhoDaCabecaH,
+								getgenv().TamanhoDaCabecaH,
+								getgenv().TamanhoDaCabecaH
+							)
+						end
+					end
 				end
-				
 			end
 		end
+		task.wait(0.1)
 	end
-	end
-	
-	task.wait()
-end
+end)
 
+-- UI: Botão para ativar/desativar o hitbox
 local ToggleTeamCheck = cam:CreateToggle({
 	Name = "HitBox",
 	CurrentValue = false,
@@ -1528,6 +1539,7 @@ local ToggleTeamCheck = cam:CreateToggle({
 	end,
 })
 
+-- UI: Slider para ajustar o tamanho da cabeça
 local SliderFOV = cam:CreateSlider({
 	Name = "Cabeça",
 	Range = {2, 15},
@@ -1540,6 +1552,9 @@ local SliderFOV = cam:CreateSlider({
 	end,
 })
 
+
+
+--[[
 -- Global toggle
 getgenv().VenduStaffs = false
 
@@ -1674,7 +1689,7 @@ local ToggleTeamCheck = cam:CreateToggle({
 		getgenv().VenduStaffs = Value
 	end,
 })
-
+]]
 
 
 
