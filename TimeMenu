@@ -5,7 +5,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Testando💥",
+	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp Arrumado💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -2402,3 +2402,65 @@ local mob = Misc:CreateButton({
 
 
 
+local Testes = Window:CreateTab("Testes")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+getgenv().AlvoP = nil
+local Telando = false
+local TelarConnection
+
+-- Dropdown (como você já tem)
+local Dropdown = Testes:CreateDropdown({
+	Name = "Player List",
+	Options = {},
+	CurrentOption = {""},
+	MultipleOptions = false,
+	Flag = "Dropdown1",
+	Callback = function(Options)
+		getgenv().AlvoP = Options[1]
+	end,
+})
+
+-- Botão para atualizar a lista de jogadores
+local mob = Testes:CreateButton({
+	Name = "Atualizar Lista",
+	Callback = function()
+		local playerNames = {}
+		for _, player in ipairs(Players:GetPlayers()) do
+			if player ~= LocalPlayer then -- opcional: não mostrar a si mesmo
+				table.insert(playerNames, player.Name)
+			end
+		end
+		Dropdown:Refresh(playerNames)
+		Dropdown:Set({""})
+	end,
+})
+
+-- Toggle para ativar/desativar o modo telar
+local ToggleTeamCheck = Testes:CreateToggle({
+	Name = "Telar Player",
+	CurrentValue = false,
+	Flag = "VerP", 
+	Callback = function(Value)
+		Telando = Value
+
+		if Telando then
+			TelarConnection = RunService.RenderStepped:Connect(function()
+				local alvoPlayer = Players:FindFirstChild(getgenv().AlvoP)
+				if alvoPlayer and alvoPlayer.Character and alvoPlayer.Character:FindFirstChild("HumanoidRootPart") then
+					Camera.CameraSubject = alvoPlayer.Character:FindFirstChild("Humanoid")
+				end
+			end)
+		else
+			if TelarConnection then
+				TelarConnection:Disconnect()
+				TelarConnection = nil
+			end
+			Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+		end
+	end,
+})
