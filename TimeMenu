@@ -2330,3 +2330,9 @@ local SliderFOV = Misc:CreateSlider({
 		AimbotSettings.FOV = Value
 	end,
 })
+local mob = Misc:CreateButton({
+	Name = "Esconder Fov",
+	Callback = function()
+		FOVCircle.Visible = false
+	end,
+})
