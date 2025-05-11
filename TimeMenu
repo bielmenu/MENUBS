@@ -29,8 +29,8 @@ local whitelist = {
 	[8216598369] = {  -- GELADA 3 perna 5 dias
 		timestamp = 1747346644
 	},
-	[8079290907] = {
-		timestamp = 1747030073
+	[8079290907] = { -- Reke 1,50 
+		timestamp = 1746987221
 	}
 }
 
@@ -44,7 +44,6 @@ local function podeUsar(userId)
 	return os.time() <= dados.timestamp, dados.timestamp
 end
 
--- Converte segundos restantes em dias, horas, minutos e segundos
 local function formatarTempoRestante(timestampFuturo)
 	local segundosRestantes = timestampFuturo - os.time()
 	if segundosRestantes <= 0 then
@@ -56,7 +55,22 @@ local function formatarTempoRestante(timestampFuturo)
 	local minutos = math.floor((segundosRestantes % 3600) / 60)
 	local segundos = segundosRestantes % 60
 
-	return string.format("Faltam %d dias, %02d:%02d:%02d", dias, horas, minutos, segundos)
+	local partes = {}
+
+	if dias > 0 then
+		table.insert(partes, dias .. (dias == 1 and " dia" or " dias"))
+	end
+	if horas > 0 then
+		table.insert(partes, horas .. (horas == 1 and " hora" or " horas"))
+	end
+	if minutos > 0 and dias == 0 then -- só mostra minutos se faltar menos de 1 dia
+		table.insert(partes, minutos .. (minutos == 1 and " minuto" or " minutos"))
+	end
+	if segundos > 0 and dias == 0 then -- só mostra segundos se faltar menos de 1 dia
+		table.insert(partes, segundos .. (segundos == 1 and " segundo" or " segundos"))
+	end
+
+	return "Faltam: " .. table.concat(partes, ", ")
 end
 
 -- Verifica acesso
