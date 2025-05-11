@@ -31,7 +31,7 @@ local whitelist = {
 		timestamp = 1747346644
 	},
 	[1856451026] = {
-		timestamp = 1746989801
+		timestamp = 1746997601
 	}
 }
 
