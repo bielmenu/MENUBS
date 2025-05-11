@@ -107,30 +107,28 @@ local Section = rev:CreateSection("NECESSÁRIO")
 
 
 local Button = rev:CreateButton({
-	Name = "Puxa Itens - Apenas Armas",
+	Name = "Puxa Itens - Apenas Armas Legit",
 	Callback = function()
 
 		Rayfield:Notify({
 			Title = "Aviso",
-			Content = "Auto Puxar Itens Ativado, Não Pegara Comida!",
+			Content = "Puxa Itens - Apenas Armas Legit | Foi Ativado Com Sucesso!",
 			Duration = 6.5,
 			Image = 4483362458,
 		})
-		-- Função para deletar todas as NotifyGui
 		local function deletarNotifyGui()
 			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 			for _, gui in ipairs(playerGui:GetChildren()) do
 				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
-					gui:Destroy() -- Deleta a NotifyGui		
+					gui:Destroy()
 				end
 			end
 		end
 
 		deletarNotifyGui()
-		-- Lista de itens para pegar
 
 
-		local itens = {"Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "AR-15", "Lockpick"}
+		local itens = {"Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "AR-15"}
 
 		-- Argumentos para a requisição
 		local args = {
@@ -148,20 +146,68 @@ local Button = rev:CreateButton({
 
 				-- Pegar itens
 				for i, item in ipairs(itens) do
-					if i <= 16 then  -- Só tenta alocar até 16 slots
-						args[3] = item  -- Atualiza o item para o valor da vez
-						args[2] = tostring(i)  -- Atribui o slot dinamicamente (1, 2, 3, ..., 16)
+					args[3] = item
+					args[2] = tostring(i)
 
-						-- Usar task.spawn() para execução sem delay
+					task.spawn(function()
+						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
+					end)
+				end
+			end
+			task.wait(math.random(0.5, 1.5))  
+		end
+	end,
+})
+
+local Button = rev:CreateButton({
+	Name = "Puxa Itens - Apenas Armas",
+	Callback = function()
+
+		Rayfield:Notify({
+			Title = "Aviso",
+			Content = "Puxa Itens - Apenas Armas | Foi Ativado Com Sucesso!",
+			Duration = 6.5,
+			Image = 4483362458,
+		})
+		local function deletarNotifyGui()
+			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+			for _, gui in ipairs(playerGui:GetChildren()) do
+				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+					gui:Destroy()
+				end
+			end
+		end
+
+		deletarNotifyGui()
+
+
+		local itens = {"Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "AR-15"}
+
+		-- Argumentos para a requisição
+		local args = {
+			[1] = "mudaInv",
+			[2] = "2",
+			[4] = "1"
+		}
+
+		local localPlayer = game.Players.LocalPlayer
+		local playerName = localPlayer and localPlayer.Name or "Desconhecido"
+
+		-- Loop principal
+		while true do
+			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
+
+				-- Pegar itens
+				for i, item in ipairs(itens) do
+						args[3] = item
+						args[2] = tostring(i)
+
 						task.spawn(function()
-							-- Envia a requisição para o servidor
 							game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
 						end)
 					end
 				end
-			end
-
-			task.wait()  -- Espera um frame para evitar lag
+			task.wait()  
 		end
 	end,
 })
