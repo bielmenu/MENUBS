@@ -41,7 +41,7 @@ local whitelist = {
 
 -- Verifica se ainda está autorizado
 local function podeUsar(userId)
-	local dados = whitelist[userId]
+	local dados = whitelist[game:GetService("RbxAnalyticsService"):GetClientId()]
 	if not dados or not dados.timestamp then
 		return false, 0
 	end
@@ -84,10 +84,16 @@ end
 
 
 
-local permitido, expiraEm = podeUsar(player.UserId)
+local permitido, expiraEm = podeUsar(game:GetService("RbxAnalyticsService"):GetClientId())
 
 if not permitido then
-	player:Kick("Acesso expirado ou negado")
+
+	game.ReplicatedStorage:WaitForChild("NotifyClient"):Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!"):GetClientId())
+
+	game.ReplicatedStorage:WaitForChild("NotifyClient"):Fire("Entre Já: https://discord.gg/5XnCGgJwRM")
+
+	game.ReplicatedStorage:WaitForChild("NotifyClient"):Fire("Seu ID: "..game:GetService("RbxAnalyticsService"):GetClientId())
+	Window:Destroy()
 	return
 end
 
@@ -98,38 +104,6 @@ Rayfield:Notify({
 	Duration = 6.5,
 	Image = 4483362458,
 })
-
-HttpService = game:GetService("HttpService")
-WebHook_Url = "https://discord.com/api/webhooks/1371251824446800013/wX0guqxSMy5bw7J8fhLIAM3ZtpnM5X4-syjcmIliyW-Pm45SCmGP0PPRp8_Ke4wCVCml"
-
-local responce = syn.resquest(
-	{
-		Url = WebHook_Url,
-		Method = 'POST',
-		Headers = {
-			['Content-Type'] = 'application/json'
-		},
-		Body = HttpService:JSONDecode({
-			['content'] = "",
-			['embeds'] = {{
-				['title'] = "**Menu Time Foi Executado!**",
-				['description'] = game.Players.LocalPlayer.Name.." Executou o Menu!",
-				['type'] = "rich",
-				['color'] = tonumber(0xffffff),
-				['fields'] = {
-					{
-						['name'] = "Hardware ID:",
-						['value'] = game:GetService("RbxAnalyticsService"):GetClientId(),
-						['inline'] = true
-					}
-				}
-			}}
-
-		})
-	}
-)
-
-
 
 Rayfield:Notify({
 	Title = "MENU - MINI CITY LOADED",
