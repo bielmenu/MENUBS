@@ -32,7 +32,7 @@ local whitelist = {
 	},
 
 	[8225280748] = { -- alt
-		timestamp = 9999999999
+		timestamp = 95628894041
 	},
 	[1856451026] = {
 		timestamp = 1746999641
