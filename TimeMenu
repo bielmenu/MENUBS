@@ -74,7 +74,7 @@ local function formatarTempoRestante(timestampFuturo)
 	return "Faltam: " .. table.concat(partes, ", ")
 end
 
--- Verifica acesso
+
 local permitido, expiraEm = podeUsar(player.UserId)
 
 if not permitido then
@@ -82,7 +82,15 @@ if not permitido then
 	return
 end
 
--- Exibe notificação com tempo restante
+
+while true do
+	if not podeUsar(player.UserId) then
+		player:Kick("Cabo o Tempo Seu Otariooooooooooooooooo!")
+	end
+	task.wait(1)
+end
+
+
 Rayfield:Notify({
 	Title = "MENU - MINI CITY",
 	Content = formatarTempoRestante(expiraEm),
@@ -199,14 +207,14 @@ local Button = rev:CreateButton({
 
 				-- Pegar itens
 				for i, item in ipairs(itens) do
-						args[3] = item
-						args[2] = tostring(i)
+					args[3] = item
+					args[2] = tostring(i)
 
-						task.spawn(function()
-							game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
-						end)
-					end
+					task.spawn(function()
+						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
+					end)
 				end
+			end
 			task.wait()  
 		end
 	end,
