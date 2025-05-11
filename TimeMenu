@@ -25,23 +25,26 @@ local Window = Rayfield:CreateWindow({
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
+local clientId = game:GetService("RbxAnalyticsService"):GetClientId()
 
+-- Lista de ClientIds permitidos com timestamp
 local whitelist = {
-	[8218877635] = {
+	["8218877635"] = {
 		timestamp = 1747346644
 	},
 
-	[8225280748] = { -- alt
+	["8225280748"] = {
 		timestamp = 95628894041
 	},
-	[1856451026] = {
+
+	["1856451026"] = {
 		timestamp = 1746999641
 	}
 }
 
 -- Verifica se ainda está autorizado
-local function podeUsar(userId)
-	local dados = whitelist[game:GetService("RbxAnalyticsService"):GetClientId()]
+local function podeUsar(clientId)
+	local dados = whitelist[clientId]
 	if not dados or not dados.timestamp then
 		return false, 0
 	end
@@ -49,13 +52,14 @@ local function podeUsar(userId)
 	return os.time() <= dados.timestamp, dados.timestamp
 end
 
+-- Formata o tempo restante
 local function formatarTempoRestante(timestampFuturo)
 	local segundosRestantes = timestampFuturo - os.time()
 	if segundosRestantes <= 0 then
 		return "Expirado"
 	end
 
-	local anos = math.floor(segundosRestantes / 31536000) -- 365 dias
+	local anos = math.floor(segundosRestantes / 31536000)
 	local dias = math.floor((segundosRestantes % 31536000) / 86400)
 	local horas = math.floor((segundosRestantes % 86400) / 3600)
 	local minutos = math.floor((segundosRestantes % 3600) / 60)
@@ -82,21 +86,21 @@ local function formatarTempoRestante(timestampFuturo)
 	return "Faltam: " .. table.concat(partes, ", ")
 end
 
-
-
-local permitido, expiraEm = podeUsar(game:GetService("RbxAnalyticsService"):GetClientId())
+-- Verifica permissão e notifica
+local permitido, expiraEm = podeUsar(clientId)
 
 if not permitido then
+	local notify = game.ReplicatedStorage:WaitForChild("NotifyClient")
 
-	game.ReplicatedStorage:WaitForChild("NotifyClient"):Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!"):GetClientId())
+	notify:Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!")
+	notify:Fire("Entre Já: https://discord.gg/5XnCGgJwRM")
+	notify:Fire("Seu ID: " .. clientId)
 
-	game.ReplicatedStorage:WaitForChild("NotifyClient"):Fire("Entre Já: https://discord.gg/5XnCGgJwRM")
-
-	game.ReplicatedStorage:WaitForChild("NotifyClient"):Fire("Seu ID: "..game:GetService("RbxAnalyticsService"):GetClientId())
-	Window:Destroy()
+	if Window then
+		Window:Destroy()
+	end
 	return
 end
-
 
 Rayfield:Notify({
 	Title = "MENU - MINI CITY",
@@ -104,6 +108,7 @@ Rayfield:Notify({
 	Duration = 6.5,
 	Image = 4483362458,
 })
+
 
 Rayfield:Notify({
 	Title = "MENU - MINI CITY LOADED",
