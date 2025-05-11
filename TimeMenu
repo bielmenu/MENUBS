@@ -64,10 +64,10 @@ local function formatarTempoRestante(timestampFuturo)
 	if horas > 0 then
 		table.insert(partes, horas .. (horas == 1 and " hora" or " horas"))
 	end
-	if minutos > 0 and dias == 0 then -- só mostra minutos se faltar menos de 1 dia
+	if minutos > 0 and dias == 0 then
 		table.insert(partes, minutos .. (minutos == 1 and " minuto" or " minutos"))
 	end
-	if segundos > 0 and dias == 0 then -- só mostra segundos se faltar menos de 1 dia
+	if segundos > 0 and dias == 0 then
 		table.insert(partes, segundos .. (segundos == 1 and " segundo" or " segundos"))
 	end
 
@@ -81,14 +81,6 @@ if not permitido then
 	player:Kick("Acesso expirado ou negado")
 	return
 end
-
-
---while true do
---	if not podeUsar(player.UserId) then
---		player:Kick("Cabo o Tempo Seu Otariooooooooooooooooo!")
---	end
---	task.wait(1)
---end
 
 
 Rayfield:Notify({
@@ -1119,6 +1111,7 @@ addTeleportButton("Teleport Banco", CFrame.new(-27.2709007, 11.5685892, 418.2006
 addTeleportButton("Teleport Ilegal", CFrame.new(11969.873046875, 38.66408157348633, 12782.341796875))
 addTeleportButton("Teleport predio 1", CFrame.new(-1618.034912109375, 4.741213321685791, 552.136962890625))
 addTeleportButton("Teleport Devs Mini City", CFrame.new(2555.44263, 303.167755, -1004.13763, -0.422592998, 0, 0.906319618, 0, 1, 0, -0.906319618, 0, -0.422592998))
+addTeleportButton("Teleport Lavagem", CFrame.new(19784.5508, 69.3496857, 13125.2607))
 
 local Section = rev:CreateSection("RISCO DE BAN")
 
@@ -2390,3 +2383,9 @@ local mob = Misc:CreateButton({
 		FOVCircle.Visible = false
 	end,
 })
+
+
+
+
+
+
