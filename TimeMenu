@@ -68,7 +68,6 @@ if not permitido then
 	notify:Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!",10)
 	notify:Fire("Entre Já: https://discord.gg/5XnCGgJwRM",10)
 	notify:Fire("Seu ID: " .. clientId,10)
-	notify:Fire("Atualiza FDPPPPPPPPPPP",10)
 	return
 end
 
