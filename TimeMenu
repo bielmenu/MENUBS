@@ -70,7 +70,7 @@ if not permitido then
 	notify:Fire("Seu ID: " .. clientId,10)
 	return
 end
-
+notify:Fire("GG acesso")
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
