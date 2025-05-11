@@ -55,28 +55,33 @@ local function formatarTempoRestante(timestampFuturo)
 		return "Expirado"
 	end
 
-	local dias = math.floor(segundosRestantes / 86400)
+	local anos = math.floor(segundosRestantes / 31536000) -- 365 dias
+	local dias = math.floor((segundosRestantes % 31536000) / 86400)
 	local horas = math.floor((segundosRestantes % 86400) / 3600)
 	local minutos = math.floor((segundosRestantes % 3600) / 60)
 	local segundos = segundosRestantes % 60
 
 	local partes = {}
 
+	if anos > 0 then
+		table.insert(partes, anos .. (anos == 1 and " ano" or " anos"))
+	end
 	if dias > 0 then
 		table.insert(partes, dias .. (dias == 1 and " dia" or " dias"))
 	end
-	if horas > 0 then
+	if horas > 0 and anos == 0 then
 		table.insert(partes, horas .. (horas == 1 and " hora" or " horas"))
 	end
-	if minutos > 0 and dias == 0 then
+	if minutos > 0 and anos == 0 and dias == 0 then
 		table.insert(partes, minutos .. (minutos == 1 and " minuto" or " minutos"))
 	end
-	if segundos > 0 and dias == 0 then
+	if segundos > 0 and anos == 0 and dias == 0 then
 		table.insert(partes, segundos .. (segundos == 1 and " segundo" or " segundos"))
 	end
 
 	return "Faltam: " .. table.concat(partes, ", ")
 end
+
 
 
 local permitido, expiraEm = podeUsar(player.UserId)
@@ -1116,6 +1121,10 @@ addTeleportButton("Teleport Ilegal", CFrame.new(11969.873046875, 38.664081573486
 addTeleportButton("Teleport predio 1", CFrame.new(-1618.034912109375, 4.741213321685791, 552.136962890625))
 addTeleportButton("Teleport Devs Mini City", CFrame.new(2555.44263, 303.167755, -1004.13763, -0.422592998, 0, 0.906319618, 0, 1, 0, -0.906319618, 0, -0.422592998))
 addTeleportButton("Teleport Lavagem", CFrame.new(19784.5508, 69.3496857, 13125.2607))
+addTeleportButton("Teleport Cutivar", CFrame.new(796.0354, 5.76249695, -86.5739288))
+
+addTeleportButton("Teleport Mansão Abondonada", CFrame.new(-2556.1145, 255.432526, 1218.24072))
+addTeleportButton("Teleport Areoporto", CFrame.new(11356.9043, 17.9186935, 9688.08984))
 
 local Section = rev:CreateSection("RISCO DE BAN")
 
