@@ -1,33 +1,7 @@
-
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-
-
-
-local Window = Rayfield:CreateWindow({
-
-	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp Arrumado💥",
-	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
-	LoadingSubtitle = "By BIEL BS",
-	Theme = "Amethyst",
-	ConfigurationSaving = {
-		Enabled = false,
-		FileName = "Save1"
-	},
-	KeySystem = false,
-	KeySettings = {
-		Title = "Mini City BR - @bielbs09_22",
-		Subtitle = "Sistema De Key",
-		Note = "Algum Bug Entre em Contato!",
-		Key = "AAAA"
-	}
-
-})
-
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local clientId = game:GetService("RbxAnalyticsService"):GetClientId()
 
--- Lista de ClientIds permitidos com timestamp
 local whitelist = {
 	["8218877635"] = {
 		timestamp = 1747346644
@@ -86,21 +60,43 @@ local function formatarTempoRestante(timestampFuturo)
 	return "Faltam: " .. table.concat(partes, ", ")
 end
 
--- Verifica permissão e notifica
 local permitido, expiraEm = podeUsar(clientId)
 
 if not permitido then
 	local notify = game.ReplicatedStorage:WaitForChild("NotifyClient")
 
-	notify:Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!")
-	notify:Fire("Entre Já: https://discord.gg/5XnCGgJwRM")
-	notify:Fire("Seu ID: " .. clientId)
-
-	if Window then
-		Window:Destroy()
-	end
+	notify:Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!",10)
+	notify:Fire("Entre Já: https://discord.gg/5XnCGgJwRM",10)
+	notify:Fire("Seu ID: " .. clientId,10)
 	return
 end
+
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+
+
+local Window = Rayfield:CreateWindow({
+
+	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp Arrumado💥",
+	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
+	LoadingSubtitle = "By BIEL BS",
+	Theme = "Amethyst",
+	ConfigurationSaving = {
+		Enabled = false,
+		FileName = "Save1"
+	},
+	KeySystem = false,
+	KeySettings = {
+		Title = "Mini City BR - @bielbs09_22",
+		Subtitle = "Sistema De Key",
+		Note = "Algum Bug Entre em Contato!",
+		Key = "AAAA"
+	}
+
+})
+
+
 
 Rayfield:Notify({
 	Title = "MENU - MINI CITY",
