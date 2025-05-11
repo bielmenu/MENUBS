@@ -29,8 +29,8 @@ local whitelist = {
 	[8216598369] = {  -- GELADA 3 perna 5 dias
 		timestamp = 1747346644
 	},
-	[8244173048] = {
-		timestamp = 1746889199
+	[8079290907] = {
+		timestamp = 1747030073
 	}
 }
 
