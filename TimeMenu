@@ -83,12 +83,12 @@ if not permitido then
 end
 
 
-while true do
-	if not podeUsar(player.UserId) then
-		player:Kick("Cabo o Tempo Seu Otariooooooooooooooooo!")
-	end
-	task.wait(1)
-end
+--while true do
+--	if not podeUsar(player.UserId) then
+--		player:Kick("Cabo o Tempo Seu Otariooooooooooooooooo!")
+--	end
+--	task.wait(1)
+--end
 
 
 Rayfield:Notify({
