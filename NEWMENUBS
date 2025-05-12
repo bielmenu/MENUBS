@@ -2234,6 +2234,7 @@ local function GetClosestTarget()
 				
 				player.Character:FindFirstChild("Head").Size = Vector3.new(6,6,6)
 				player.Character:FindFirstChild("Head").Transparency = 1
+				player.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 1
 
 				if not player.Character:FindFirstChild("VerVc") then
 					local esp = Instance.new("Highlight")
@@ -2270,6 +2271,7 @@ local function GetClosestTarget()
 				
 				player.Character:FindFirstChild("Head").Size = Vector3.new(1,1,1)
 				player.Character:FindFirstChild("Head").Transparency = 0
+				player.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 0
 
 				if player.Character:FindFirstChild("VerVc") then
 					player.Character:FindFirstChild("VerVc"):Destroy()
