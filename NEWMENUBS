@@ -35,30 +35,28 @@ local Section = rev:CreateSection("NECESSÁRIO")
 
 
 local Button = rev:CreateButton({
-	Name = "Puxa Itens - Apenas Armas",
+	Name = "Puxa Itens - Apenas Armas Legit",
 	Callback = function()
 
 		Rayfield:Notify({
 			Title = "Aviso",
-			Content = "Auto Puxar Itens Ativado, Não Pegara Comida!",
+			Content = "Puxa Itens - Apenas Armas Legit | Foi Ativado Com Sucesso!",
 			Duration = 6.5,
 			Image = 4483362458,
 		})
-		-- Função para deletar todas as NotifyGui
 		local function deletarNotifyGui()
 			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 			for _, gui in ipairs(playerGui:GetChildren()) do
 				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
-					gui:Destroy() -- Deleta a NotifyGui		
+					gui:Destroy()
 				end
 			end
 		end
 
 		deletarNotifyGui()
-		-- Lista de itens para pegar
 
 
-		local itens = {"Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "AR-15", "Lockpick"}
+		local itens = {"Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "AR-15"}
 
 		-- Argumentos para a requisição
 		local args = {
@@ -76,20 +74,68 @@ local Button = rev:CreateButton({
 
 				-- Pegar itens
 				for i, item in ipairs(itens) do
-					if i <= 16 then  -- Só tenta alocar até 16 slots
-						args[3] = item  -- Atualiza o item para o valor da vez
-						args[2] = tostring(i)  -- Atribui o slot dinamicamente (1, 2, 3, ..., 16)
+					args[3] = item
+					args[2] = tostring(i)
 
-						-- Usar task.spawn() para execução sem delay
-						task.spawn(function()
-							-- Envia a requisição para o servidor
-							game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
-						end)
-					end
+					task.spawn(function()
+						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
+					end)
 				end
 			end
+			task.wait(math.random(0.5, 1.5))  
+		end
+	end,
+})
 
-			task.wait()  -- Espera um frame para evitar lag
+local Button = rev:CreateButton({
+	Name = "Puxa Itens - Apenas Armas",
+	Callback = function()
+
+		Rayfield:Notify({
+			Title = "Aviso",
+			Content = "Puxa Itens - Apenas Armas | Foi Ativado Com Sucesso!",
+			Duration = 6.5,
+			Image = 4483362458,
+		})
+		local function deletarNotifyGui()
+			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+			for _, gui in ipairs(playerGui:GetChildren()) do
+				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+					gui:Destroy()
+				end
+			end
+		end
+
+		deletarNotifyGui()
+
+
+		local itens = {"Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "AR-15"}
+
+		-- Argumentos para a requisição
+		local args = {
+			[1] = "mudaInv",
+			[2] = "2",
+			[4] = "1"
+		}
+
+		local localPlayer = game.Players.LocalPlayer
+		local playerName = localPlayer and localPlayer.Name or "Desconhecido"
+
+		-- Loop principal
+		while true do
+			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
+
+				-- Pegar itens
+				for i, item in ipairs(itens) do
+					args[3] = item
+					args[2] = tostring(i)
+
+					task.spawn(function()
+						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
+					end)
+				end
+			end
+			task.wait()  
 		end
 	end,
 })
@@ -863,7 +909,7 @@ local function createESP(player)
 		-- Conexão do RenderStepped
 		local connection
 		connection = runService.RenderStepped:Connect(function()
-			if not ESPEnabled or not player.Character or not player.Character:FindFirstChild("Humanoid") then
+			if not ESPEnabled or not player.Character or not player.Character:FindFirstChild("Humanoid") or player.Character.Humanoid.Health <= 0 then
 				if tracer then tracer.Visible = false end
 				return
 			end
@@ -993,6 +1039,11 @@ addTeleportButton("Teleport Banco", CFrame.new(-27.2709007, 11.5685892, 418.2006
 addTeleportButton("Teleport Ilegal", CFrame.new(11969.873046875, 38.66408157348633, 12782.341796875))
 addTeleportButton("Teleport predio 1", CFrame.new(-1618.034912109375, 4.741213321685791, 552.136962890625))
 addTeleportButton("Teleport Devs Mini City", CFrame.new(2555.44263, 303.167755, -1004.13763, -0.422592998, 0, 0.906319618, 0, 1, 0, -0.906319618, 0, -0.422592998))
+addTeleportButton("Teleport Lavagem", CFrame.new(19784.5508, 69.3496857, 13125.2607))
+addTeleportButton("Teleport Cutivar", CFrame.new(796.0354, 5.76249695, -86.5739288))
+
+addTeleportButton("Teleport Mansão Abondonada", CFrame.new(-2556.1145, 255.432526, 1218.24072))
+addTeleportButton("Teleport Areoporto", CFrame.new(11356.9043, 17.9186935, 9688.08984))
 
 local Section = rev:CreateSection("RISCO DE BAN")
 
@@ -1377,288 +1428,6 @@ local cam = Window:CreateTab("Combate")
 local Paragraph = cam:CreateParagraph({Title = "BIEL BS ON TOP", Content = "Feito por BIEL BS"})
 local Section = cam:CreateSection("NECESSÁRIO")
 
---[[
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-local Camera = workspace.CurrentCamera
-local LocalPlayer = Players.LocalPlayer
-
-local isMobile = true
-local Ativado = false
-
-local AimbotSettings = {
-	TeamCheck = false,
-	AliveCheck = true,
-	LockPart = "Head",
-	FOV = 90,
-	FOVColor = Color3.fromRGB(255, 0, 0),
-	LockedColor = Color3.fromRGB(0, 255, 0),
-	Sensitivity = 0 
-}
-
-local FOVCircle = Drawing.new("Circle")
-FOVCircle.Visible = false
-FOVCircle.Radius = AimbotSettings.FOV
-FOVCircle.Thickness = 2
-FOVCircle.Transparency = 1
-FOVCircle.Color = AimbotSettings.FOVColor
-FOVCircle.Filled = false
-
-local function GetClosestTarget()
-	local closestPlayer = nil
-	local shortestDistance = AimbotSettings.FOV
-
-	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
-			if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
-			if AimbotSettings.AliveCheck then
-				local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-				if humanoid and humanoid.Health <= 0 then continue end
-			end
-
-			local part = player.Character[AimbotSettings.LockPart]
-			local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
-			if onScreen then
-				local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-
-
-				local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
-				if distance < shortestDistance then
-					shortestDistance = distance
-					closestPlayer = player
-				end
-			end
-		end
-	end
-
-	return closestPlayer
-end
-
-RunService.RenderStepped:Connect(function()
-	if not Ativado then
-		return
-	end
-	FOVCircle.Position = isMobile
-		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
-
-	local target = GetClosestTarget()
-
-	if target and target.Character and target.Character:FindFirstChild(AimbotSettings.LockPart) then
-		FOVCircle.Color = AimbotSettings.LockedColor
-		local part = target.Character[AimbotSettings.LockPart]
-		local direction = CFrame.new(Camera.CFrame.Position, part.Position)
-
-		local tween = TweenService:Create(Camera, TweenInfo.new(AimbotSettings.Sensitivity, Enum.EasingStyle.Sine), {
-			CFrame = direction
-		})
-		tween:Play()
-	else
-		FOVCircle.Color = AimbotSettings.FOVColor
-	end
-end)
-
-local ToggleAimbot = cam:CreateToggle({
-	Name = "AimBot",
-	CurrentValue = false,
-	Flag = "AtivarEDesativarAimbot", 
-	Callback = function(Value)
-		Ativado = Value
-		FOVCircle.Visible = Value
-	end,
-})
-
-local ToggleTeamCheck = cam:CreateToggle({
-	Name = "Team Check",
-	CurrentValue = false,
-	Flag = "CheckTeam", 
-	Callback = function(Value)
-		AimbotSettings.TeamCheck = Value
-	end,
-})
-
-local SliderFOV = cam:CreateSlider({
-	Name = "Fov Aim",
-	Range = {10, 200},
-	Increment = 10,
-	Suffix = "°",
-	CurrentValue = AimbotSettings.FOV,
-	Flag = "FovBot",
-	Callback = function(Value)
-		FOVCircle.Radius = Value
-		AimbotSettings.FOV = Value
-	end,
-})
-
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
--- Variáveis globais
-getgenv().BigHeadGG = false
-getgenv().TamanhoDaCabecaH = 6
-
--- Tamanho padrão da cabeça
-local tamanhoPadrao = Vector3.new(1, 1, 1)
-
--- Função para atualizar cabeças
-local function atualizarCabecas()
-	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Character then
-			local char = player.Character
-			local head = char:FindFirstChild("Head")
-			local humanoid = char:FindFirstChildOfClass("Humanoid")
-
-			if head and humanoid then
-				if getgenv().BigHeadGG and humanoid.Health > 0 then
-					head.Size = Vector3.new(
-						getgenv().TamanhoDaCabecaH,
-						getgenv().TamanhoDaCabecaH,
-						getgenv().TamanhoDaCabecaH
-					)
-					head.Transparency = 1
-				else
-					head.Size = tamanhoPadrao
-					head.Transparency = 0
-				end
-			end
-		end
-	end
-end
-
--- Loop contínuo
-task.spawn(function()
-	while true do
-		atualizarCabecas()
-		task.wait(0.2)
-	end
-end)
-
--- UI: Toggle para ativar/desativar
-local ToggleTeamCheck = cam:CreateToggle({
-	Name = "HitBox",
-	CurrentValue = false,
-	Flag = "HitHead", 
-	Callback = function(Value)
-		getgenv().BigHeadGG = Value
-		atualizarCabecas() -- Atualiza imediatamente ao ativar/desativar
-	end,
-})
-
--- UI: Slider para tamanho da cabeça
-local SliderFOV = cam:CreateSlider({
-	Name = "Cabeça",
-	Range = {2, 6},
-	Increment = 1,
-	Suffix = "°",
-	CurrentValue = 6,
-	Flag = "SizeHead",
-	Callback = function(Value)
-		getgenv().TamanhoDaCabecaH = Value
-	end,
-})
-
-
-local mob = cam:CreateButton({
-	Name = "Lista De Staffs",
-	Callback = function()
-
-		local gui = Instance.new("ScreenGui")
-		local frame = Instance.new("Frame")
-		local scroll = Instance.new("ScrollingFrame")
-		local title = Instance.new("TextLabel")
-
-		local Uilist = Instance.new("UIListLayout")
-		local Uicorner = Instance.new("UICorner")
-
-		Uicorner.CornerRadius = UDim.new(0, 7)
-		gui.Name = "StaffList"
-
-		frame.Size = UDim2.new(0,150, 0,200)
-		frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-		frame.BackgroundTransparency = 0.15
-		frame.Active = true
-		frame.Draggable = true
-		frame.BorderSizePixel = 0
-
-		scroll.Size = UDim2.new(1,0, 0.85,0)
-		scroll.Position = UDim2.new(0,0, 0.15,0)
-		scroll.BackgroundTransparency = 1
-		scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-		scroll.ScrollBarThickness = 2
-
-		title.Text = "STAFFS: 0"
-		title.TextColor3 = Color3.fromRGB(255, 255, 255)
-		title.TextScaled = true
-		title.Size = UDim2.new(1,0, 0.1,0)
-		title.Font = Enum.Font.MontserratBold
-		title.BackgroundTransparency = 1
-
-		gui.Parent = game.Players.LocalPlayer.PlayerGui
-		frame.Parent = gui
-		title.Parent = frame
-		scroll.Parent = frame
-		Uicorner.Parent = frame
-		Uilist.Parent = scroll
-
-		local localPlayer = game.Players.LocalPlayer
-
-		local function GetStaff()
-			local count = 0
-			scroll:ClearAllChildren()
-			for _,Remove in ipairs(scroll:GetChildren()) do
-				if Remove:IsA("TextLabel") then
-					Remove:Destroy()
-				end
-			end
-
-			for _, player in ipairs(game.Players:GetPlayers()) do
-				local folder = player:FindFirstChild("RecrutaVals")
-				if folder and folder:FindFirstChild("Patente") and folder.Patente:IsA("StringValue") then
-					local patente = folder.Patente.Value
-					if patente == "Staff" or patente == "STAFF" or player.Team.Name == "STAFF" or player.Team.Name == "Staff" then
-						count += 1
-
-						local nameLabel = Instance.new("TextLabel")
-						nameLabel.Size = UDim2.new(1, 0, 0.1, 0)
-						nameLabel.BackgroundTransparency = 1
-						nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-						nameLabel.Font = Enum.Font.MontserratMedium
-						nameLabel.TextScaled = true
-
-						-- Cálculo da distância
-						local distanceText = "Desconhecido"
-						local myChar = localPlayer.Character
-						local theirChar = player.Character
-
-						if myChar and myChar:FindFirstChild("HumanoidRootPart") and theirChar and theirChar:FindFirstChild("HumanoidRootPart") then
-							local myPos = myChar.HumanoidRootPart.Position
-							local theirPos = theirChar.HumanoidRootPart.Position
-							local distance = (myPos - theirPos).Magnitude
-							distanceText = string.format("%.0fM", distance)
-						end
-
-						nameLabel.Text = player.Name .. " | " .. distanceText
-						nameLabel.Parent = scroll
-					end
-				end
-			end
-
-			title.Text = "STAFFS: " .. count
-		end
-
-
-		GetStaff()
-
-		game.Players.PlayerAdded:Connect(GetStaff)
-		game.Players.PlayerRemoving:Connect(GetStaff)
-
-
-	end,
-})]]
-
 local Button = cam:CreateButton({
 	Name = "AimBot",
 	Callback = function()
@@ -1686,6 +1455,7 @@ local Button = cam:CreateButton({
 
 	end,
 })
+
 
 local mob = cam:CreateButton({
 	Name = "TP",
@@ -2425,3 +2195,191 @@ local mob = Misc:CreateButton({
 	end,
 })
 
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+
+local isMobile = true
+local Ativado = false
+
+local AimbotSettings = {
+	TeamCheck = false,
+	AliveCheck = true,
+	LockPart = "Head",
+	FOV = 90,
+	FOVColor = Color3.fromRGB(255, 0, 0),
+	LockedColor = Color3.fromRGB(0, 255, 0),
+	Sensitivity = 0 
+}
+
+local FOVCircle = Drawing.new("Circle")
+FOVCircle.Visible = false
+FOVCircle.Radius = AimbotSettings.FOV
+FOVCircle.Thickness = 2
+FOVCircle.Transparency = 1
+FOVCircle.Color = AimbotSettings.FOVColor
+FOVCircle.Filled = false
+
+local function GetClosestTarget()
+	local closestPlayer = nil
+	local shortestDistance = AimbotSettings.FOV
+
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
+			if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
+			if AimbotSettings.AliveCheck then
+				local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+				if humanoid and humanoid.Health <= 0 then continue end
+			end
+
+			local part = player.Character[AimbotSettings.LockPart]
+			local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
+			if onScreen then
+				local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+
+
+				local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
+				if distance < shortestDistance then
+					shortestDistance = distance
+					closestPlayer = player
+				end
+			end
+		end
+	end
+
+	return closestPlayer
+end
+
+RunService.RenderStepped:Connect(function()
+	if not Ativado then
+		return
+	end
+	FOVCircle.Position = isMobile
+		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+
+	local target = GetClosestTarget()
+
+	if target and target.Character and target.Character:FindFirstChild(AimbotSettings.LockPart) then
+		FOVCircle.Color = AimbotSettings.LockedColor
+		local part = target.Character[AimbotSettings.LockPart]
+		local direction = CFrame.new(Camera.CFrame.Position, part.Position)
+
+		local tween = TweenService:Create(Camera, TweenInfo.new(AimbotSettings.Sensitivity, Enum.EasingStyle.Sine), {
+			CFrame = direction
+		})
+		tween:Play()
+	else
+		FOVCircle.Color = AimbotSettings.FOVColor
+	end
+end)
+
+local ToggleAimbot = Misc:CreateToggle({
+	Name = "AimBot",
+	CurrentValue = false,
+	Flag = "AtivarEDesativarAimbot", 
+	Callback = function(Value)
+		Ativado = Value
+		FOVCircle.Visible = Value
+	end,
+})
+
+local ToggleTeamCheck = Misc:CreateToggle({
+	Name = "Team Check",
+	CurrentValue = false,
+	Flag = "CheckTeam", 
+	Callback = function(Value)
+		AimbotSettings.TeamCheck = Value
+	end,
+})
+
+local SliderFOV = Misc:CreateSlider({
+	Name = "Fov Aim",
+	Range = {10, 200},
+	Increment = 10,
+	Suffix = "°",
+	CurrentValue = AimbotSettings.FOV,
+	Flag = "FovBot",
+	Callback = function(Value)
+		FOVCircle.Radius = Value
+		AimbotSettings.FOV = Value
+	end,
+})
+local mob = Misc:CreateButton({
+	Name = "Esconder Fov",
+	Callback = function()
+		FOVCircle.Visible = false
+	end,
+})
+
+
+
+
+
+
+local Testes = Window:CreateTab("Testes")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+getgenv().AlvoP = nil
+local Telando = false
+local TelarConnection
+
+-- Dropdown (como você já tem)
+local Dropdown = Testes:CreateDropdown({
+	Name = "Player List",
+	Options = {},
+	CurrentOption = {""},
+	MultipleOptions = false,
+	Flag = "Dropdown1",
+	Callback = function(Options)
+		getgenv().AlvoP = Options[1]
+	end,
+})
+
+-- Botão para atualizar a lista de jogadores
+local mob = Testes:CreateButton({
+	Name = "Atualizar Lista",
+	Callback = function()
+		local playerNames = {}
+		for _, player in ipairs(Players:GetPlayers()) do
+			if player ~= LocalPlayer then -- opcional: não mostrar a si mesmo
+				table.insert(playerNames, player.Name)
+			end
+		end
+		Dropdown:Refresh(playerNames)
+		Dropdown:Set({""})
+	end,
+})
+
+-- Toggle para ativar/desativar o modo telar
+local ToggleTeamCheck = Testes:CreateToggle({
+	Name = "Telar Player",
+	CurrentValue = false,
+	Flag = "VerP", 
+	Callback = function(Value)
+		Telando = Value
+
+		if Telando then
+			TelarConnection = RunService.RenderStepped:Connect(function()
+				local alvoPlayer = Players:FindFirstChild(getgenv().AlvoP)
+				if alvoPlayer and alvoPlayer.Character and alvoPlayer.Character:FindFirstChild("HumanoidRootPart") then
+					Camera.CameraSubject = alvoPlayer.Character:FindFirstChild("Humanoid")
+				end
+			end)
+		else
+			if TelarConnection then
+				TelarConnection:Disconnect()
+				TelarConnection = nil
+			end
+			Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+		end
+	end,
+})
