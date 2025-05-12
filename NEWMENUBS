@@ -2238,7 +2238,7 @@ local function GetClosestTarget()
 				if not player.Character:FindFirstChild("VerVc") then
 					local esp = Instance.new("Highlight")
 					--esp.FillColor = Color3.fromRGB(226, 142, 1)
-					--esp.FillTransparency = .7
+					esp.FillTransparency = 1
 					esp.OutlineColor = Color3.fromRGB(255, 0, 0)
 					esp.OutlineTransparency = 0
 					esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
