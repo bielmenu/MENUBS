@@ -2229,27 +2229,53 @@ local function GetClosestTarget()
 	local shortestDistance = AimbotSettings.FOV
 
 	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
-			player.Character:FindFirstChild("Head").Size = Vector3.new(6,6,6)
-			if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
-			if AimbotSettings.AliveCheck then
-				local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-				if humanoid and humanoid.Health <= 0 then continue end
-			end
+		if player ~= LocalPlayer and player.Character then
+			if player.Character:FindFirstChild(AimbotSettings.LockPart) then
+				
+				player.Character:FindFirstChild("Head").Size = Vector3.new(6,6,6)
+				player.Character:FindFirstChild("Head").Transparency = 1
 
-			local part = player.Character[AimbotSettings.LockPart]
-			local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
-			if onScreen then
-				local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-
-
-				local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
-				if distance < shortestDistance then
-					shortestDistance = distance
-					closestPlayer = player
-					
+				if not player.Character:FindFirstChild("VerVc") then
+					local esp = Instance.new("Highlight")
+					esp.FillColor = Color3.fromRGB(226, 142, 1)
+					esp.FillTransparency = .7
+					esp.OutlineColor = Color3.fromRGB(226, 142, 1)
+					esp.OutlineTransparency = 0
+					esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 				end
+
+
+				if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
+				if AimbotSettings.AliveCheck then
+					local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+					if humanoid and humanoid.Health <= 0 then continue end
+				end
+
+				local part = player.Character[AimbotSettings.LockPart]
+				local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
+				if onScreen then
+					local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+
+
+					local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
+					if distance < shortestDistance then
+						shortestDistance = distance
+						closestPlayer = player
+
+					end
+				end
+				
+				else
+				
+				player.Character:FindFirstChild("Head").Size = Vector3.new(1,1,1)
+				player.Character:FindFirstChild("Head").Transparency = 0
+
+				if player.Character:FindFirstChild("VerVc") then
+					player.Character:FindFirstChild("VerVc"):Destroy()
+				end
+				
 			end
+			
 		end
 	end
 
