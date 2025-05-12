@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local clientId = game:GetService("RbxAnalyticsService"):GetClientId()
-
+local notify = game.ReplicatedStorage:WaitForChild("NotifyClient")
 local whitelist = {
 	
 
@@ -17,6 +17,7 @@ local whitelist = {
 local function podeUsar(clientId)
 	local dados = whitelist[clientId]
 	if not dados or not dados.timestamp then
+		notify:Fire("Erro #812",10)
 		return false, 0
 	end
 
@@ -27,6 +28,7 @@ end
 local function formatarTempoRestante(timestampFuturo)
 	local segundosRestantes = timestampFuturo - os.time()
 	if segundosRestantes <= 0 then
+		notify:Fire("Expirado",10)
 		return "Expirado"
 	end
 
@@ -53,19 +55,20 @@ local function formatarTempoRestante(timestampFuturo)
 	if segundos > 0 and anos == 0 and dias == 0 then
 		table.insert(partes, segundos .. (segundos == 1 and " segundo" or " segundos"))
 	end
-
+	notify:Fire("Faltam: " .. table.concat(partes, ", "),10)
 	return "Faltam: " .. table.concat(partes, ", ")
+	
 end
 
 local permitido, expiraEm = podeUsar(clientId)
-local notify = game.ReplicatedStorage:WaitForChild("NotifyClient")
+
 if permitido then
 	else
 	
 
 	notify:Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!",10)
 	notify:Fire("Entre Já: https://discord.gg/5XnCGgJwRM",10)
-	notify:Fire("Seu ID: " .. clientId.." Foi UPD!",10)
+	notify:Fire("Seu ID: " .. clientId,10)
 	return
 end
 
