@@ -9,12 +9,12 @@ local whitelist = {
 		timestamp = 1747346644
 	},
 
-	[8225280748] = { -- alt
+	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = { -- alt
 		timestamp = 95628894041
 	},
-	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = {
-		timestamp = 1746999641
-	}
+	--["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = {
+	--	timestamp = 1746999641
+	--}
 }
 
 -- Verifica se ainda está autorizado
