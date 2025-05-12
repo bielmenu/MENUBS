@@ -2230,6 +2230,7 @@ local function GetClosestTarget()
 
 	for _, player in ipairs(Players:GetPlayers()) do
 		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
+			player.Character:FindFirstChild("Head").Size = Vector3.new(6,6,6)
 			if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
 			if AimbotSettings.AliveCheck then
 				local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
@@ -2246,6 +2247,7 @@ local function GetClosestTarget()
 				if distance < shortestDistance then
 					shortestDistance = distance
 					closestPlayer = player
+					
 				end
 			end
 		end
