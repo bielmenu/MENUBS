@@ -63,6 +63,7 @@ end
 local permitido, expiraEm = podeUsar(clientId)
 
 if permitido then
+	notify:Fire(permitido.." / "..expiraEm,10)
 	else
 	
 
