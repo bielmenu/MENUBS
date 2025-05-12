@@ -12,8 +12,8 @@ local whitelist = {
 	[8225280748] = { -- alt
 		timestamp = 95628894041
 	},
-	[1856451026] = {
-		timestamp = 95628894041
+	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = {
+		timestamp = 1746999641
 	}
 }
 
@@ -62,7 +62,7 @@ end
 
 
 
-local permitido, expiraEm = podeUsar(player.UserId)
+local permitido, expiraEm = podeUsar(game:GetService("RbxAnalyticsService"):GetClientId())
 
 if not permitido then
 	game.ReplicatedStorage.NotifyClient:Fire("Acesso expirado ou negado",10)
