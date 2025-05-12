@@ -1083,7 +1083,7 @@ local function LoadAR()
 	end
 end
 
-local ww = rev:CreateToggle({
+--[[local ww = rev:CreateToggle({
 	Name = "Auto Revistar",
 	CurrentValue = false,
 	Flag = "rvstAuto",
@@ -1092,7 +1092,7 @@ local ww = rev:CreateToggle({
 		LoadAR()
 	end,
 
-})
+})]]
 
 
 --[[getgenv().AntiStaffLoad = false
@@ -2237,11 +2237,12 @@ local function GetClosestTarget()
 
 				if not player.Character:FindFirstChild("VerVc") then
 					local esp = Instance.new("Highlight")
-					esp.FillColor = Color3.fromRGB(226, 142, 1)
-					esp.FillTransparency = .7
-					esp.OutlineColor = Color3.fromRGB(226, 142, 1)
+					--esp.FillColor = Color3.fromRGB(226, 142, 1)
+					--esp.FillTransparency = .7
+					esp.OutlineColor = Color3.fromRGB(255, 0, 0)
 					esp.OutlineTransparency = 0
 					esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+					esp.Parent = player.Character
 				end
 
 
