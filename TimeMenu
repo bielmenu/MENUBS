@@ -65,7 +65,7 @@ end
 local permitido, expiraEm = podeUsar(player.UserId)
 
 if not permitido then
-	player:Kick("Acesso expirado ou negado")
+	game.ReplicatedStorage.NotifyClient:Fire("Acesso expirado ou negado",10)
 	return
 end
 
@@ -76,6 +76,8 @@ Rayfield:Notify({
 	Duration = 6.5,
 	Image = 4483362458,
 })
+
+
 
 local Window = Rayfield:CreateWindow({
 
