@@ -1,3 +1,6 @@
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local clientId = game:GetService("RbxAnalyticsService"):GetClientId()
@@ -61,18 +64,25 @@ local function formatarTempoRestante(timestampFuturo)
 end
 
 local permitido, expiraEm = podeUsar(clientId)
-
-if not permitido then
-	local notify = game.ReplicatedStorage:WaitForChild("NotifyClient")
+local notify = game.ReplicatedStorage:WaitForChild("NotifyClient")
+if permitido then
+	else
+	
 
 	notify:Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!",10)
 	notify:Fire("Entre Já: https://discord.gg/5XnCGgJwRM",10)
 	notify:Fire("Seu ID: " .. clientId,10)
 	return
 end
+
 notify:Fire("GG acesso")
 
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+Rayfield:Notify({
+	Title = "MENU - MINI CITY",
+	Content = formatarTempoRestante(expiraEm),
+	Duration = 6.5,
+	Image = 4483362458,
+})
 
 
 
@@ -98,12 +108,6 @@ local Window = Rayfield:CreateWindow({
 
 
 
-Rayfield:Notify({
-	Title = "MENU - MINI CITY",
-	Content = formatarTempoRestante(expiraEm),
-	Duration = 6.5,
-	Image = 4483362458,
-})
 
 
 Rayfield:Notify({
