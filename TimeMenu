@@ -8,14 +8,14 @@ local notify = game.ReplicatedStorage:WaitForChild("NotifyClient")
 local whitelist = {
 	
 
-	["12C0FB60-2EF0-4709-83F9-BOB718D75877"] = {
+	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = {
 		timestamp = 1749678041
 	}
 }
 
 -- Verifica se ainda está autorizado
-local function podeUsar(clientId)
-	local dados = whitelist[clientId]
+local function podeUsar(clientId2)
+	local dados = whitelist[clientId2]
 	if not dados or not dados.timestamp then
 		notify:Fire("Erro #812",10)
 		return false, 0
