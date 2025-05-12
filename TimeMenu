@@ -12,7 +12,7 @@ local whitelist = {
 	},
 
 	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = { -- alt
-		timestamp = 95628894041
+		timestamp = 1747086041
 	},
 	--["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = {
 	--	timestamp = 1746999641
