@@ -6,16 +6,10 @@ local player = Players.LocalPlayer
 local clientId = game:GetService("RbxAnalyticsService"):GetClientId()
 
 local whitelist = {
-	["8218877635"] = {
-		timestamp = 1747346644
-	},
+	
 
 	["12C0FB60-2EF0-4709-83F9-BOB718D75877"] = {
-		timestamp = 95628894041
-	},
-
-	["1856451026"] = {
-		timestamp = 1746999641
+		timestamp = 1749678041
 	}
 }
 
@@ -71,7 +65,7 @@ if permitido then
 
 	notify:Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!",10)
 	notify:Fire("Entre Já: https://discord.gg/5XnCGgJwRM",10)
-	notify:Fire("Seu ID: " .. clientId,10)
+	notify:Fire("Seu ID: " .. clientId.." Foi UPD!",10)
 	return
 end
 
