@@ -2229,8 +2229,8 @@ local function GetClosestTarget()
 	local shortestDistance = AimbotSettings.FOV
 
 	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Character then
-			if player.Character:FindFirstChild(AimbotSettings.LockPart) then
+		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
+			if Ativado then
 				
 				player.Character:FindFirstChild("Head").Size = Vector3.new(6,6,6)
 				player.Character:FindFirstChild("Head").Transparency = 1
@@ -2284,9 +2284,9 @@ local function GetClosestTarget()
 end
 
 RunService.RenderStepped:Connect(function()
-	if not Ativado then
-		return
-	end
+	--if not Ativado then
+	--	return
+	--end
 	FOVCircle.Position = isMobile
 		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
 		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
