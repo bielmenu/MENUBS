@@ -4,6 +4,8 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
+game.ReplicatedStorage.NotifyClient:Fire("Versão 2.12.4",10)
+
 local whitelist = {
 	[8218877635] = {
 		timestamp = 1747346644
@@ -65,7 +67,9 @@ end
 local permitido, expiraEm = podeUsar(game:GetService("RbxAnalyticsService"):GetClientId())
 
 if not permitido then
-	game.ReplicatedStorage.NotifyClient:Fire("Acesso expirado ou negado",10)
+	game.ReplicatedStorage.NotifyClient:Fire("Você Ainda Não Possuí Acesso 	Ao Menu :(",10)
+	game.ReplicatedStorage.NotifyClient:Fire("Seu ID: "..game:GetService("RbxAnalyticsService"):GetClientId(),10)
+	game.ReplicatedStorage.NotifyClient:Fire("Entre Já Em Nosso Discord: Discord.gg/5XnCGgJwRM",10)
 	return
 end
 
