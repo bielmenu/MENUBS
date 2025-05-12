@@ -7,8 +7,8 @@ local player = Players.LocalPlayer
 game.ReplicatedStorage.NotifyClient:Fire("Versão 2.12.4",10)
 
 local whitelist = {
-	[8218877635] = {
-		timestamp = 1747346644
+	["3DDE034F-D21B-49C8-A850-8792128657A2"] = {
+		timestamp = 1747114339
 	},
 
 	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = { -- alt
