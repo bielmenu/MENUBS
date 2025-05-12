@@ -3,39 +3,37 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local clientId = game:GetService("RbxAnalyticsService"):GetClientId()
-local notify = game.ReplicatedStorage:WaitForChild("NotifyClient")
-local whitelist = {
-	
 
-	["12C0FB60-2EF0-4709-83F9-BOB718D75877"] = {
-		timestamp = 1749678041
+local whitelist = {
+	[8218877635] = {
+		timestamp = 1747346644
+	},
+
+	[8225280748] = { -- alt
+		timestamp = 95628894041
+	},
+	[1856451026] = {
+		timestamp = 1746999641
 	}
 }
 
 -- Verifica se ainda está autorizado
-local function podeUsar()
-	local dados = whitelist[clientId]
-	if whitelist[clientId] then
-		notify:Fire("Seu Id ja esta setado",10)
-	end
+local function podeUsar(userId)
+	local dados = whitelist[userId]
 	if not dados or not dados.timestamp then
-		notify:Fire("Erro #812",10)
 		return false, 0
 	end
 
 	return os.time() <= dados.timestamp, dados.timestamp
 end
 
--- Formata o tempo restante
 local function formatarTempoRestante(timestampFuturo)
 	local segundosRestantes = timestampFuturo - os.time()
 	if segundosRestantes <= 0 then
-		notify:Fire("Expirado",10)
 		return "Expirado"
 	end
 
-	local anos = math.floor(segundosRestantes / 31536000)
+	local anos = math.floor(segundosRestantes / 31536000) -- 365 dias
 	local dias = math.floor((segundosRestantes % 31536000) / 86400)
 	local horas = math.floor((segundosRestantes % 86400) / 3600)
 	local minutos = math.floor((segundosRestantes % 3600) / 60)
@@ -58,25 +56,19 @@ local function formatarTempoRestante(timestampFuturo)
 	if segundos > 0 and anos == 0 and dias == 0 then
 		table.insert(partes, segundos .. (segundos == 1 and " segundo" or " segundos"))
 	end
-	notify:Fire("Faltam: " .. table.concat(partes, ", "),10)
+
 	return "Faltam: " .. table.concat(partes, ", ")
-	
 end
 
-local permitido, expiraEm = podeUsar()
 
-if permitido then
-	notify:Fire(permitido.." / "..expiraEm,10)
-	else
-	
 
-	notify:Fire("Você Ainda Não Tem Acesso Ao Nosso Menu!",10)
-	notify:Fire("Entre Já: https://discord.gg/5XnCGgJwRM",10)
-	notify:Fire("Seu ID: " .. clientId,10)
+local permitido, expiraEm = podeUsar(player.UserId)
+
+if not permitido then
+	player:Kick("Acesso expirado ou negado")
 	return
 end
 
-notify:Fire("GG acesso")
 
 Rayfield:Notify({
 	Title = "MENU - MINI CITY",
@@ -84,8 +76,6 @@ Rayfield:Notify({
 	Duration = 6.5,
 	Image = 4483362458,
 })
-
-
 
 local Window = Rayfield:CreateWindow({
 
@@ -106,8 +96,6 @@ local Window = Rayfield:CreateWindow({
 	}
 
 })
-
-
 
 
 
