@@ -1167,7 +1167,7 @@ local function LoadAR()
 	end
 end
 
-local ww = rev:CreateToggle({
+--[[local ww = rev:CreateToggle({
 	Name = "Auto Revistar",
 	CurrentValue = false,
 	Flag = "rvstAuto",
@@ -1176,7 +1176,7 @@ local ww = rev:CreateToggle({
 		LoadAR()
 	end,
 
-})
+})]]
 
 
 --[[getgenv().AntiStaffLoad = false
