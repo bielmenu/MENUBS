@@ -24,6 +24,8 @@ local function podeUsar(clientId2)
 	return os.time() <= dados.timestamp, dados.timestamp
 end
 
+notify:Fire("TESTE kkk #1713",10)
+
 -- Formata o tempo restante
 local function formatarTempoRestante(timestampFuturo)
 	local segundosRestantes = timestampFuturo - os.time()
