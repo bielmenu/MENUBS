@@ -12,8 +12,8 @@ local whitelist = {
 		timestamp = 1747207312
 	},
 
-	["3DDE034F-D21B-49C8-A850-8792128657A2"] = {
-		timestamp = 1747114339
+	["3DDE034F-D21B-49C8-A850-8792128657A2"] = { -- King Gayzinho
+		timestamp = 1748405093
 	},
 
 	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = { -- REKE VIADINHO
@@ -72,7 +72,7 @@ end
 local permitido, expiraEm = podeUsar(game:GetService("RbxAnalyticsService"):GetClientId())
 
 if not permitido then
-	game.ReplicatedStorage.NotifyClient:Fire("Você Ainda Não Possuí Acesso 	Ao Menu :(",10)
+	game.ReplicatedStorage.NotifyClient:Fire("Você Ainda Não Possuí Acesso Ao Menu :(",10)
 	game.ReplicatedStorage.NotifyClient:Fire("Seu ID: "..game:GetService("RbxAnalyticsService"):GetClientId(),10)
 	game.ReplicatedStorage.NotifyClient:Fire("Entre Já Em Nosso Discord: Discord.gg/5XnCGgJwRM",10)
 	return
