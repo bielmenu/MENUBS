@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Staff Lista + AimBot Novo + HitBox 2💥",
+	Name = "💥Menu Mini City BIEL BS | Staff Lista + AimBot Novo + Novo Revistar OP💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -191,6 +191,77 @@ local Button = rev:CreateButton({
 			end
 			task.wait()  -- Espera um frame para evitar lag
 		end
+	end,
+})
+
+
+local Button = rev:CreateButton({
+	Name = "Puxa Itens - Novo",
+	Callback = function()
+		Rayfield:Notify({
+			Title = "Aviso",
+			Content = "Auto Puxar Itens Ativado!",
+			Duration = 6.5,
+			Image = 4483362458,
+		})
+
+		local function deletarNotifyGui()
+			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+			for _, gui in ipairs(playerGui:GetChildren()) do
+				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+					gui:Destroy() -- Deleta a NotifyGui		
+				end
+			end
+		end
+
+		deletarNotifyGui()
+
+		local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
+		
+		
+		while true do
+			local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
+
+			if revistaInfo and revistaInfo.Value ~= nil then
+				local invTarget = revistaInfo.Value:FindFirstChild("Inv")
+
+				if invTarget then
+					local items = invTarget:GetChildren()
+
+					for i, item in ipairs(items) do
+						local args = {
+							"mudaInv",
+							tostring(i),
+							item.Name,
+							1
+						}
+
+						local itemGui = outroCont:FindFirstChild(item.Name, true)
+
+						if itemGui and itemGui:FindFirstChild("Qnt") and itemGui.Qnt:IsA("TextLabel") then
+							local text = itemGui.Qnt.Text
+
+							if text:sub(1, 1) == "x" then
+								text = text:sub(2)
+							end
+
+							local qtd = tonumber(text)
+							if qtd and qtd >= 1 then
+								args[4] = qtd
+							end
+						end
+
+						task.spawn(function()
+							local invRequest = game.ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
+							invRequest:InvokeServer(unpack(args))
+						end)
+					end
+				end
+			end
+
+			task.wait()
+		end
+		
 	end,
 })
 
@@ -2231,7 +2302,7 @@ local function GetClosestTarget()
 	for _, player in ipairs(Players:GetPlayers()) do
 		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
 			if Ativado then
-				
+
 				player.Character:FindFirstChild("Head").Size = Vector3.new(6,6,6)
 				player.Character:FindFirstChild("Head").Transparency = 1
 				player.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 1
@@ -2266,9 +2337,9 @@ local function GetClosestTarget()
 
 					end
 				end
-				
-				else
-				
+
+			else
+
 				player.Character:FindFirstChild("Head").Size = Vector3.new(1,1,1)
 				player.Character:FindFirstChild("Head").Transparency = 0
 				player.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 0
@@ -2276,9 +2347,9 @@ local function GetClosestTarget()
 				if player.Character:FindFirstChild("VerVc") then
 					player.Character:FindFirstChild("VerVc"):Destroy()
 				end
-				
+
 			end
-			
+
 		end
 	end
 
