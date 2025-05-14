@@ -217,8 +217,8 @@ local Button = rev:CreateButton({
 		deletarNotifyGui()
 
 		local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
-		
-		
+
+
 		while true do
 			local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
 
@@ -261,7 +261,7 @@ local Button = rev:CreateButton({
 
 			task.wait()
 		end
-		
+
 	end,
 })
 
@@ -2357,9 +2357,9 @@ local function GetClosestTarget()
 end
 
 RunService.RenderStepped:Connect(function()
-	--if not Ativado then
-	--	return
-	--end
+	if not Ativado then
+		return
+	end
 	FOVCircle.Position = isMobile
 		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
 		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
