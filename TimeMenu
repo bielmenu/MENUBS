@@ -48,6 +48,7 @@ local function formatarTempoRestante(timestampFuturo)
 	end
 
 	local anos = math.floor(segundosRestantes / 31536000) -- 365 dias
+	local meses = math.floor((segundosRestantes % 31536000) / 2592000) -- 30 dias
 	local dias = math.floor((segundosRestantes % 31536000) / 86400)
 	local horas = math.floor((segundosRestantes % 86400) / 3600)
 	local minutos = math.floor((segundosRestantes % 3600) / 60)
@@ -58,16 +59,19 @@ local function formatarTempoRestante(timestampFuturo)
 	if anos > 0 then
 		table.insert(partes, anos .. (anos == 1 and " ano" or " anos"))
 	end
+	if meses > 0 then
+		table.insert(partes, meses .. (meses == 1 and " mês" or " meses"))
+	end
 	if dias > 0 then
 		table.insert(partes, dias .. (dias == 1 and " dia" or " dias"))
 	end
-	if horas > 0 and anos == 0 then
+	if horas > 0 and anos == 0 and meses == 0 then
 		table.insert(partes, horas .. (horas == 1 and " hora" or " horas"))
 	end
-	if minutos > 0 and anos == 0 and dias == 0 then
+	if minutos > 0 and anos == 0 and meses == 0 and dias == 0 then
 		table.insert(partes, minutos .. (minutos == 1 and " minuto" or " minutos"))
 	end
-	if segundos > 0 and anos == 0 and dias == 0 then
+	if segundos > 0 and anos == 0 and meses == 0 and dias == 0 then
 		table.insert(partes, segundos .. (segundos == 1 and " segundo" or " segundos"))
 	end
 
