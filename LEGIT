@@ -1,56 +1,34 @@
 
-local ArrayField = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/calangof/MENUBS/refs/heads/main/BS'))()
 
-local Window = ArrayField:CreateWindow({
+local Window = Rayfield:CreateWindow({
+
 	Name = "💥Menu Mini City BIEL BS | Staff Lista + AimBot Novo + HitBox 2💥",
-	LoadingTitle = "BS ON TOP",
-	LoadingSubtitle = "by Biel BS",
+	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
+	LoadingSubtitle = "By BIEL BS",
+	Theme = "Amethyst",
 	ConfigurationSaving = {
-		Enabled = true,
-		FolderName = nil, -- Create a custom folder for your hub/game
-		FileName = "ArrayField"
-	},
-	Discord = {
 		Enabled = false,
-		Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
-		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+		FileName = "Save1"
 	},
-	KeySystem = false, -- Set this to true to use our key system
+	KeySystem = false,
 	KeySettings = {
-		Title = "Untitled",
-		Subtitle = "Key System",
-		Note = "No method of obtaining the key is provided",
-		FileName = "Key", -- It is recommended to use something unique as other scripts using ArrayField may overwrite your key file
-		SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-		GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like ArrayField to get the key from
-		Actions = {
-			[1] = {
-				Text = 'Click here to copy the key link <--',
-				OnPress = function()
-					print('Pressed')
-				end,
-			}
-		},
-		Key = {"Hello"}
+		Title = "Mini City BR - @bielbs09_22",
+		Subtitle = "Sistema De Key",
+		Note = "Algum Bug Entre em Contato!",
+		Key = "Biel1107bs"
 	}
+
 })
 
-ArrayField:Notify({
-	Title = "MENU LEGIT - MINI CITY LOADED",
+Rayfield:Notify({
+	Title = "MENU - MINI CITY LOADED",
 	Content = "Owner: @bielbs09_22\nProgrammer: ???\nLast Update: 14/05/2025",
 	Duration = 6.5,
 	Image = 4483362458,
-	--[[Actions = { -- Notification Buttons
-		Ignore = {
-			Name = "Okay!",
-			Callback = function()
-				print("The user tapped Okay!")
-			end
-		},
-	},]]
 })
 
-local Tab = Window:CreateTab("Main", 4483362458)
+local rev = Window:CreateTab("Main",4483362458)
 
 
 getgenv().PuxarIssoEIsso = false
@@ -125,7 +103,7 @@ local function LoadPuxaPuxa()
 
 end
 
-local Toggle = Tab:CreateToggle({
+local Toggle = rev:CreateToggle({
 	Name = "Puxar Items",
 	CurrentValue = false,
 	Flag = "rvstAuto", 
@@ -135,8 +113,7 @@ local Toggle = Tab:CreateToggle({
 	end,
 })
 
-
-local Dropdown = Tab:CreateDropdown({
+local Dropdown = rev:CreateDropdown({
 	Name = "Items",
 	Options = {
 		"PARAFAL", "AR-15", "G3", "IA2", "Glock 17", "Hi Power", "Faca", "Natalina", 
@@ -144,12 +121,10 @@ local Dropdown = Tab:CreateDropdown({
 		"Plástico Pronto", "Plástico Vazio", "Agua", "Drink", "Pizza", "Hamburguer", 
 		"Cookie", "Dinamite", "Lockpick", "iPhone 14"
 	},
-	CurrentOption = nil,
-	MultiSelection = true,
+	CurrentOption = {""},
+	MultipleOptions = true,
 	Flag = "PuxarApenasEssesCoco",
-	Callback = function(Option)
-		getgenv().VouPuxarIsso = Option
+	Callback = function(Options)
+		getgenv().VouPuxarIsso = Options
 	end,
 })
-
-
