@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-game.ReplicatedStorage.NotifyClient:Fire("Versão 2.12.4",10)
+game.ReplicatedStorage.NotifyClient:Fire("Versão 2.15.4",10)
 
 local whitelist = {
 
@@ -230,11 +230,11 @@ local Button = rev:CreateButton({
 })
 
 local Button = rev:CreateButton({
-	Name = "Puxa Itens - Menos Lag",
+	Name = "Puxa Itens - Novo",
 	Callback = function()
 		Rayfield:Notify({
 			Title = "Aviso",
-			Content = "Auto Puxar Itens Ativado, Pegara Comida!",
+			Content = "Auto Puxar Itens Ativado!",
 			Duration = 6.5,
 			Image = 4483362458,
 		})
@@ -250,92 +250,53 @@ local Button = rev:CreateButton({
 
 		deletarNotifyGui()
 
-
-		local itens = {"AR-15", "Agua", "Hamburguer", "Drink", "Pizza", "Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "Tratamento", "C4"}
-
-		local args = {
-			[1] = "mudaInv",
-			[2] = "2",
-			[4] = "1"
-		}
-
-		local localPlayer = game.Players.LocalPlayer
-		local playerName = localPlayer and localPlayer.Name or "Desconhecido"
+		local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
 
 		while true do
-			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
-				for i, item in ipairs(itens) do
-					if i <= 16 then  -- Só tenta alocar até 16 slots
-						args[3] = item  -- Atualiza o item para o valor da vez
-						args[2] = tostring(i)
-						args[4] = 1
+			
 
-						-- Usar task.spawn() para execução sem delay
-						task.spawn(function()
-							-- Envia a requisição para o servidor
-							game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
-						end)
-					end
-				end
-			end
-			task.wait()  -- Espera um frame para evitar lag
-		end
-	end,
-})
+			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= nil then
+				local invTarget = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value:FindFirstChild("Inv")
 
+				if invTarget then
+					local items = invTarget:GetChildren()
 
-local Button = rev:CreateButton({
-	Name = "Puxar Tudo - Menos Lag",
-	Callback = function()
+					for i, item in ipairs(items) do
+						local args = {
+							"mudaInv",
+							tostring(i),
+							item.Name,
+							1
+						}
 
-		local function deletarNotifyGui()
-			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-			for _, gui in ipairs(playerGui:GetChildren()) do
-				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
-					gui:Destroy()	
-				end
-			end
-		end
+						local itemGui = outroCont:FindFirstChild(item.Name, true)
 
-		deletarNotifyGui()
+						if itemGui and itemGui:FindFirstChild("Qnt") and itemGui.Qnt:IsA("TextLabel") then
+							local text = itemGui.Qnt.Text
 
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
-		local ToolsFolder = ReplicatedStorage:FindFirstChild("Tools")
+							if text:sub(1, 1) == "x" then
+								text = text:sub(2)
+							end
 
-		while true do
-			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
-
-
-				if ToolsFolder then
-					local Tools = ToolsFolder:GetChildren()
-
-					for i, item in ipairs(Tools) do
-						--if i <= 16 then
-						local args = {}
-						args[1] = "mudaInv"
-						args[2] = tostring(i)
-						args[3] = item.Name
-						args[4] = 1
+							local qtd = tonumber(text)
+							if qtd and qtd >= 1 then
+								args[4] = qtd
+							end
+						end
 
 						task.spawn(function()
-							local invRequest = ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
+							local invRequest = game.ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
 							invRequest:InvokeServer(unpack(args))
 						end)
 					end
-					--end
-				else
-					warn("Pasta 'Tools' não encontrada em ReplicatedStorage.")
 				end
 			end
 
 			task.wait()
-
 		end
-
 
 	end,
 })
-
 
 local Button = rev:CreateButton({
 	Name = "Fly",
