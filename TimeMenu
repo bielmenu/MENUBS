@@ -12,6 +12,10 @@ local whitelist = {
 		timestamp = 1747207312
 	},
 
+	["3cff3df2-cf49-4c9c-9b48-e6697c97842f"] = { -- GELADE
+		timestamp = 1747589491
+	},
+
 	["3DDE034F-D21B-49C8-A850-8792128657A2"] = { -- King Gayzinho
 		timestamp = 1748405093
 	},
