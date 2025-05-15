@@ -21,7 +21,7 @@ local whitelist = {
 	},
 
 	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = { -- REKE VIADINHO
-		timestamp = 1748405093
+		timestamp = 1778866291
 	},
 	["60C90C55-1D6A-4937-8E42-BDAFIFD018EB"] = {
 		timestamp = 999999999
