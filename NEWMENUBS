@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Staff Lista + AimBot Novo + Novo Revistar OP💥",
+	Name = "💥Menu Mini City BIEL BS | ??? + AimBot Novo + Novo Revistar?💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -195,6 +195,24 @@ local Button = rev:CreateButton({
 })
 
 
+local function deletarNotifyDeErro()
+	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	for _, gui in ipairs(playerGui:GetChildren()) do
+		if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+			local frame = gui:FindFirstChild("Frame")
+			if frame and frame:FindFirstChild("Texto") and frame.Texto:IsA("TextLabel") then
+				local texto = frame.Texto.Text
+				if texto:match("^Erro #%d+") then
+					gui:Destroy() -- Remove qualquer erro que siga o padrão "Erro #número"
+					print("Notificação de erro removida:", texto)
+				end
+			end
+		end
+	end
+end
+
+
+
 local Button = rev:CreateButton({
 	Name = "Puxa Itens - Novo",
 	Callback = function()
@@ -205,16 +223,7 @@ local Button = rev:CreateButton({
 			Image = 4483362458,
 		})
 
-		local function deletarNotifyGui()
-			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-			for _, gui in ipairs(playerGui:GetChildren()) do
-				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
-					gui:Destroy() -- Deleta a NotifyGui		
-				end
-			end
-		end
-
-		deletarNotifyGui()
+		
 
 		local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
 
@@ -248,6 +257,8 @@ local Button = rev:CreateButton({
 							local qtd = tonumber(text)
 							if qtd and qtd >= 1 then
 								args[4] = qtd
+							else
+								args[4] = 1
 							end
 						end
 
@@ -258,8 +269,8 @@ local Button = rev:CreateButton({
 					end
 				end
 			end
-
-			task.wait()
+			deletarNotifyDeErro()
+			task.wait(.1)
 		end
 
 	end,
