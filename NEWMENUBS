@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
 
-	Name = "💥Menu Mini City BIEL BS | Nova Opção + AimBot Novo + Novo Revistar?💥",
+	Name = "💥Menu Mini City BIEL BS | ??? - Nova Opção + AimBot Novo + Novo Revistar?💥",
 	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
 	LoadingSubtitle = "By BIEL BS",
 	Theme = "Amethyst",
@@ -194,22 +194,24 @@ local Button = rev:CreateButton({
 	end,
 })
 
-
 local function deletarNotifyDeErro()
 	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
 	for _, gui in ipairs(playerGui:GetChildren()) do
 		if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
 			local frame = gui:FindFirstChild("Frame")
-			if frame and frame:FindFirstChild("Texto") and frame.Texto:IsA("TextLabel") then
-				local texto = frame.Texto.Text
-				if texto:match("^Error #%d+") then
-					gui:Destroy() -- Remove qualquer erro que siga o padrão "Erro #número"
-					print("Notificação de erro removida:", texto)
+			if frame then
+				for _, child in ipairs(frame:GetChildren()) do
+					if child:IsA("TextLabel") and child.Text:match("^Error #%d+") then
+						gui:Destroy() -- Remove toda a notificação
+						print("Notificação de erro removida:", child.Text)
+					end
 				end
 			end
 		end
 	end
 end
+
 
 
 
