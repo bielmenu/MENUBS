@@ -1,1 +1,2543 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/calangof/MENUBS/refs/heads/main/TimeMenu"))()
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local versao = "2.2.4"
+
+
+
+game.ReplicatedStorage.NotifyClient:Fire(string.format("Versão <font color=\'#e28e01\'>%s</font>",versao),10)
+
+local whitelist = {
+	["3cff3df2-cf49-4c9c-9b48-e6697c97842f"] = { -- GELADE
+		timestamp = 1747589491
+	},
+
+	["3DDE034F-D21B-49C8-A850-8792128657A2"] = { -- King Gayzinho
+		timestamp = 1748405093
+	},
+
+	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = { -- REKE VIADINHO
+		timestamp = 1778866291
+	},
+	["7e2b6dca-63f7-424f-b61a-4ab423c41321"] = { -- WEB
+		timestamp = math.huge
+	},
+	["Oca7d54e-35df-4403-8bdb-8b8e505fbfd8"] = { -- Julio
+		
+		timestamp = math.huge
+	},
+	["e70b295e-da02-4e2d-b870-e9bf94allffa"] = { -- Biel
+		timestamp = math.huge
+	},
+	["d3b0f935-801e-4c2a-a6a7-406f1dece906"] = { -- Eu
+		timestamp = math.huge
+	},
+
+}
+
+-- Verifica se ainda está autorizado
+local function podeUsar(userId)
+	local dados = whitelist[userId]
+	if not dados or not dados.timestamp then
+		return false, 0
+	end
+
+	return os.time() <= dados.timestamp, dados.timestamp
+end
+
+local function formatarTempoRestante(timestampFuturo)
+	local segundosRestantes = timestampFuturo - os.time()
+	if timestampFuturo == math.huge or timestampFuturo > 9999999999 then
+		return "Permanente"
+	end
+
+	if segundosRestantes <= 0 then
+		return "Expirado"
+	end
+
+	local anos = math.floor(segundosRestantes / 31536000) -- 365 dias
+	local meses = math.floor((segundosRestantes % 31536000) / 2592000) -- 30 dias
+	local dias = math.floor((segundosRestantes % 31536000) / 86400)
+	local horas = math.floor((segundosRestantes % 86400) / 3600)
+	local minutos = math.floor((segundosRestantes % 3600) / 60)
+	local segundos = segundosRestantes % 60
+
+	local partes = {}
+
+	if anos > 0 then
+		table.insert(partes, anos .. (anos == 1 and " ano" or " anos"))
+	end
+	if meses > 0 then
+		table.insert(partes, meses .. (meses == 1 and " mês" or " meses"))
+	end
+	if dias > 0 then
+		table.insert(partes, dias .. (dias == 1 and " dia" or " dias"))
+	end
+	if horas > 0 and anos == 0 and meses == 0 then
+		table.insert(partes, horas .. (horas == 1 and " hora" or " horas"))
+	end
+	if minutos > 0 and anos == 0 and meses == 0 and dias == 0 then
+		table.insert(partes, minutos .. (minutos == 1 and " minuto" or " minutos"))
+	end
+	if segundos > 0 and anos == 0 and meses == 0 and dias == 0 then
+		table.insert(partes, segundos .. (segundos == 1 and " segundo" or " segundos"))
+	end
+
+	return "Faltam: " .. table.concat(partes, ", ")
+end
+
+
+
+local permitido, expiraEm = podeUsar(game:GetService("RbxAnalyticsService"):GetClientId())
+
+if not permitido then
+	game.ReplicatedStorage.NotifyClient:Fire("Você Ainda Não Possuí Acesso Ao Menu :(",10)
+	game.ReplicatedStorage.NotifyClient:Fire("Seu ID: "..game:GetService("RbxAnalyticsService"):GetClientId(),10)
+	game.ReplicatedStorage.NotifyClient:Fire("Entre Já Em Nosso Discord: Discord.gg/5XnCGgJwRM",10)
+	return
+end
+
+
+Rayfield:Notify({
+	Title = "MENU - MINI CITY",
+	Content = formatarTempoRestante(expiraEm),
+	Duration = 6.5,
+	Image = 4483362458,
+})
+
+
+
+local Window = Rayfield:CreateWindow({
+
+	Name = "💥Menu Mini City BIEL BS | Fly + AimBot Novo + Esp Arrumado💥",
+	LoadingTitle = "MENU MINI CITY | V2 BETA 💨",
+	LoadingSubtitle = "By BIEL BS",
+	Theme = "Amethyst",
+	ConfigurationSaving = {
+		Enabled = false,
+		FileName = "Save1"
+	},
+	KeySystem = false,
+	KeySettings = {
+		Title = "Mini City BR - @bielbs09_22",
+		Subtitle = "Sistema De Key",
+		Note = "Algum Bug Entre em Contato!",
+		Key = "AAAA"
+	}
+
+})
+
+
+Rayfield:Notify({
+	Title = "MENU - MINI CITY LOADED",
+	Content = "Owner: @bielbs09_22\nProgrammer: ???\nLast Update: 17/05/2025",
+	Duration = 6.5,
+	Image = 4483362458,
+})
+
+
+local rev = Window:CreateTab("Main")
+local Paragraph = rev:CreateParagraph({Title = "BIEL BS ON TOP", Content = "Feito por BIEL BS"})
+local Section = rev:CreateSection("NECESSÁRIO")
+
+
+local Button = rev:CreateButton({
+	Name = "Puxa Itens - Apenas Armas Legit",
+	Callback = function()
+
+		Rayfield:Notify({
+			Title = "Aviso",
+			Content = "Puxa Itens - Apenas Armas Legit | Foi Ativado Com Sucesso!",
+			Duration = 6.5,
+			Image = 4483362458,
+		})
+		local function deletarNotifyGui()
+			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+			for _, gui in ipairs(playerGui:GetChildren()) do
+				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+					gui:Destroy()
+				end
+			end
+		end
+
+		deletarNotifyGui()
+
+
+		local itens = {"Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "AR-15"}
+
+		local args = {
+			[1] = "mudaInv",
+			[2] = "2",
+			[4] = "1"
+		}
+
+		local localPlayer = game.Players.LocalPlayer
+		local playerName = localPlayer and localPlayer.Name or "Desconhecido"
+
+		-- Loop principal
+		while true do
+			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
+
+				for i, item in ipairs(itens) do
+					args[3] = item
+					args[2] = tostring(i)
+
+					task.spawn(function()
+						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
+					end)
+				end
+			end
+			task.wait(math.random(0.5, 1.5))  
+		end
+	end,
+})
+
+local Button = rev:CreateButton({
+	Name = "Puxa Itens - Apenas Armas",
+	Callback = function()
+
+		Rayfield:Notify({
+			Title = "Aviso",
+			Content = "Puxa Itens - Apenas Armas | Foi Ativado Com Sucesso!",
+			Duration = 6.5,
+			Image = 4483362458,
+		})
+		local function deletarNotifyGui()
+			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+			for _, gui in ipairs(playerGui:GetChildren()) do
+				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+					gui:Destroy()
+				end
+			end
+		end
+
+		deletarNotifyGui()
+
+
+		local itens = {"Escudo", "AK47", "Uzi", "PARAFAL", "Faca", "IA2", "G3", "Hi Power", "Natalina", "AR-15"}
+
+		-- Argumentos para a requisição
+		local args = {
+			[1] = "mudaInv",
+			[2] = "2",
+			[4] = "1"
+		}
+
+		local localPlayer = game.Players.LocalPlayer
+		local playerName = localPlayer and localPlayer.Name or "Desconhecido"
+
+		-- Loop principal
+		while true do
+			if game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") and game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value ~= "" then
+
+				-- Pegar itens
+				for i, item in ipairs(itens) do
+					args[3] = item
+					args[2] = tostring(i)
+
+					task.spawn(function()
+						game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer(unpack(args))
+					end)
+				end
+			end
+			task.wait()  
+		end
+	end,
+})
+
+local function deletarNotifyDeErro()
+	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+	for _, gui in ipairs(playerGui:GetChildren()) do
+		if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+			local frame = gui:FindFirstChild("Frame")
+			if frame then
+				for _, child in ipairs(frame:GetChildren()) do
+					if child:IsA("TextLabel") and child.Text:match("^Error #%d+") then
+						child:Destroy() -- Remove toda a notificação
+						print("Notificação de erro removida:", child.Text)
+					end
+				end
+			end
+		end
+	end
+end
+
+
+
+
+local Button = rev:CreateButton({
+	Name = "Puxa Itens - Novo",
+	Callback = function()
+		Rayfield:Notify({
+			Title = "Aviso",
+			Content = "Auto Puxar Itens Ativado!",
+			Duration = 6.5,
+			Image = 4483362458,
+		})
+
+
+
+		local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
+
+
+		while true do
+			local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
+
+			if revistaInfo and revistaInfo.Value ~= nil then
+				local invTarget = revistaInfo.Value:FindFirstChild("Inv")
+
+				if invTarget then
+					local items = invTarget:GetChildren()
+
+					for i, item in ipairs(items) do
+						local args = {
+							"mudaInv",
+							tostring(i),
+							item.Name,
+							1
+						}
+
+						local itemGui = outroCont:FindFirstChild(item.Name, true)
+
+						if itemGui and itemGui:FindFirstChild("Qnt") and itemGui.Qnt:IsA("TextLabel") then
+							local text = itemGui.Qnt.Text
+
+							if text:sub(1, 1) == "x" then
+								text = text:sub(2)
+							end
+
+							local qtd = tonumber(text)
+							if qtd and qtd >= 1 then
+								args[4] = qtd
+							else
+								args[4] = 1
+							end
+						end
+
+						task.spawn(function()
+							local invRequest = game.ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
+							invRequest:InvokeServer(unpack(args))
+						end)
+					end
+				end
+			end
+			deletarNotifyDeErro()
+			task.wait(.1)
+		end
+
+	end,
+})
+
+
+local Button = rev:CreateButton({
+	Name = "Auto-Revistar",
+	Callback = function()
+		Rayfield:Notify({
+			Title = "Aviso",
+			Content = "Auto Revistar Ativado!",
+			Duration = 6.5,
+			Image = 4483362458,
+		})
+
+		while true do
+			task.wait(.5)
+			if not game.Players.LocalPlayer:FindFirstChild("RevistaPlayer") or game.Players.LocalPlayer:FindFirstChild("RevistaPlayer").Value == nil then
+
+				local character = game.Players.LocalPlayer.Character
+				if character and character:FindFirstChild("HumanoidRootPart") then
+					local myPosition = character.HumanoidRootPart.Position
+
+					for _, player in pairs(game.Players:GetPlayers()) do
+						if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("HumanoidRootPart") and player.Inv then
+							local invtarget = player.Inv
+
+							if #invtarget:GetChildren() > 0 then
+
+
+								local humanoid = player.Character.Humanoid
+								local distance = (player.Character.HumanoidRootPart.Position - myPosition).Magnitude
+
+								if humanoid.Health <= 0 and distance <= 8 then
+									game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+									break
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+
+	end,
+})
+
+local Button = rev:CreateButton({
+	Name = "Fly",
+	Callback = function()
+		local main = Instance.new("ScreenGui")
+		local Frame = Instance.new("Frame")
+		local up = Instance.new("TextButton")
+		local down = Instance.new("TextButton")
+		local onof = Instance.new("TextButton")
+		local plus = Instance.new("TextButton")
+		local speed = Instance.new("TextLabel")
+		local mine = Instance.new("TextButton")
+
+
+		local uiGG0 = Instance.new("UICorner")
+		uiGG0.CornerRadius = UDim.new(0, 4)
+		uiGG0.Parent = Frame
+
+		local uiGG = Instance.new("UICorner")
+		uiGG.CornerRadius = UDim.new(0, 4)
+		uiGG.Parent = onof
+
+		local uiGG2 = Instance.new("UICorner")
+		uiGG2.CornerRadius = UDim.new(0, 4)
+		uiGG2.Parent = mine
+		local uiGG2 = Instance.new("UICorner")
+		uiGG2.CornerRadius = UDim.new(0, 4)
+		uiGG2.Parent = plus
+
+		main.Name = "main"
+		main.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+		main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		main.ResetOnSpawn = false
+
+		Frame.Parent = main
+		Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Frame.BorderSizePixel = 0
+		Frame.BackgroundTransparency = 0.15
+		Frame.Position = UDim2.new(0,0,0,0)
+		Frame.Size = UDim2.new(0, 220, 0, 79)
+
+
+
+		onof.Name = "onof"
+		onof.Parent = Frame
+		onof.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		onof.AnchorPoint = Vector2.new(0.5, 0.5)
+		onof.Position = UDim2.new(0.5, 0, 0.36, 0)
+		onof.BorderSizePixel = 0
+
+
+		onof.Size = UDim2.new(0.86, 0, 0.355, 0)
+		onof.Font = Enum.Font.MontserratBold
+		onof.Text = "FLY"
+		onof.BackgroundTransparency = 0.35
+		onof.TextColor3 = Color3.fromRGB(255, 255, 255)
+		onof.TextScaled = true
+
+
+		plus.Name = "plus"
+		plus.Parent = Frame
+		plus.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		plus.AnchorPoint = Vector2.new(0.5, 0.5)
+		plus.Position = UDim2.new(0.23, 0, 0.77, 0)
+		plus.Size = UDim2.new(0.325, 0, 0.3, 0)
+		plus.Font = Enum.Font.MontserratBold
+		plus.Text = "+"
+		plus.TextColor3 = Color3.fromRGB(255, 255, 255)
+		plus.BackgroundTransparency = 0.35
+		plus.TextScaled = true
+		plus.TextWrapped = true
+
+		speed.Name = "speed"
+		speed.Parent = Frame
+		speed.AnchorPoint = Vector2.new(0.5, 0)
+		speed.BackgroundTransparency = 1
+		speed.Position = UDim2.new(0.5, 0, 0.561, 0)
+		speed.Size = UDim2.new(0.15, 0, 0.4, 0)
+		speed.Font = Enum.Font.MontserratBold
+		speed.Text = "1"
+		speed.TextColor3 = Color3.fromRGB(255, 255, 255)
+		speed.TextScaled = true
+		speed.TextWrapped = true
+
+		mine.Name = "mine"
+		mine.Parent = Frame
+		mine.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		mine.AnchorPoint = Vector2.new(0.5, 0.5)
+		mine.Position = UDim2.new(0.767, 0, 0.77, 0)
+		mine.Size = UDim2.new(0.325, 0, 0.3, 0)
+		mine.Font = Enum.Font.MontserratBold
+		mine.BackgroundTransparency = 0.35
+		mine.Text = "–"
+		mine.TextColor3 = Color3.fromRGB(255, 255, 255)
+		mine.TextScaled = true
+		mine.TextWrapped = true
+
+		speeds = 1
+
+		local speaker = game:GetService("Players").LocalPlayer
+
+		local chr = game.Players.LocalPlayer.Character
+		local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+
+		nowe = false
+
+		Frame.Active = true -- main = gui
+		Frame.Draggable = true
+
+		onof.MouseButton1Down:connect(function()
+
+			if nowe == true then
+				nowe = false
+
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+				speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+			else 
+				nowe = true
+
+
+
+				for i = 1, speeds do
+					spawn(function()
+
+						local hb = game:GetService("RunService").Heartbeat	
+
+
+						tpwalking = true
+						local chr = game.Players.LocalPlayer.Character
+						local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+						while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+							if hum.MoveDirection.Magnitude > 0 then
+								chr:TranslateBy(hum.MoveDirection)
+							end
+						end
+
+					end)
+				end
+				game.Players.LocalPlayer.Character.Animate.Disabled = false
+				local Char = game.Players.LocalPlayer.Character
+				local Hum = Char:FindFirstChildOfClass("Humanoid") or Char:FindFirstChildOfClass("AnimationController")
+
+				for i,v in next, Hum:GetPlayingAnimationTracks() do
+					v:AdjustSpeed(0)
+				end
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
+				speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
+				speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+			end
+
+
+
+
+			if game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R6 then
+
+
+
+				local plr = game.Players.LocalPlayer
+				local torso = plr.Character.Torso
+				local flying = true
+				local deb = true
+				local ctrl = {f = 0, b = 0, l = 0, r = 0}
+				local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+				local maxspeed = 50
+				local speed = 0
+
+
+				local bg = Instance.new("BodyGyro", torso)
+				bg.P = 9e4
+				bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+				bg.cframe = torso.CFrame
+				local bv = Instance.new("BodyVelocity", torso)
+				bv.velocity = Vector3.new(0,0.1,0)
+				bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+				if nowe == true then
+					plr.Character.Humanoid.PlatformStand = true
+				end
+				while nowe == true or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0 do
+					game:GetService("RunService").RenderStepped:Wait()
+
+					if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+						speed = speed+.5+(speed/maxspeed)
+						if speed > maxspeed then
+							speed = maxspeed
+						end
+					elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+						speed = speed-1
+						if speed < 0 then
+							speed = 0
+						end
+					end
+					if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+						bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+						lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+					elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+						bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+					else
+						bv.velocity = Vector3.new(0,0,0)
+					end
+					--	game.Players.LocalPlayer.Character.Animate.Disabled = true
+					bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+				end
+				ctrl = {f = 0, b = 0, l = 0, r = 0}
+				lastctrl = {f = 0, b = 0, l = 0, r = 0}
+				speed = 0
+				bg:Destroy()
+				bv:Destroy()
+				plr.Character.Humanoid.PlatformStand = false
+				game.Players.LocalPlayer.Character.Animate.Disabled = false
+				tpwalking = false
+
+
+
+
+			else
+				local plr = game.Players.LocalPlayer
+				local UpperTorso = plr.Character.UpperTorso
+				local flying = true
+				local deb = true
+				local ctrl = {f = 0, b = 0, l = 0, r = 0}
+				local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+				local maxspeed = 50
+				local speed = 0
+
+
+				local bg = Instance.new("BodyGyro", UpperTorso)
+				bg.P = 9e4
+				bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+				bg.cframe = UpperTorso.CFrame
+				local bv = Instance.new("BodyVelocity", UpperTorso)
+				bv.velocity = Vector3.new(0,0.1,0)
+				bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+				if nowe == true then
+					plr.Character.Humanoid.PlatformStand = true
+				end
+				while nowe == true or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0 do
+					wait()
+
+					if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+						speed = speed+.5+(speed/maxspeed)
+						if speed > maxspeed then
+							speed = maxspeed
+						end
+					elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+						speed = speed-1
+						if speed < 0 then
+							speed = 0
+						end
+					end
+					if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+						bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+						lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+					elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+						bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+					else
+						bv.velocity = Vector3.new(0,0,0)
+					end
+
+					bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+				end
+				ctrl = {f = 0, b = 0, l = 0, r = 0}
+				lastctrl = {f = 0, b = 0, l = 0, r = 0}
+				speed = 0
+				bg:Destroy()
+				bv:Destroy()
+				plr.Character.Humanoid.PlatformStand = false
+				game.Players.LocalPlayer.Character.Animate.Disabled = false
+				tpwalking = false
+
+
+
+			end
+
+
+
+
+
+		end)
+
+		local tis
+
+		up.MouseButton1Down:connect(function()
+			tis = up.MouseEnter:connect(function()
+				while tis do
+					wait()
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,1,0)
+				end
+			end)
+		end)
+
+		up.MouseLeave:connect(function()
+			if tis then
+				tis:Disconnect()
+				tis = nil
+			end
+		end)
+
+		local dis
+
+		down.MouseButton1Down:connect(function()
+			dis = down.MouseEnter:connect(function()
+				while dis do
+					wait()
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-1,0)
+				end
+			end)
+		end)
+
+		down.MouseLeave:connect(function()
+			if dis then
+				dis:Disconnect()
+				dis = nil
+			end
+		end)
+
+
+		game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(char)
+			wait(0.7)
+			game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+			game.Players.LocalPlayer.Character.Animate.Disabled = false
+
+		end)
+
+
+		plus.MouseButton1Down:connect(function()
+			speeds = speeds + 1
+			speed.Text = speeds
+			if nowe == true then
+
+
+				tpwalking = false
+				for i = 1, speeds do
+					spawn(function()
+
+						local hb = game:GetService("RunService").Heartbeat	
+
+
+						tpwalking = true
+						local chr = game.Players.LocalPlayer.Character
+						local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+						while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+							if hum.MoveDirection.Magnitude > 0 then
+								chr:TranslateBy(hum.MoveDirection)
+							end
+						end
+
+					end)
+				end
+			end
+		end)
+		mine.MouseButton1Down:connect(function()
+			if speeds == 1 then
+				speed.Text = speeds
+			else
+				speeds = speeds - 1
+				speed.Text = speeds
+				if nowe == true then
+					tpwalking = false
+					for i = 1, speeds do
+						spawn(function()
+
+							local hb = game:GetService("RunService").Heartbeat	
+
+
+							tpwalking = true
+							local chr = game.Players.LocalPlayer.Character
+							local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+							while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+								if hum.MoveDirection.Magnitude > 0 then
+									chr:TranslateBy(hum.MoveDirection)
+								end
+							end
+
+						end)
+					end
+				end
+			end
+		end)
+	end,
+})
+
+local Tps = Window:CreateTab("TELETRANSPORTERS")
+local Section = Tps:CreateSection("Teletransporte")
+
+local Visuals = Window:CreateTab("VISUAL")
+local Section = Visuals:CreateSection("Visuals")
+
+local function loadScript()
+	local Players = game:GetService("Players")
+	local LocalPlayer = Players.LocalPlayer
+	local Workspace = game:GetService("Workspace")
+
+	local function isPlayerInLineOfSight(player)
+		local character = player.Character
+		if not character then return false end
+
+		local head = character:FindFirstChild("Head")
+		if not head then return false end
+
+		local origin = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+		if not origin then return false end
+
+		local ray = Workspace:Raycast(origin.Position, head.Position - origin.Position)
+		return not ray or ray.Instance:IsDescendantOf(LocalPlayer.Character)
+	end
+
+	local function hasRequiredItems(player)
+		local inventoryItems = {}
+		local backpack = player:FindFirstChild("Backpack")
+		if backpack then
+			for _, item in ipairs(backpack:GetChildren()) do
+				if item:IsA("Tool") then
+					table.insert(inventoryItems, item.Name)
+				end
+			end
+		end
+
+		-- Verifica se o jogador *não* tem exatamente os itens "1", "2", "3"
+		if inventoryItems[1] == "1" and inventoryItems[2] == "2" and inventoryItems[3] == "3" then
+			return false
+		end
+
+		-- Retorna verdadeiro se ao menos um dos 3 slots estiver ocupado
+		return inventoryItems[1] or inventoryItems[2] or inventoryItems[3]
+	end
+
+	local function createUIForPlayer(player)
+		if player == LocalPlayer then return end
+
+		local function addBillboard()
+			local character = player.Character
+			if not character then return end
+
+			local head = character:FindFirstChild("Head")
+			if not head or head:FindFirstChild("PlayerUI") then return end
+
+			if not isPlayerInLineOfSight(player) or not hasRequiredItems(player) then return end
+
+			local billboard = Instance.new("BillboardGui")
+			billboard.Name = "PlayerUI"
+			billboard.Adornee = head
+			billboard.Size = UDim2.new(0, 160, 0, 50)
+			billboard.StudsOffset = Vector3.new(0, -3, 0)
+			billboard.AlwaysOnTop = true
+			billboard.Parent = head
+
+			local frame = Instance.new("Frame")
+			frame.Size = UDim2.new(1, 0, 1, 0)
+			frame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+			frame.BorderSizePixel = 0
+			frame.Parent = billboard
+			frame.Style = Enum.FrameStyle.DropShadow
+
+			local nameLabel = Instance.new("TextLabel")
+			nameLabel.Size = UDim2.new(1, 0, 0.35, 0)
+			nameLabel.Position = UDim2.new(0, 0, 0.02, 0)
+			nameLabel.Text = player.Name
+			nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			nameLabel.Font = Enum.Font.SourceSansBold
+			nameLabel.TextSize = 14
+			nameLabel.BackgroundTransparency = 1
+			nameLabel.TextStrokeTransparency = 0.8
+			nameLabel.Parent = frame
+
+			local backpack = player:FindFirstChild("Backpack")
+			local inventoryItems = {}
+			if backpack then
+				for _, item in ipairs(backpack:GetChildren()) do
+					if item:IsA("Tool") then
+						table.insert(inventoryItems, item.Name)
+					end
+				end
+			end
+
+			for i = 1, 3 do
+				local button = Instance.new("TextButton")
+				button.Size = UDim2.new(0.28, -5, 0.4, 0)
+				button.Position = UDim2.new((i - 1) * 0.33, 0, 0.35, 0)
+				button.Text = inventoryItems[i] or tostring(i)
+				button.TextColor3 = Color3.fromRGB(255, 255, 255)
+				button.Font = Enum.Font.SourceSansBold
+				button.TextSize = 12
+				button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+				button.BorderSizePixel = 2
+				button.BorderColor3 = Color3.fromRGB(100, 100, 100)
+				button.Parent = frame
+
+				button.MouseButton1Click:Connect(function()
+					print("Botão " .. (inventoryItems[i] or i) .. " clicado em " .. player.Name)
+				end)
+			end
+
+			local function onItemChanged()
+				if not hasRequiredItems(player) then
+					if head:FindFirstChild("PlayerUI") then
+						head.PlayerUI:Destroy()
+					end
+				elseif not head:FindFirstChild("PlayerUI") then
+					addBillboard()
+				end
+			end
+
+			if backpack then
+				backpack.ChildRemoved:Connect(onItemChanged)
+				backpack.ChildAdded:Connect(onItemChanged)
+			end
+		end
+
+		if player.Character then
+			addBillboard()
+		else
+			player.CharacterAdded:Connect(function()
+				task.wait(0.5)
+				addBillboard()
+			end)
+		end
+	end
+
+	for _, player in ipairs(Players:GetPlayers()) do
+		createUIForPlayer(player)
+	end
+
+	Players.PlayerAdded:Connect(createUIForPlayer)
+
+	local function updateUI()
+		for _, player in ipairs(Players:GetPlayers()) do
+			createUIForPlayer(player)
+		end
+	end
+
+	while true do
+		task.wait(1)
+		updateUI()
+	end
+end
+
+-- UI callback
+local Veritem = Visuals:CreateButton({
+	Name = "Ver Items - (Irreversível)",
+	Callback = function()
+		if not _G.createdUI then
+			_G.createdUI = true
+			coroutine.wrap(loadScript)()
+		else
+			warn("UI já foi criada.")
+		end
+	end
+})
+
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local runService = game:GetService("RunService")
+
+local ESPColor = Color3.new(1, 0, 0)
+local ESPEnabled = false
+local tracers = {}
+local espInstances = {}
+local connections = {}
+
+-- REMOVE O ESP DO PLAYER
+local function removeESP(player)
+	if player.Character then
+		local head = player.Character:FindFirstChild("Head")
+		if head then
+			local esp = head:FindFirstChild("ESP")
+			if esp then esp:Destroy() end
+		end
+		local nameESP = player.Character:FindFirstChild("ESPName")
+		if nameESP then nameESP:Destroy() end
+	end
+
+	if tracers[player] then
+		tracers[player]:Remove()
+		tracers[player] = nil
+	end
+
+	if espInstances[player] then
+		espInstances[player]:Destroy()
+		espInstances[player] = nil
+	end
+
+	if connections[player] then
+		connections[player]:Disconnect()
+		connections[player] = nil
+	end
+end
+
+-- CRIA O ESP COMPLETO
+local function createESP(player)
+	task.spawn(function()
+		local character = player.Character or player.CharacterAdded:Wait()
+		local head = character:WaitForChild("Head", 5)
+		if not head or head:FindFirstChild("ESP") then return end
+
+		removeESP(player)
+
+		-- GUI com nome, HP e distância
+		local billboard = Instance.new("BillboardGui")
+		billboard.Name = "ESP"
+		billboard.Size = UDim2.new(0, 200, 0, 50)
+		billboard.StudsOffset = Vector3.new(0, 3, 0)
+		billboard.Adornee = head
+		billboard.AlwaysOnTop = true
+		billboard.Parent = head
+
+		local textLabel = Instance.new("TextLabel")
+		textLabel.Size = UDim2.new(1, 0, 1, 0)
+		textLabel.BackgroundTransparency = 1
+		textLabel.TextColor3 = ESPColor
+		textLabel.TextStrokeTransparency = 0.5
+		textLabel.Font = Enum.Font.SourceSansBold
+		textLabel.TextScaled = true
+		textLabel.Text = ""
+		textLabel.Parent = billboard
+
+		local nameBillboard = Instance.new("BillboardGui")
+		nameBillboard.Name = "ESPName"
+		nameBillboard.Adornee = head
+		nameBillboard.Size = UDim2.new(27, 0, 2, 0)
+		nameBillboard.StudsOffset = Vector3.new(0, 3, 0)
+		nameBillboard.AlwaysOnTop = true
+		nameBillboard.Parent = character
+
+		espInstances[player] = nameBillboard
+
+		local tracer = Drawing.new("Line")
+		tracer.Color = ESPColor
+		tracer.Thickness = 1
+		tracer.Transparency = 1
+		tracer.Visible = true
+		tracers[player] = tracer
+
+		-- Conexão do RenderStepped
+		local connection
+		connection = runService.RenderStepped:Connect(function()
+			if not ESPEnabled or not player.Character or not player.Character:FindFirstChild("Humanoid") or player.Character.Humanoid.Health <= 0 then
+				if tracer then tracer.Visible = false end
+				return
+			end
+
+			if localPlayer.Character and localPlayer.Character:FindFirstChild("Head") then
+				local hp = math.floor(player.Character.Humanoid.Health)
+				local distance = math.floor((head.Position - localPlayer.Character.Head.Position).Magnitude)
+				textLabel.Text = player.Name .. "\nHP: " .. hp .. "\nDIST: " .. distance
+				textLabel.TextColor3 = ESPColor
+
+				local screenPos1, onScreen1 = workspace.CurrentCamera:WorldToViewportPoint(localPlayer.Character.Head.Position)
+				local screenPos2, onScreen2 = workspace.CurrentCamera:WorldToViewportPoint(head.Position)
+
+				if onScreen1 and onScreen2 then
+					tracer.From = Vector2.new(screenPos1.X, screenPos1.Y)
+					tracer.To = Vector2.new(screenPos2.X, screenPos2.Y)
+					tracer.Visible = true
+				else
+					tracer.Visible = false
+				end
+			end
+		end)
+
+		connections[player] = connection
+
+		character:WaitForChild("Humanoid").Died:Connect(function()
+			removeESP(player)
+		end)
+	end)
+end
+
+-- ATIVA OU DESATIVA O ESP
+local function toggleESP(active)
+	ESPEnabled = active
+
+	for _, player in ipairs(players:GetPlayers()) do
+		if player ~= localPlayer then
+			if active then
+				createESP(player)
+			else
+				removeESP(player)
+			end
+		end
+	end
+end
+
+-- MONITORA NOVOS JOGADORES
+players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(function()
+		if ESPEnabled then
+			createESP(player)
+		end
+	end)
+end)
+
+-- MONITORA JOGADORES EXISTENTES
+for _, player in ipairs(players:GetPlayers()) do
+	if player ~= localPlayer then
+		player.CharacterAdded:Connect(function()
+			if ESPEnabled then
+				createESP(player)
+			end
+		end)
+	end
+end
+
+players.PlayerRemoving:Connect(function(player)
+	removeESP(player)
+end)
+
+-- BOTÃO DA HAWKLIB
+Visuals:CreateToggle({
+	Name = "Exibir ESP",
+	CurrentValue = false,
+	Flag = "ESPInfo",
+	Callback = function(Value)
+		toggleESP(Value)
+	end
+})
+
+
+Visuals:CreateToggle({
+	Name = "Noclip",
+	CurrentValue = false,
+	Flag = "NoclipInfo",
+	Callback = function(Value)
+		toggleESP(Value)
+	end
+})
+
+Visuals:CreateColorPicker({
+	Name = "Cor do ESP",
+	Color = Color3.fromRGB(255, 0, 0),
+	Flag = "ESPColor",
+	Callback = function(color)
+		ESPColor = color
+	end
+})
+
+
+local function addTeleportButton(name, cframe)
+	Tps:CreateButton({
+		Name = name,
+		Callback = function()
+			local player = game.Players.LocalPlayer
+			if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+				player.Character:MoveTo(cframe.Position + Vector3.new(0, 3, 0))
+			end
+		end,
+	})
+end
+addTeleportButton("Teleport Praça", CFrame.new(-291.579559, 3.26299787, 342.192535))
+addTeleportButton("Teleport Gás", CFrame.new(-469.959015, 3.25349784, -54.3936005))
+addTeleportButton("Teleport HP", CFrame.new(-543.439941, 3.26299858, 645.16864))
+addTeleportButton("Teleport Tabacaria", CFrame.new(-83.1141129, 13.1430578, 74.7073364))
+addTeleportButton("Teleport Garagem", CFrame.new(-466.870148, 7.64567232, 350.242737))
+addTeleportButton("Teleport Concessionaria", CFrame.new(-91.3902893, 8.07136822, 520.355347))
+addTeleportButton("Teleport Gari", CFrame.new(-518.672852, 3.16749811, -1.16962147, 0, 0, -1, 0, 1, 0, 1, 0, 0))
+addTeleportButton("Teleport Imobiliaria", CFrame.new(-284.904785, 8.26088619, -72.2896194, 0, 0, -1, 0, 1, 0, 1, 0, 0))
+addTeleportButton("Teleport PM", CFrame.new(-980.181458, 2.27553082, 467.080536, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+addTeleportButton("Teleport PRF", CFrame.new(6662.24512, 36.6637421, 5047.83838, 0.707134247, 0, 0.707079291, 0, 1, 0, -0.707079291, 0, 0.707134247))
+addTeleportButton("Teleport Mineração", CFrame.new(201.932144, 2.76136589, 145.50531, 0, 0, 1, 0, 1, -0, -1, 0, 0))
+addTeleportButton("Teleport Mecânica", CFrame.new(-180.608261, 3.29813337, -532.4151, 0.422592998, -0, -0.906319618, 0, 1, -0, 0.906319618, 0, 0.422592998))
+addTeleportButton("Teleport Fazenda", CFrame.new(817.243225, 3.26249814, -87.316864, 0, 0, 1, 0, 1, 0, -1, 0, 0))
+addTeleportButton("Teleport Prefeitura", CFrame.new(-289.5747375488281, 20.34406089782715, 117.11897277832031))
+addTeleportButton("Teleport Banco", CFrame.new(-27.2709007, 11.5685892, 418.200653, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+addTeleportButton("Teleport Ilegal", CFrame.new(11969.873046875, 38.66408157348633, 12782.341796875))
+addTeleportButton("Teleport predio 1", CFrame.new(-1618.034912109375, 4.741213321685791, 552.136962890625))
+addTeleportButton("Teleport Devs Mini City", CFrame.new(2555.44263, 303.167755, -1004.13763, -0.422592998, 0, 0.906319618, 0, 1, 0, -0.906319618, 0, -0.422592998))
+addTeleportButton("Teleport Lavagem", CFrame.new(19784.5508, 69.3496857, 13125.2607))
+addTeleportButton("Teleport Cutivar", CFrame.new(796.0354, 5.76249695, -86.5739288))
+
+addTeleportButton("Teleport Mansão Abondonada", CFrame.new(-2556.1145, 255.432526, 1218.24072))
+addTeleportButton("Teleport Areoporto", CFrame.new(11356.9043, 17.9186935, 9688.08984))
+
+local Section = rev:CreateSection("RISCO DE BAN")
+
+
+getgenv().AutoRevistarLoad = false
+getgenv().AutoRevistar = false
+
+local function LoadAR()
+	if getgenv().AutoRevistarLoad then return end
+	local player = game.Players.LocalPlayer
+
+	getgenv().AutoRevistarLoad = true
+	while true do
+		task.wait(1)
+		if not getgenv().AutoRevistar then return end
+		if not player:FindFirstChild("RevistaPlayer") or player:FindFirstChild("RevistaPlayer").Value == "" then
+
+			local character = game.Players.LocalPlayer.Character
+			if character and character:FindFirstChild("HumanoidRootPart") then
+				local myPosition = character.HumanoidRootPart.Position
+
+				for _, player in pairs(game.Players:GetPlayers()) do
+					if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("HumanoidRootPart") then
+						local humanoid = player.Character.Humanoid
+						local distance = (player.Character.HumanoidRootPart.Position - myPosition).Magnitude
+
+						if humanoid.Health <= 0 and distance <= 8 then
+							game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+							break
+						end
+					end
+				end
+			end
+
+
+		end
+	end
+end
+
+--[[local ww = rev:CreateToggle({
+	Name = "Auto Revistar",
+	CurrentValue = false,
+	Flag = "rvstAuto",
+	Callback = function(Value)
+		getgenv().AutoRevistar = Value
+		LoadAR()
+	end,
+
+})]]
+
+
+--[[getgenv().AntiStaffLoad = false
+getgenv().AntiStaff = false
+
+local function LoadAR()
+	if getgenv().AntiStaffLoad then return end
+	local player = game.Players.LocalPlayer
+
+	getgenv().AntiStaffLoad = true
+	while true do
+		task.wait(1)
+		if not getgenv().AntiStaff then return end
+		
+		
+		
+	end
+end
+
+local ww = rev:CreateToggle({
+	Name = "Auto Revistar",
+	CurrentValue = false,
+	Flag = "rvstAuto",
+	Callback = function(Value)
+		getgenv().AntiStaff = Value
+		LoadAR()
+	end,
+
+})]]
+
+local Button = rev:CreateButton({
+	Name = "Remover Dano De Queda",
+	Callback = function()
+		local function deleteDamageEvents()
+			for _, obj in ipairs(game:GetDescendants()) do
+				if obj:IsA("RemoteEvent") or obj:IsA("BindableEvent") then
+					if string.lower(obj.Name):find("damage") or string.lower(obj.Name):find("dano") then
+						obj:Destroy()
+					end
+				end
+			end
+		end
+
+		deleteDamageEvents()
+
+		game.DescendantAdded:Connect(function(obj)
+			if (obj:IsA("RemoteEvent") or obj:IsA("BindableEvent")) then
+				if string.lower(obj.Name):find("damage") or string.lower(obj.Name):find("dano") then
+					obj:Destroy()
+				end
+			end
+		end)
+	end,
+})
+
+
+local Button = rev:CreateButton({
+	Name = "Anti-AFK (20 Minutos)",
+	Callback = function()
+		local function deletarNotifyGui()
+			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+			for _, gui in ipairs(playerGui:GetChildren()) do
+				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+					gui:Destroy()
+				end
+			end
+		end
+
+		local TextChatService = game:GetService("TextChatService")
+		local Players = game:GetService("Players")
+		local LocalPlayer = Players.LocalPlayer
+
+		local function sendRejoinMessage()
+			local channel = TextChatService:WaitForChild("TextChannels"):WaitForChild("RBXGeneral")
+			channel:SendAsync("/rejoin")
+		end
+
+		-- 🟢 Início do Anti-AFK por pulo automático
+		task.spawn(function()
+			while true do
+				Rayfield:Notify({
+					Title = "MENU - MINI CITY",
+					Content = "Anti-Afk, Pulei para reset time!",
+					Duration = 6.5,
+					Image = 4483362458,
+				})
+
+				local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+				local humanoid = character:FindFirstChildOfClass("Humanoid")
+				if humanoid then
+					humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+				end
+				wait(60) -- pula a cada 60 segundos
+			end
+		end)
+	end,
+})
+
+
+					--[[local Button = rev:CreateButton({
+						Name = "Auto CL v2 - (-30 HP)",
+						Callback = function()
+							local TeleportService = game:GetService("TeleportService")
+							local Players = game:GetService("Players")
+							local LocalPlayer = Players.LocalPlayer
+							local placeId = game.PlaceId
+
+							while true do
+								local character = LocalPlayer.Character
+								if character then
+									local humanoid = character:FindFirstChildOfClass("Humanoid")
+									if humanoid and humanoid.Health < 30 then
+										-- Teleporta para outro servidor aleatório do mesmo jogo
+										TeleportService:Teleport(placeId)
+										break
+									end
+								end
+								task.wait()
+							end
+						end,
+					})]]
+
+
+
+local Section = rev:CreateSection("REVISTAR")
+local ww = rev:CreateToggle({
+	Name = "Revistar (TECLA T | PC)",
+	CurrentValue = false,
+	Flag = "rvst",
+	Callback = function(Value)
+		getgenv().Enabled = Value
+
+		local TextChatService = game:GetService("TextChatService")
+		local Players = game:GetService("Players")
+		local LocalPlayer = Players.LocalPlayer
+
+		local function sendMessage()
+			game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+		end
+
+		game.UserInputService.InputBegan:Connect(function(input, gameProcessed)
+			if gameProcessed then return end
+			if input.KeyCode == Enum.KeyCode.T then
+				if Value then
+					sendMessage()
+				end
+			end
+		end)
+	end,
+
+
+})
+
+local mob = rev:CreateButton({
+	Name = "Revistar (MOBILE)",
+	Callback = function()
+		local TextChatService = game:GetService("TextChatService")
+
+		-- Função para enviar a mensagem /revistar morto
+		local function sendRevistarMessage()
+			game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+		end
+
+		-- Cria a interface
+		local ScreenGui = Instance.new("ScreenGui")
+		local Frame = Instance.new("CanvasGroup")
+		local CloseButton = Instance.new("TextButton")
+		local RevistarButton = Instance.new("TextButton")
+		local Ui1 = Instance.new("UIStroke")
+		local Ui2 = Instance.new("UIStroke")
+		local Title = Instance.new("TextLabel")
+
+		ScreenGui.Name = "RevistarUI"
+		ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+
+		Ui2.Color = Color3.fromRGB(30, 30, 30)
+		Ui2.Parent = Frame
+		Ui2.LineJoinMode = Enum.LineJoinMode.Miter
+		Ui2.Thickness = 2
+
+		Ui1.Color = Color3.fromRGB(30, 30, 30)
+		Ui1.Parent = RevistarButton
+		Ui1.LineJoinMode = Enum.LineJoinMode.Miter
+		Ui1.Thickness = 2
+		Ui1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+		-- Estilo do Frame
+		Frame.Size = UDim2.new(0, 300, 0, 100)
+		Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+		Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Frame.BorderSizePixel = 0
+		Frame.BackgroundTransparency = 0.6
+		Frame.Active = true
+		Frame.Draggable = true
+
+		-- Título
+		Title.Size = UDim2.new(1, 0, 0, 30)
+		Title.Position = UDim2.new(0, 0, 0, 0)
+		Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Title.Text = "BIEL BS"
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.Font = Enum.Font.MontserratBold
+		Title.TextSize = 18
+
+		-- Botão Fechar
+		CloseButton.Size = UDim2.new(0, 30, 0, 30)
+		CloseButton.Position = UDim2.new(1, -30, 0, 0)
+		CloseButton.BackgroundTransparency = 1
+		CloseButton.Text = "–"
+		CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		CloseButton.Font = Enum.Font.MontserratBold
+		CloseButton.TextSize = 25
+		CloseButton.MouseButton1Click:Connect(function()
+			ScreenGui:Destroy()
+		end)
+
+		-- Botão Revistar
+		RevistarButton.Size = UDim2.new(0.8, 0, 0.4, 0)
+		RevistarButton.Position = UDim2.new(0.1, 0, 0.75, -30)
+		RevistarButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		RevistarButton.Text = "REVISTAR"
+		RevistarButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		RevistarButton.Font = Enum.Font.MontserratBold
+		RevistarButton.BackgroundTransparency = 0.6
+		RevistarButton.TextSize = 20
+		RevistarButton.AutoButtonColor = true
+		RevistarButton.MouseButton1Click:Connect(function()
+			sendRevistarMessage()
+		end)
+
+		-- Adiciona os elementos ao frame
+		Frame.Parent = ScreenGui
+		Title.Parent = Frame
+		CloseButton.Parent = Frame
+		RevistarButton.Parent = Frame
+	end,
+})
+
+local mob = rev:CreateButton({
+	Name = "Roubar (MOBILE)",
+	Callback = function()
+		local TextChatService = game:GetService("TextChatService")
+
+		-- Função para enviar a mensagem /revistar morto
+		local function sendRevistarMessage()
+			game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/roubar")
+		end
+
+		-- Cria a interface
+		local ScreenGui = Instance.new("ScreenGui")
+		local Frame = Instance.new("CanvasGroup")
+		local CloseButton = Instance.new("TextButton")
+		local RevistarButton = Instance.new("TextButton")
+		local Ui1 = Instance.new("UIStroke")
+		local Ui2 = Instance.new("UIStroke")
+		local Title = Instance.new("TextLabel")
+
+		ScreenGui.Name = "RobaUI"
+		ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+
+		Ui2.Color = Color3.fromRGB(30, 30, 30)
+		Ui2.Parent = Frame
+		Ui2.LineJoinMode = Enum.LineJoinMode.Miter
+		Ui2.Thickness = 2
+
+		Ui1.Color = Color3.fromRGB(30, 30, 30)
+		Ui1.Parent = RevistarButton
+		Ui1.LineJoinMode = Enum.LineJoinMode.Miter
+		Ui1.Thickness = 2
+		Ui1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+		-- Estilo do Frame
+		Frame.Size = UDim2.new(0, 300, 0, 100)
+		Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+		Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Frame.BorderSizePixel = 0
+		Frame.BackgroundTransparency = 0.6
+		Frame.Active = true
+		Frame.Draggable = true
+
+		-- Título
+		Title.Size = UDim2.new(1, 0, 0, 30)
+		Title.Position = UDim2.new(0, 0, 0, 0)
+		Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Title.Text = "BIEL BS"
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.Font = Enum.Font.MontserratBold
+		Title.TextSize = 18
+
+		-- Botão Fechar
+		CloseButton.Size = UDim2.new(0, 30, 0, 30)
+		CloseButton.Position = UDim2.new(1, -30, 0, 0)
+		CloseButton.BackgroundTransparency = 1
+		CloseButton.Text = "–"
+		CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		CloseButton.Font = Enum.Font.MontserratBold
+		CloseButton.TextSize = 25
+		CloseButton.MouseButton1Click:Connect(function()
+			ScreenGui:Destroy()
+		end)
+
+		-- Botão Revistar
+		RevistarButton.Size = UDim2.new(0.8, 0, 0.4, 0)
+		RevistarButton.Position = UDim2.new(0.1, 0, 0.75, -30)
+		RevistarButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		RevistarButton.Text = "ROUBAR"
+		RevistarButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		RevistarButton.Font = Enum.Font.MontserratBold
+		RevistarButton.BackgroundTransparency = 0.6
+		RevistarButton.TextSize = 20
+		RevistarButton.AutoButtonColor = true
+		RevistarButton.MouseButton1Click:Connect(function()
+			sendRevistarMessage()
+		end)
+
+		-- Adiciona os elementos ao frame
+		Frame.Parent = ScreenGui
+		Title.Parent = Frame
+		CloseButton.Parent = Frame
+		RevistarButton.Parent = Frame
+	end,
+})
+local Section = rev:CreateSection("Info")
+rev:CreateParagraph({
+	Title = "Descrição",
+	Content = "Script feito por BIEL BS\nNOVA ATUALIZAÇÃO:\n1. Novo Auto Revistar, Revista Todos Mortos Perto De Você (5 Passos).\n2. Auto CL, Quita Sozinho Quanto Tiver Com Menos De 30 De Vida.\n3. Itens Que o Revistar Pegara. AK47, Uzi, Parafal, Faca, IA2, G3, IPhone 14, Agua, Hamburguer, Hi Power, Natalina, Tratamento, AR-15, Lockpick, Glock17, Planta Suja, Planta Limpa, Plástico Pronto, Plástico Vázio.\n 4. To com Preguiça."
+})
+
+local cam = Window:CreateTab("Combate")
+
+local Paragraph = cam:CreateParagraph({Title = "BIEL BS ON TOP", Content = "Feito por BIEL BS"})
+local Section = cam:CreateSection("NECESSÁRIO")
+
+local Button = cam:CreateButton({
+	Name = "AimBot",
+	Callback = function()
+
+
+		Rayfield:Notify({
+			Title = "Aviso",
+			Content = "Aimbot Ativado!",
+			Duration = 6.5,
+			Image = 4483362458,
+		})
+
+		-- Função para deletar todas as NotifyGui
+		local function deletarNotifyGui()
+			local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+			for _, gui in ipairs(playerGui:GetChildren()) do
+				if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+					gui:Destroy() -- Deleta a NotifyGui
+				end
+			end
+		end
+
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/yzeedw/Mortalv2-main/main/universal%20silent%20aim%20by%20Mortalexploits'))()
+
+
+	end,
+})
+
+
+local mob = cam:CreateButton({
+	Name = "TP",
+	Callback = function()
+
+		local function tp()
+			local TweenService = game:GetService("TweenService")
+			local Players = game:GetService("Players")
+
+			local player = Players.LocalPlayer
+			local character = player.Character or player.CharacterAdded:Wait()
+			local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+			-- Função para obter um player vivo aleatório (diferente de si mesmo)
+			local function getRandomAlivePlayer()
+				for i = 1, 10 do -- Tenta algumas vezes (caso tenha muitos mortos)
+					local otherPlayers = Players:GetPlayers()
+					local randomPlayer = otherPlayers[math.random(1, #otherPlayers)]
+					if randomPlayer ~= player and randomPlayer.Character and randomPlayer.Character:FindFirstChild("Humanoid") then
+						local humanoid = randomPlayer.Character:FindFirstChild("Humanoid")
+						if humanoid and humanoid.Health > 0 then
+							return randomPlayer
+						end
+					end
+				end
+				return nil
+			end
+
+			local targetPlayer = getRandomAlivePlayer()
+
+			if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+				local targetHRP = targetPlayer.Character.HumanoidRootPart
+				local destino = targetHRP.Position + Vector3.new(0, 10, 0)
+
+				-- Velocidade desejada
+				local VELOCIDADE = 1500  -- studs por segundo
+
+				-- Calcular distância e duração
+				local distancia = (destino - humanoidRootPart.Position).Magnitude
+				local duracao = distancia / VELOCIDADE
+
+				-- Criar TweenInfo
+				local tweenInfo = TweenInfo.new(duracao, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+				local goal = {Position = destino}
+
+				-- Ancorar antes de mover
+				humanoidRootPart.Anchored = true
+
+				-- Criar e tocar o tween
+				local tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
+				tween:Play()
+
+
+				-- Desancorar quando terminar
+				tween.Completed:Connect(function()
+					humanoidRootPart.Anchored = false
+				end)
+			else
+				warn("Nenhum player vivo encontrado.")
+			end
+		end
+
+		local TextChatService = game:GetService("TextChatService")
+
+		-- Cria a interface
+		local ScreenGui = Instance.new("ScreenGui")
+		local Frame = Instance.new("CanvasGroup")
+		local CloseButton = Instance.new("TextButton")
+		local TPButton = Instance.new("TextButton")
+		local Ui1 = Instance.new("UIStroke")
+		local Ui2 = Instance.new("UIStroke")
+		local Title = Instance.new("TextLabel")
+
+		ScreenGui.Name = "TpUi"
+		ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+
+		Ui2.Color = Color3.fromRGB(30, 30, 30)
+		Ui2.Parent = Frame
+		Ui2.LineJoinMode = Enum.LineJoinMode.Miter
+		Ui2.Thickness = 2
+
+		Ui1.Color = Color3.fromRGB(30, 30, 30)
+		Ui1.Parent = TPButton
+		Ui1.LineJoinMode = Enum.LineJoinMode.Miter
+		Ui1.Thickness = 2
+		Ui1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+		-- Estilo do Frame
+		Frame.Size = UDim2.new(0, 300, 0, 100)
+		Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+		Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Frame.BorderSizePixel = 0
+		Frame.BackgroundTransparency = 0.6
+		Frame.Active = true
+		Frame.Draggable = true
+
+		-- Título
+		Title.Size = UDim2.new(1, 0, 0, 30)
+		Title.Position = UDim2.new(0, 0, 0, 0)
+		Title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Title.Text = "BIEL BS"
+		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Title.Font = Enum.Font.MontserratBold
+		Title.TextSize = 18
+
+		-- Botão Fechar
+		CloseButton.Size = UDim2.new(0, 30, 0, 30)
+		CloseButton.Position = UDim2.new(1, -30, 0, 0)
+		CloseButton.BackgroundTransparency = 1
+		CloseButton.Text = "–"
+		CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		CloseButton.Font = Enum.Font.MontserratBold
+		CloseButton.TextSize = 25
+		CloseButton.MouseButton1Click:Connect(function()
+			ScreenGui:Destroy()
+		end)
+
+		-- Botão Revistar
+		TPButton.Size = UDim2.new(0.8, 0, 0.4, 0)
+		TPButton.Position = UDim2.new(0.1, 0, 0.75, -30)
+		TPButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		TPButton.Text = "IR ATE ALGUEM"
+		TPButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		TPButton.Font = Enum.Font.MontserratBold
+		TPButton.BackgroundTransparency = 0.6
+		TPButton.TextSize = 20
+		TPButton.AutoButtonColor = true
+		TPButton.MouseButton1Click:Connect(function()
+			tp()
+		end)
+
+		-- Adiciona os elementos ao frame
+		Frame.Parent = ScreenGui
+		Title.Parent = Frame
+		CloseButton.Parent = Frame
+		TPButton.Parent = Frame
+	end,
+})
+
+local mob = cam:CreateButton({
+	Name = "TP Em Quem Mato",
+	Callback = function()
+		local Players = game:GetService("Players")
+		local TweenService = game:GetService("TweenService")
+		local TextChatService = game:GetService("TextChatService")
+
+		local localPlayer = Players.LocalPlayer
+		local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+		local alvosPendentes = {}
+		local alvosProcessados = {}
+		local cooldownAtivo = false
+
+		local function sendRevistarMessage()
+			game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("bixobrabo"):FireServer("/revistar")
+		end
+
+		local function tp(targetPlayer)
+			if cooldownAtivo then return end
+			cooldownAtivo = true
+
+			if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+				local targetHRP = targetPlayer.Character.HumanoidRootPart
+				local destino = targetHRP.Position
+				local VELOCIDADE = 1500
+				local distancia = (destino - humanoidRootPart.Position).Magnitude
+				local duracao = distancia / VELOCIDADE
+
+				local tweenInfo = TweenInfo.new(duracao, Enum.EasingStyle.Linear)
+				local tween = TweenService:Create(humanoidRootPart, tweenInfo, {Position = destino})
+				humanoidRootPart.Anchored = true
+				tween:Play()
+				tween.Completed:Connect(function()
+					humanoidRootPart.Anchored = false
+					task.wait(0.1)
+					sendRevistarMessage()
+					-- Ativa o cooldown por 2 segundos (ajuste conforme necessário)
+					task.delay(.5, function()
+						cooldownAtivo = false
+					end)
+				end)
+			else
+				cooldownAtivo = false
+			end
+		end
+
+		-- Loop para encontrar jogadores mortos por você
+		task.spawn(function()
+			while true do
+				task.wait() -- reduz o número de verificações por segundo
+				for _, p in ipairs(Players:GetPlayers()) do
+					if p ~= localPlayer and not alvosProcessados[p] then
+						local char = p.Character
+						if char then
+							local hum = char:FindFirstChild("Humanoid")
+							if hum and hum.Health <= 0 then
+								local creator = hum:FindFirstChild("creator")
+								if creator and creator.Value == localPlayer then
+									table.insert(alvosPendentes, p)
+									alvosProcessados[p] = true
+								end
+							end
+						end
+					end
+				end
+			end
+		end)
+
+		-- Loop para tratar os alvos pendentes
+		task.spawn(function()
+			while true do
+				task.wait(0.1)
+				if #alvosPendentes > 0 and not cooldownAtivo then
+					local alvo = table.remove(alvosPendentes, 1)
+					tp(alvo)
+				end
+			end
+		end)
+	end,
+})
+
+
+
+
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+
+
+local Dropdown = cam:CreateDropdown({
+	Name = "Player List",
+	Options = {},
+	CurrentOption = {""},
+	MultipleOptions = false,
+	Flag = "Dropdown1",
+	Callback = function(Options)
+
+		local selectedName = Options[1]
+		local targetPlayer = Players:FindFirstChild(selectedName)
+
+
+
+		if not targetPlayer or not targetPlayer.Character or not targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			warn("Jogador inválido ou sem personagem.")
+			return
+		end
+
+		tp(targetPlayer)
+
+	end,
+})
+
+function tp(targetPlayer)
+	Dropdown:Set({""})
+	local playerNames = {}
+	for _, player in ipairs(Players:GetPlayers()) do
+		table.insert(playerNames, player.Name)
+	end
+	Dropdown:Refresh(playerNames)
+
+	local localPlayer = Players.LocalPlayer
+	local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+	local targetHRP = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+	local destino = targetHRP.Position + Vector3.new(0, 10, 0)
+
+	local VELOCIDADE = 1500
+	local distancia = (destino - humanoidRootPart.Position).Magnitude
+	local duracao = distancia / VELOCIDADE
+
+	local tweenInfo = TweenInfo.new(duracao, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+	local goal = {Position = destino}
+
+	humanoidRootPart.Anchored = true
+	local tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
+	tween:Play()
+
+	tween.Completed:Connect(function()
+		humanoidRootPart.Anchored = false
+	end)
+end
+
+local mob = cam:CreateButton({
+	Name = "Atualizar Lista",
+	Callback = function()
+		local playerNames = {}
+		for _, player in ipairs(Players:GetPlayers()) do
+			table.insert(playerNames, player.Name)
+		end
+		Dropdown:Refresh(playerNames)
+		Dropdown:Set({""})
+	end,
+})
+
+local ClSystem = Window:CreateTab("CL")
+
+local Paragraph = ClSystem:CreateParagraph({Title = "CL", Content = "Area Dos CL"})
+local Section = ClSystem:CreateSection("NECESSÁRIO")
+
+if getgenv == nil then
+	error("getgenv não está definido neste ambiente.")
+end
+
+getgenv().KickOnLowHealth = false
+getgenv().HealthThreshold = 30
+
+local function monitorHealth()
+	local player = game.Players.LocalPlayer
+	local character = player.Character
+	if character and character:FindFirstChild("Humanoid") then
+		local humanoid = character.Humanoid
+		humanoid.HealthChanged:Connect(function(health)
+			if health <= getgenv().HealthThreshold and getgenv().KickOnLowHealth then
+				player:Kick("Auto cl pq tua vida tava abaixo de " .. getgenv().HealthThreshold)
+			end
+		end)
+	end
+end
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+	monitorHealth()
+end)
+
+if game.Players.LocalPlayer.Character then
+	monitorHealth()
+end
+
+
+local Slider = ClSystem:CreateSlider({
+	Name = "CL Config",
+	Range = {0, 100},
+	Increment = 10,
+	Suffix = "Vida",
+	CurrentValue = 30,
+	Flag = "CLConfig",
+	Callback = function(Value)
+		getgenv().HealthThreshold = Value
+	end,
+})
+
+local Toggle = ClSystem:CreateToggle({
+	Name = "Auto CL",
+	CurrentValue = false,
+	Flag = "AutoCLC", 
+	Callback = function(Value)
+		getgenv().KickOnLowHealth = Value
+	end,
+})
+
+
+
+local LockPickW = Window:CreateTab("LockPick")
+
+local Section = LockPickW:CreateSection("DEIXE TODAS AS LOCKPICK FACIL - ATIVE ANTES DE USAR A LOCKPICK")
+
+getgenv().lockPickFacil = false
+getgenv().lockPickFacilLoad = false
+
+local function LoadLock()
+	if getgenv().lockPickFacilLoad then return end
+	local player = game.Players.LocalPlayer
+
+	getgenv().lockPickFacilLoad = true
+	while true do
+		task.wait(.1)
+		if not getgenv().lockPickFacil then return end
+		if player.PlayerGui:FindFirstChild("LockpickTentativa") then
+			local screenGui = player.PlayerGui:FindFirstChild("LockpickTentativa")
+			local area:Frame = player.PlayerGui:FindFirstChild("LockpickTentativa"):WaitForChild("Frame"):WaitForChild("progresso"):WaitForChild("areaCerteira")
+			area.Size = UDim2.new(1,0,1,0)
+		end
+	end
+end
+
+getgenv().FurtoCarroF = false
+
+game:GetService("ProximityPromptService").PromptTriggered:Connect(function(prompt)
+	if not getgenv().FurtoCarroF then
+		warn("Furtar Carro nao esta ativo")
+		return
+	end
+
+	game:GetService("ProximityPromptService").PromptTriggered:Connect(function(promt)
+		if promt.Name == "DrivePrompt" then
+			local seat = promt.Parent.Parent
+			seat:Sit(game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"))
+		end
+	end)
+
+end)
+
+local Toggle = LockPickW:CreateToggle({
+	Name = "Entrar No Carro Trancado",
+	CurrentValue = false,
+	Flag = "FurtoCarro", 
+	Callback = function(Value)
+		getgenv().FurtoCarroF = Value
+	end,
+})
+
+
+local Toggle = LockPickW:CreateToggle({
+	Name = "Lockpick Facil",
+	CurrentValue = false,
+	Flag = "FacilLock", 
+	Callback = function(Value)
+		getgenv().lockPickFacil = Value
+		LoadLock()
+	end,
+})
+
+local Farm = Window:CreateTab("Farm Peça")
+
+local Section = Farm:CreateSection("FARM PEÇA DE ARMA - Está Bugado")
+
+local mob = Farm:CreateButton({
+	Name = "Salvar Posição",
+	Callback = function()
+		local player = game.Players.LocalPlayer
+		local character = player.Character
+		if character then
+			local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+			if humanoidRootPart then
+				_G.SavedPosition = humanoidRootPart.Position
+			end
+		end
+	end,
+})
+
+local Toggle = Farm:CreateToggle({
+	Name = "Começar Farmar",
+	CurrentValue = false,
+	Flag = "FarmPeca", 
+	Callback = function(Value)
+		if Value then
+			local function fireAllProximityPrompts()
+				local objetosMissao = workspace:FindFirstChild("MapaGeral")
+				if objetosMissao then
+					objetosMissao = objetosMissao:FindFirstChild("FavelaV2")
+					if objetosMissao then
+						objetosMissao = objetosMissao:FindFirstChild("objetosMissao")
+						if objetosMissao then
+							for _, prompt in ipairs(objetosMissao:GetDescendants()) do
+								if prompt:IsA("ProximityPrompt") then
+									prompt.HoldDuration = 0
+									prompt:InputHoldBegin()
+									prompt:InputHoldEnd()
+								end
+							end
+						end
+					end
+				end
+			end
+
+			local function findPlayerProximityPrompt()
+				local playerName = game.Players.LocalPlayer.Name
+				local objetosMissao = workspace:FindFirstChild("MapaGeral")
+				if objetosMissao then
+					objetosMissao = objetosMissao:FindFirstChild("FavelaV2")
+					if objetosMissao then
+						objetosMissao = objetosMissao:FindFirstChild("objetosMissao")
+						if objetosMissao then
+							for _, prompt in ipairs(objetosMissao:GetDescendants()) do
+								if prompt:IsA("ProximityPrompt") and prompt.Name == playerName then
+									return prompt
+								end
+							end
+						end
+					end
+				end
+				return nil
+			end
+
+			while Value do
+				if not _G.SavedPosition then
+					break
+				end
+
+				local player = game.Players.LocalPlayer
+				local character = player.Character
+				if not character or not character:FindFirstChild("HumanoidRootPart") then
+					break
+				end
+
+				fireAllProximityPrompts()
+				character.HumanoidRootPart.CFrame = CFrame.new(_G.SavedPosition)
+
+				task.wait(0.35)
+
+				local args = {
+					[1] = "missaoPECAS"
+				}
+				game:GetService("ReplicatedStorage"):WaitForChild("RemoteNovos"):WaitForChild("trabalhos"):FireServer({"missaoPECAS"})
+
+				local playerPrompt = findPlayerProximityPrompt()
+				if playerPrompt and playerPrompt.Parent then
+					character.HumanoidRootPart.CFrame = CFrame.new(playerPrompt.Parent.Position)
+				end
+
+				task.wait(0.2)
+			end
+		end
+	end,
+})
+
+local Section = Farm:CreateSection("FARM ENTREGADOR DE GÁS")
+
+
+
+
+getgenv().EntregarGasFarm = false
+getgenv().EntregarGas = false
+
+local ePegar = true
+
+local function getNearestPrompt(PromptNameKK)
+	local nearestPrompt = nil
+
+	for _, prompt in workspace:GetDescendants() do
+		if prompt:IsA("ProximityPrompt") and prompt.Enabled and prompt.ActionText == PromptNameKK then
+			nearestPrompt = prompt
+			break
+		end
+	end
+
+	return nearestPrompt
+end
+
+local function StartFarm()
+	if getgenv().EntregarGas == true then return end
+	getgenv().EntregarGas = true
+	local actionPegar = "Pegar Botijão"
+
+	local playerLocal = game.Players.LocalPlayer
+	local char = playerLocal.Character
+	local hum = char:FindFirstChildOfClass("Humanoid")
+
+	while true do
+
+		task.wait()
+		if getgenv().EntregarGasFarm and playerLocal.Team.Name == "Entregador de Gás" then
+			if playerLocal.Inv:FindFirstChild("Botijão de Gás") and not playerLocal.Character:FindFirstChild("Botijão de Gás") then
+				ePegar = true
+				local prompt:ProximityPrompt = getNearestPrompt("Pegar Botijão")
+				prompt.HoldDuration = 0
+
+				char.HumanoidRootPart.CFrame = prompt.Parent.CFrame
+
+				prompt:InputHoldBegin()
+				prompt:InputHoldEnd()
+
+
+				game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest"):InvokeServer("janemseimais", "Botijão de Gás")
+				hum:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Botijão de Gás"))
+			elseif playerLocal.Character:FindFirstChild("Botijão de Gás") then
+				warn("Ja pode entragar esse kacete fdp")
+				ePegar = false
+
+				local prompt:ProximityPrompt = getNearestPrompt("Entregar Botijão")
+				prompt.HoldDuration = 0
+
+				char.HumanoidRootPart.CFrame = prompt.Parent.CFrame
+
+				prompt:InputHoldBegin()
+				prompt:InputHoldEnd()
+			end
+		end
+	end
+end
+
+
+local Toggle = Farm:CreateToggle({
+	Name = "Farma Gás",
+	CurrentValue = false,
+	Flag = "DaySet", 
+	Callback = function(Value)
+		getgenv().EntregarGasFarm = Value
+		StartFarm()
+	end,
+})
+
+
+local Misc = Window:CreateTab("Misc")
+
+local Paragraph = Misc:CreateParagraph({Title = "Misc", Content = "Area Dos Treco"})
+local Section = Misc:CreateSection("NECESSÁRIO")
+
+if getgenv == nil then
+	error("getgenv não está definido neste ambiente.")
+end
+
+getgenv().CorrerAgachadoAtivado = false
+getgenv().CorrerAgachado = 100
+getgenv().CarregadoCorrer = false
+
+local function LoadCorrer()
+	if getgenv().CarregadoCorrer then return end
+	getgenv().CarregadoCorrer = true
+
+	local localPlayer = game.Players.LocalPlayer
+	local function updateSpeed()
+		while true do
+			if getgenv().CorrerAgachadoAtivado and localPlayer and localPlayer.Character then
+				local humanoid = localPlayer.Character:FindFirstChildOfClass("Humanoid")
+				if humanoid and localPlayer:GetAttribute("agachado") == true then
+					humanoid.WalkSpeed = getgenv().CorrerAgachado
+				end
+			end
+			task.wait(0.05)
+		end
+	end
+
+	task.spawn(updateSpeed)
+end
+
+local Slider = Misc:CreateSlider({
+	Name = "Speed",
+	Range = {50, 200},
+	Increment = 10,
+	Suffix = "Velocidade",
+	CurrentValue = 100,
+	Flag = "SpeedC",
+	Callback = function(Value)
+		getgenv().CorrerAgachado = Value
+	end,
+})
+
+local Toggle = Misc:CreateToggle({
+	Name = "Correr Rápido",
+	CurrentValue = false,
+	Flag = "CorreFast", 
+	Callback = function(Value)
+		getgenv().CorrerAgachadoAtivado = Value
+		LoadCorrer()
+	end,
+})
+
+local Dropdown = Misc:CreateDropdown({
+	Name = "Menu Tema",
+	Options = {"Default","AmberGlow","Amethyst","Bloom","DarkBlue","Green","Light","Ocean","Serenity"},
+	CurrentOption = {"Ocean"},
+	MultipleOptions = false,
+	Flag = "TemaMenu",
+	Callback = function(Options)
+		Window.ModifyTheme(Options[1])
+	end,
+})
+
+local ServerS = Misc:CreateSection("SERVER")
+
+local mob = Misc:CreateButton({
+	Name = "Entre No Menor Server",
+	Callback = function()
+		local success, err = pcall(function()
+			local module = loadstring(game:HttpGet("https://raw.githubusercontent.com/raw-scriptpastebin/FE/main/Server_Hop_Settings"))()
+			module:Teleport(game.PlaceId)
+		end)
+
+		if not success then
+			warn("Erro ao trocar de servidor: " .. tostring(err))
+		else
+			print("Servidor trocado com sucesso!")
+		end
+	end,
+})
+local OutrosS = Misc:CreateSection("OUTROS")
+
+getgenv().SempreDia = false
+getgenv().CarregadoDia = false
+
+local function manterDia()
+	if getgenv().CarregadoDia then return end
+	getgenv().CarregadoDia = true
+	local Lighting = game:GetService("Lighting")
+	while true do
+
+		if getgenv().SempreDia == true then
+			Lighting.ClockTime = 14
+		end
+
+		task.wait()
+	end
+end
+
+
+local Toggle = Misc:CreateToggle({
+	Name = "Sempre Dia",
+	CurrentValue = false,
+	Flag = "DaySet", 
+	Callback = function(Value)
+		getgenv().SempreDia = Value
+
+		manterDia()
+	end,
+})
+
+
+getgenv().PegarArmaSafe = false
+getgenv().CarregadoSafe = false
+
+local function SafeEnabled()
+	if getgenv().CarregadoSafe then return end
+	getgenv().CarregadoSafe = true
+	local Lighting = game:GetService("Lighting")
+	while true do
+
+		if getgenv().PegarArmaSafe == true then
+			if game.Players.LocalPlayer:GetAttribute("SafeImp") then
+				game.Players.LocalPlayer:SetAttribute("SafeImp", false)
+			end
+		end
+
+		task.wait()
+	end
+end
+
+
+local Toggle = Misc:CreateToggle({
+	Name = "Puxar Arma Na Safe",
+	CurrentValue = false,
+	Flag = "SafeGun", 
+	Callback = function(Value)
+		getgenv().PegarArmaSafe = Value
+
+		SafeEnabled()
+	end,
+})
+
+
+local mob = Misc:CreateButton({
+	Name = "Atualizar Menu",
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/calangof/biel-ne-vida2/refs/heads/main/BielV2"))()
+	end,
+})
+
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+
+local isMobile = true
+local Ativado = false
+
+local AimbotSettings = {
+	TeamCheck = false,
+	AliveCheck = true,
+	LockPart = "Head",
+	FOV = 90,
+	FOVColor = Color3.fromRGB(255, 0, 0),
+	LockedColor = Color3.fromRGB(0, 255, 0),
+	Sensitivity = 0 
+}
+
+local FOVCircle = Drawing.new("Circle")
+FOVCircle.Visible = false
+FOVCircle.Radius = AimbotSettings.FOV
+FOVCircle.Thickness = 2
+FOVCircle.Transparency = 1
+FOVCircle.Color = AimbotSettings.FOVColor
+FOVCircle.Filled = false
+
+local function GetClosestTarget()
+	local closestPlayer = nil
+	local shortestDistance = AimbotSettings.FOV
+
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
+			if Ativado then
+
+				player.Character:FindFirstChild("Head").Size = Vector3.new(6,6,6)
+				player.Character:FindFirstChild("Head").Transparency = 1
+				player.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 1
+
+				if not player.Character:FindFirstChild("VerVc") then
+					local esp = Instance.new("Highlight")
+					--esp.FillColor = Color3.fromRGB(226, 142, 1)
+					esp.FillTransparency = 1
+					esp.OutlineColor = Color3.fromRGB(255, 0, 0)
+					esp.OutlineTransparency = 0
+					esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+					esp.Parent = player.Character
+				end
+
+
+				if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
+				if AimbotSettings.AliveCheck then
+					local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+					if humanoid and humanoid.Health <= 0 then continue end
+				end
+
+				local part = player.Character[AimbotSettings.LockPart]
+				local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
+				if onScreen then
+					local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+
+
+					local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
+					if distance < shortestDistance then
+						shortestDistance = distance
+						closestPlayer = player
+
+					end
+				end
+
+			else
+
+				player.Character:FindFirstChild("Head").Size = Vector3.new(1,1,1)
+				player.Character:FindFirstChild("Head").Transparency = 0
+				player.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 0
+
+				if player.Character:FindFirstChild("VerVc") then
+					player.Character:FindFirstChild("VerVc"):Destroy()
+				end
+
+			end
+
+		end
+	end
+
+	return closestPlayer
+end
+
+RunService.RenderStepped:Connect(function()
+	if not Ativado then
+		return
+	end
+	FOVCircle.Position = isMobile
+		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+
+	local target = GetClosestTarget()
+
+	if target and target.Character and target.Character:FindFirstChild(AimbotSettings.LockPart) then
+		FOVCircle.Color = AimbotSettings.LockedColor
+		local part = target.Character[AimbotSettings.LockPart]
+		local direction = CFrame.new(Camera.CFrame.Position, part.Position)
+
+		local tween = TweenService:Create(Camera, TweenInfo.new(AimbotSettings.Sensitivity, Enum.EasingStyle.Sine), {
+			CFrame = direction
+		})
+		tween:Play()
+	else
+		FOVCircle.Color = AimbotSettings.FOVColor
+	end
+end)
+
+local ToggleAimbot = Misc:CreateToggle({
+	Name = "AimBot",
+	CurrentValue = false,
+	Flag = "AtivarEDesativarAimbot", 
+	Callback = function(Value)
+		Ativado = Value
+		FOVCircle.Visible = Value
+	end,
+})
+
+local ToggleTeamCheck = Misc:CreateToggle({
+	Name = "Team Check",
+	CurrentValue = false,
+	Flag = "CheckTeam", 
+	Callback = function(Value)
+		AimbotSettings.TeamCheck = Value
+	end,
+})
+
+local SliderFOV = Misc:CreateSlider({
+	Name = "Fov Aim",
+	Range = {10, 200},
+	Increment = 10,
+	Suffix = "°",
+	CurrentValue = AimbotSettings.FOV,
+	Flag = "FovBot",
+	Callback = function(Value)
+		FOVCircle.Radius = Value
+		AimbotSettings.FOV = Value
+	end,
+})
+local mob = Misc:CreateButton({
+	Name = "Esconder Fov",
+	Callback = function()
+		FOVCircle.Visible = false
+	end,
+})
+
+
+
+
+
+
+local Testes = Window:CreateTab("Testes")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+getgenv().AlvoP = nil
+local Telando = false
+local TelarConnection
+
+-- Dropdown (como você já tem)
+local Dropdown = Testes:CreateDropdown({
+	Name = "Player List",
+	Options = {},
+	CurrentOption = {""},
+	MultipleOptions = false,
+	Flag = "Dropdown1",
+	Callback = function(Options)
+		getgenv().AlvoP = Options[1]
+	end,
+})
+
+-- Botão para atualizar a lista de jogadores
+local mob = Testes:CreateButton({
+	Name = "Atualizar Lista",
+	Callback = function()
+		local playerNames = {}
+		for _, player in ipairs(Players:GetPlayers()) do
+			if player ~= LocalPlayer then -- opcional: não mostrar a si mesmo
+				table.insert(playerNames, player.Name)
+			end
+		end
+		Dropdown:Refresh(playerNames)
+		Dropdown:Set({""})
+	end,
+})
+
+-- Toggle para ativar/desativar o modo telar
+local ToggleTeamCheck = Testes:CreateToggle({
+	Name = "Telar Player",
+	CurrentValue = false,
+	Flag = "VerP", 
+	Callback = function(Value)
+		Telando = Value
+
+		if Telando then
+			TelarConnection = RunService.RenderStepped:Connect(function()
+				local alvoPlayer = Players:FindFirstChild(getgenv().AlvoP)
+				if alvoPlayer and alvoPlayer.Character and alvoPlayer.Character:FindFirstChild("HumanoidRootPart") then
+					Camera.CameraSubject = alvoPlayer.Character:FindFirstChild("Humanoid")
+				end
+			end)
+		else
+			if TelarConnection then
+				TelarConnection:Disconnect()
+				TelarConnection = nil
+			end
+			Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+		end
+	end,
+})
