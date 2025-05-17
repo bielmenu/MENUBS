@@ -226,11 +226,11 @@ local Button = rev:CreateButton({
 
 
 local Button = rev:CreateButton({
-	Name = "Puxa Itens - Menos Lag",
+	Name = "Auto-Revistar",
 	Callback = function()
 		Rayfield:Notify({
 			Title = "Aviso",
-			Content = "Auto Revistar Ativado, Pegara Comida!",
+			Content = "Auto Revistar Ativado!",
 			Duration = 6.5,
 			Image = 4483362458,
 		})
