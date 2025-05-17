@@ -77,7 +77,7 @@ local permitido, expiraEm = podeUsar(game:GetService("RbxAnalyticsService"):GetC
 if not permitido then
 	game.ReplicatedStorage.NotifyClient:Fire("Você Ainda Não Possuí Acesso Ao Menu :(",10)
 	game.ReplicatedStorage.NotifyClient:Fire("Seu ID: "..game:GetService("RbxAnalyticsService"):GetClientId(),10)
-	game.ReplicatedStorage.NotifyClient:Fire("Entre Já Em Nosso Discord: Discord.gg/5XnCGgJwRM",10)
+	game.ReplicatedStorage.NotifyClient:Fire("Entre Já Em Nosso Discord: <font color=\'#e28e01\'>Discord.gg/5XnCGgJwRM</font>",10)
 	return
 end
 
