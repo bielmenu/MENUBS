@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "2.2.8"
+local versao = "2.2.9"
 
 
 
@@ -1098,7 +1098,7 @@ Visuals:CreateToggle({
 	end
 })
 
-getgenv().NoClipOnOff = false
+getgenv().NoClipOnOff = true
 
 game:GetService("RunService").Stepped:Connect(function()
 	local character = game.Players.LocalPlayer.Character
@@ -1122,7 +1122,7 @@ Visuals:CreateToggle({
 		else
 			getgenv().NoClipOnOff = true
 		end
-		
+
 	end
 })
 
@@ -2321,10 +2321,7 @@ local mob = Misc:CreateButton({
 	end,
 })
 
-
-local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
@@ -2339,7 +2336,7 @@ local AimbotSettings = {
 	FOV = 90,
 	FOVColor = Color3.fromRGB(255, 0, 0),
 	LockedColor = Color3.fromRGB(0, 255, 0),
-	Sensitivity = 0 
+	Sensitivity = 5 -- quanto maior, mais rápido o aimbot gira
 }
 
 local FOVCircle = Drawing.new("Circle")
@@ -2356,89 +2353,96 @@ local function GetClosestTarget()
 
 	for _, player in ipairs(Players:GetPlayers()) do
 		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild(AimbotSettings.LockPart) then
-			if Ativado then
-
-				player.Character:FindFirstChild("Head").Size = Vector3.new(6,6,6)
-				player.Character:FindFirstChild("Head").Transparency = 1
-				player.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 1
-
-				if not player.Character:FindFirstChild("VerVc") then
-					local esp = Instance.new("Highlight")
-					--esp.FillColor = Color3.fromRGB(226, 142, 1)
-					esp.FillTransparency = 1
-					esp.OutlineColor = Color3.fromRGB(255, 0, 0)
-					esp.OutlineTransparency = 0
-					esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-					esp.Parent = player.Character
-				end
-
-
-				if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
-				if AimbotSettings.AliveCheck then
-					local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-					if humanoid and humanoid.Health <= 0 then continue end
-				end
-
-				local part = player.Character[AimbotSettings.LockPart]
-				local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
-				if onScreen then
-					local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-
-
-					local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
-					if distance < shortestDistance then
-						shortestDistance = distance
-						closestPlayer = player
-
-					end
-				end
-
-			else
-
-				player.Character:FindFirstChild("Head").Size = Vector3.new(1,1,1)
-				player.Character:FindFirstChild("Head").Transparency = 0
-				player.Character:FindFirstChild("Head"):FindFirstChild("face").Transparency = 0
-
-				if player.Character:FindFirstChild("VerVc") then
-					player.Character:FindFirstChild("VerVc"):Destroy()
-				end
-
+			if AimbotSettings.TeamCheck and player.Team == LocalPlayer.Team then continue end
+			if AimbotSettings.AliveCheck then
+				local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+				if humanoid and humanoid.Health <= 0 then continue end
 			end
 
+			local part = player.Character[AimbotSettings.LockPart]
+			local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
+			if onScreen then
+				local inputPos = isMobile and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+				local distance = (Vector2.new(screenPos.X, screenPos.Y) - inputPos).Magnitude
+				if distance < shortestDistance then
+					shortestDistance = distance
+					closestPlayer = player
+				end
+			end
 		end
 	end
 
 	return closestPlayer
 end
 
-RunService.RenderStepped:Connect(function()
-	if not Ativado then
-		return
-	end
+RunService.RenderStepped:Connect(function(dt)
+	if not Ativado then return end
+
 	FOVCircle.Position = isMobile
 		and Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
 		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+			local head = player.Character.Head
+
+			if Ativado then
+				-- Apenas modifica uma vez
+				if not head:FindFirstChild("AimbotMod") then
+					local mod = Instance.new("BoolValue")
+					mod.Name = "AimbotMod"
+					mod.Parent = head
+
+					head.Size = Vector3.new(6, 6, 6)
+					head.Transparency = 1
+					local face = head:FindFirstChild("face")
+					if face then face.Transparency = 1 end
+
+					if not player.Character:FindFirstChild("VerVc") then
+						local esp = Instance.new("Highlight")
+						esp.Name = "VerVc"
+						esp.FillTransparency = 1
+						esp.OutlineColor = Color3.fromRGB(255, 0, 0)
+						esp.OutlineTransparency = 0
+						esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+						esp.Parent = player.Character
+					end
+				end
+			else
+				-- Reset visual
+				if head:FindFirstChild("AimbotMod") then
+					head.Size = Vector3.new(1, 1, 1)
+					head.Transparency = 0
+					local face = head:FindFirstChild("face")
+					if face then face.Transparency = 0 end
+					head:FindFirstChild("AimbotMod"):Destroy()
+				end
+
+				local esp = player.Character:FindFirstChild("VerVc")
+				if esp then esp:Destroy() end
+			end
+		end
+	end
 
 	local target = GetClosestTarget()
 
 	if target and target.Character and target.Character:FindFirstChild(AimbotSettings.LockPart) then
 		FOVCircle.Color = AimbotSettings.LockedColor
 		local part = target.Character[AimbotSettings.LockPart]
-		local direction = CFrame.new(Camera.CFrame.Position, part.Position)
-
-		local tween = TweenService:Create(Camera, TweenInfo.new(AimbotSettings.Sensitivity, Enum.EasingStyle.Sine), {
-			CFrame = direction
-		})
-		tween:Play()
+		local goalCFrame = CFrame.new(Camera.CFrame.Position, part.Position)
+		local alpha = math.clamp(AimbotSettings.Sensitivity * dt, 0, 1)
+		Camera.CFrame = Camera.CFrame:Lerp(goalCFrame, alpha)
 	else
 		FOVCircle.Color = AimbotSettings.FOVColor
 	end
 end)
 
+-- Interface de controle
+
 local ToggleAimbot = Misc:CreateToggle({
 	Name = "AimBot",
 	CurrentValue = false,
-	Flag = "AtivarEDesativarAimbot", 
+	Flag = "AtivarEDesativarAimbot",
 	Callback = function(Value)
 		Ativado = Value
 		FOVCircle.Visible = Value
@@ -2448,7 +2452,7 @@ local ToggleAimbot = Misc:CreateToggle({
 local ToggleTeamCheck = Misc:CreateToggle({
 	Name = "Team Check",
 	CurrentValue = false,
-	Flag = "CheckTeam", 
+	Flag = "CheckTeam",
 	Callback = function(Value)
 		AimbotSettings.TeamCheck = Value
 	end,
@@ -2466,77 +2470,10 @@ local SliderFOV = Misc:CreateSlider({
 		AimbotSettings.FOV = Value
 	end,
 })
+
 local mob = Misc:CreateButton({
 	Name = "Esconder Fov",
 	Callback = function()
 		FOVCircle.Visible = false
-	end,
-})
-
-
-
-
-
-
-local Testes = Window:CreateTab("Testes")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
-getgenv().AlvoP = nil
-local Telando = false
-local TelarConnection
-
--- Dropdown (como você já tem)
-local Dropdown = Testes:CreateDropdown({
-	Name = "Player List",
-	Options = {},
-	CurrentOption = {""},
-	MultipleOptions = false,
-	Flag = "Dropdown1",
-	Callback = function(Options)
-		getgenv().AlvoP = Options[1]
-	end,
-})
-
--- Botão para atualizar a lista de jogadores
-local mob = Testes:CreateButton({
-	Name = "Atualizar Lista",
-	Callback = function()
-		local playerNames = {}
-		for _, player in ipairs(Players:GetPlayers()) do
-			if player ~= LocalPlayer then -- opcional: não mostrar a si mesmo
-				table.insert(playerNames, player.Name)
-			end
-		end
-		Dropdown:Refresh(playerNames)
-		Dropdown:Set({""})
-	end,
-})
-
--- Toggle para ativar/desativar o modo telar
-local ToggleTeamCheck = Testes:CreateToggle({
-	Name = "Telar Player",
-	CurrentValue = false,
-	Flag = "VerP", 
-	Callback = function(Value)
-		Telando = Value
-
-		if Telando then
-			TelarConnection = RunService.RenderStepped:Connect(function()
-				local alvoPlayer = Players:FindFirstChild(getgenv().AlvoP)
-				if alvoPlayer and alvoPlayer.Character and alvoPlayer.Character:FindFirstChild("HumanoidRootPart") then
-					Camera.CameraSubject = alvoPlayer.Character:FindFirstChild("Humanoid")
-				end
-			end)
-		else
-			if TelarConnection then
-				TelarConnection:Disconnect()
-				TelarConnection = nil
-			end
-			Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-		end
 	end,
 })
