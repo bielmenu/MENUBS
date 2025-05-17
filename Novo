@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "2.2.4"
+local versao = "2.2.5"
 
 
 
@@ -14,11 +14,9 @@ local whitelist = {
 	["3cff3df2-cf49-4c9c-9b48-e6697c97842f"] = { -- GELADE
 		timestamp = 1747589491
 	},
-
 	["3DDE034F-D21B-49C8-A850-8792128657A2"] = { -- King Gayzinho
 		timestamp = 1748405093
 	},
-
 	["12C0FB60-2EF0-4709-83F9-B0B718D75877"] = { -- REKE VIADINHO
 		timestamp = 1778866291
 	},
@@ -26,7 +24,6 @@ local whitelist = {
 		timestamp = math.huge
 	},
 	["Oca7d54e-35df-4403-8bdb-8b8e505fbfd8"] = { -- Julio
-		
 		timestamp = math.huge
 	},
 	["e70b295e-da02-4e2d-b870-e9bf94allffa"] = { -- Biel
