@@ -10,7 +10,7 @@ local versao = "BETA 2.3"
 
 game.ReplicatedStorage.NotifyClient:Fire(string.format("Versão <font color=\'#e28e01\'>%s</font>",versao),10)
 
-local whitelist = loadstring(game:HttpGet('https://raw.githubusercontent.com/calangof/AcessoID/refs/heads/main/Acessos'))()
+local whitelist = loadstring(game:HttpGet('https://raw.githubusercontent.com/bielmenu/AcessoID/refs/heads/main/Acessos'))()
 
 local function podeUsar(userId)
 	local dados = whitelist[userId]
