@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "BETA 2.3"
+local versao = "BETA 2.4"
 
 
 
@@ -106,7 +106,7 @@ local Window = Rayfield:CreateWindow({
 
 Rayfield:Notify({
 	Title = "MENU - MINI CITY LOADED",
-	Content = "Owner: @bielbs09_22\nProgrammer: ???\nLast Update: 17/05/2025",
+	Content = "Owner: @bielbs09_22\nProgrammer: ???\nLast Update: 20/05/2025",
 	Duration = 6.5,
 	Image = 4483362458,
 })
@@ -910,7 +910,14 @@ local function loadScript()
 	end
 end
 
--- UI callback
+local Veritem = Visuals:CreateButton({
+	Name = "Staff List",
+	Callback = function()
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/bielmenu/MENUBS/refs/heads/main/StaffList'))()
+	end
+})
+
+
 local Veritem = Visuals:CreateButton({
 	Name = "Ver Items - (Irreversível)",
 	Callback = function()
@@ -1090,31 +1097,32 @@ Visuals:CreateToggle({
 	end
 })
 
-getgenv().NoClipOnOff = true
+ggetgenv().NoClipOnOff = false
 
 game:GetService("RunService").Stepped:Connect(function()
 	local character = game.Players.LocalPlayer.Character
-	for _, g in ipairs(character:GetChildren()) do
-		if g:IsA("BasePart") then
-			g.CanCollide = getgenv().NoClipOnOff
+	if not character then return end
 
+	for _, part in ipairs(character:GetChildren()) do
+		if part:IsA("BasePart") then
+			if getgenv().NoClipOnOff then
+				part.CanCollide = false
+			else
+				-- Noclip ativado: apenas Torso e HumanoidRootPart colidem
+				if part.Name == "Torso" or part.Name == "HumanoidRootPart" then
+					part.CanCollide = true
+				end
+			end
 		end
 	end
 end)
-
-
 
 Visuals:CreateToggle({
 	Name = "Noclip",
 	CurrentValue = false,
 	Flag = "NoclipInfo",
 	Callback = function(Value)
-		if Value == true then
-			getgenv().NoClipOnOff = false
-		else
-			getgenv().NoClipOnOff = true
-		end
-
+		getgenv().NoClipOnOff = Value
 	end
 })
 
