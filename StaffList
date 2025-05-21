@@ -1,0 +1,140 @@
+  local gui = Instance.new("ScreenGui")
+local frame = Instance.new("Frame")
+local scroll = Instance.new("ScrollingFrame")
+local close = Instance.new("TextButton")
+local title = Instance.new("TextLabel")
+local uicorner = Instance.new("UICorner")
+local uilist = Instance.new("UIListLayout")
+
+gui.Name = "StaffList"
+
+frame.BorderSizePixel = 0
+scroll.BorderSizePixel = 0
+
+frame.BackgroundTransparency = .3
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+scroll.BackgroundTransparency = 1
+scroll.ScrollBarThickness = 2
+
+
+
+frame.Size = UDim2.new(0,200, 0,250)
+scroll.Size = UDim2.new(0,200, 0,210)
+scroll.Position = UDim2.new(0,0, 0,35)
+
+uicorner.CornerRadius = UDim.new(0,4)
+
+frame.Active = true
+frame.Draggable = true
+
+uilist.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+title.Size = UDim2.new(0,150, 0,30)
+title.Text = "STAFFS: 0"
+title.Font = Enum.Font.MontserratBold
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
+title.BackgroundTransparency = 1
+
+close.Size = UDim2.new(0,50, 0,30)
+close.Position = UDim2.new(0,150, 0,0)
+close.Text = "–"
+close.Font = Enum.Font.MontserratBold
+close.TextColor3 = Color3.fromRGB(255, 255, 255)
+close.TextScaled = true
+close.BackgroundTransparency = 1
+
+scroll.CanvasSize = UDim2.new(0,0, 0,0)
+scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+
+gui.Parent = game.Players.LocalPlayer.PlayerGui
+frame.Parent = gui
+scroll.Parent = frame
+uicorner.Parent = frame
+close.Parent = frame
+title.Parent = frame
+
+uilist.Parent = scroll
+
+local count = 0
+
+local teamName = "STAFF"
+
+local function Update(Nome)
+	for i, removeAll in ipairs(scroll:GetChildren()) do
+		if removeAll:IsA("TextLabel") then
+			removeAll:Destroy()
+		end
+	end
+	
+	local newName = Instance.new("TextLabel")
+	newName.Name = Nome
+	newName.Text = Nome
+	newName.Font = Enum.Font.MontserratBold
+	
+	newName.BackgroundTransparency = 1
+	newName.TextScaled = true
+	newName.TextColor3 = Color3.fromRGB(255, 255, 255)
+	newName.Size = UDim2.new(0,190, 0,25)
+	
+	newName.Parent = scroll
+end
+
+local function UpdateStaffList()
+	for _, child in ipairs(scroll:GetChildren()) do
+		if child:IsA("TextLabel") then
+			child:Destroy()
+		end
+	end
+
+	local count = 0
+
+	for _, player in ipairs(game.Players:GetPlayers()) do
+		local isStaff = false
+
+		if player.Team and player.Team.Name == "STAFF" then
+			isStaff = true
+		end
+
+		local character = player.Character
+		if character then
+			local root = character:FindFirstChild("HumanoidRootPart")
+			if root and root:FindFirstChild("STAFF") and root.STAFF:IsA("BillboardGui") then
+				isStaff = true
+			end
+		end
+
+		if isStaff then
+			count += 1
+
+			local newLabel = Instance.new("TextLabel")
+			newLabel.Name = player.Name
+			newLabel.Text = "@"..player.Name.." – "..player.DisplayName
+			newLabel.Font = Enum.Font.MontserratBold
+			newLabel.BackgroundTransparency = 1
+			newLabel.TextScaled = true
+			newLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			newLabel.Size = UDim2.new(0, 190, 0, 25)
+			newLabel.Parent = scroll
+		end
+	end
+
+	title.Text = "STAFFS: " .. count
+end
+
+game.Players.PlayerAdded:Connect(function()
+	task.wait(1)
+	UpdateStaffList()
+end)
+
+game.Players.PlayerRemoving:Connect(UpdateStaffList)
+
+for _, player in ipairs(game.Players:GetPlayers()) do
+	player:GetPropertyChangedSignal("Team"):Connect(UpdateStaffList)
+end
+
+close.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
+UpdateStaffList()
