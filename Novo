@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "BETA 2.4"
+local versao = "BETA 2.3.7"
 
 
 
