@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "BETA 2.3.7"
+local versao = "BETA 2.3.8"
 
 
 
@@ -2374,7 +2374,6 @@ local function GetClosestTarget()
 
 	return closestPlayer
 end
-
 RunService.RenderStepped:Connect(function(dt)
 	if not Ativado then return end
 
@@ -2383,43 +2382,42 @@ RunService.RenderStepped:Connect(function(dt)
 		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
 
 	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
-			local head = player.Character.Head
+		if player ~= LocalPlayer and player.Character then
+			local head = player.Character:FindFirstChild("Head")
+			local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
 
-			if Ativado then
-				-- Apenas modifica uma vez
-				if not head:FindFirstChild("AimbotMod") then
-					local mod = Instance.new("BoolValue")
-					mod.Name = "AimbotMod"
-					mod.Parent = head
+			if head and humanoid then
+				if humanoid.Health > 0 then
+					-- Jogador vivo: aplica modificações
+					if not head:FindFirstChild("AimbotMod") then
+						local mod = Instance.new("BoolValue")
+						mod.Name = "AimbotMod"
+						mod.Parent = head
+					end
 
 					head.Size = Vector3.new(6, 6, 6)
 					head.Transparency = 1
-					local face = head:FindFirstChild("face")
-					if face then face.Transparency = 1 end
+					head.CanCollide = false
 
-					if not player.Character:FindFirstChild("VerVc") then
-						local esp = Instance.new("Highlight")
-						esp.Name = "VerVc"
-						esp.FillTransparency = 1
-						esp.OutlineColor = Color3.fromRGB(255, 0, 0)
-						esp.OutlineTransparency = 0
-						esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-						esp.Parent = player.Character
+					local face = head:FindFirstChild("face")
+					if face then
+						face.Transparency = 1
+					end
+				else
+					-- Jogador morto: reseta modificações
+					if head:FindFirstChild("AimbotMod") then
+						head.Size = Vector3.new(1, 1, 1)
+						head.Transparency = 0
+						head.CanCollide = true
+
+						local face = head:FindFirstChild("face")
+						if face then
+							face.Transparency = 0
+						end
+
+						head:FindFirstChild("AimbotMod"):Destroy()
 					end
 				end
-			else
-				-- Reset visual
-				if head:FindFirstChild("AimbotMod") then
-					head.Size = Vector3.new(1, 1, 1)
-					head.Transparency = 0
-					local face = head:FindFirstChild("face")
-					if face then face.Transparency = 0 end
-					head:FindFirstChild("AimbotMod"):Destroy()
-				end
-
-				local esp = player.Character:FindFirstChild("VerVc")
-				if esp then esp:Destroy() end
 			end
 		end
 	end
