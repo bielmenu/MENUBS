@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "BETA 2.3.8"
+local versao = "BETA 2.3.7"
 
 
 
@@ -2334,9 +2334,10 @@ local AimbotSettings = {
 	AliveCheck = true,
 	LockPart = "Head",
 	FOV = 90,
-	FOVColor = Color3.fromRGB(255, 0, 0),
-	LockedColor = Color3.fromRGB(0, 255, 0),
-	Sensitivity = 5 -- quanto maior, mais rápido o aimbot gira
+	FOVColor = Color3.fromRGB(85, 0, 127),
+	LockedColor = Color3.fromRGB(153, 0, 230),
+	Sensitivity = 5,
+	BigHead = true
 }
 
 local FOVCircle = Drawing.new("Circle")
@@ -2374,6 +2375,7 @@ local function GetClosestTarget()
 
 	return closestPlayer
 end
+
 RunService.RenderStepped:Connect(function(dt)
 	if not Ativado then return end
 
@@ -2382,41 +2384,31 @@ RunService.RenderStepped:Connect(function(dt)
 		or Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
 
 	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Character then
-			local head = player.Character:FindFirstChild("Head")
-			local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+			local head = player.Character.Head
 
-			if head and humanoid then
-				if humanoid.Health > 0 then
-					-- Jogador vivo: aplica modificações
-					if not head:FindFirstChild("AimbotMod") then
-						local mod = Instance.new("BoolValue")
-						mod.Name = "AimbotMod"
-						mod.Parent = head
-					end
-
-					head.Size = Vector3.new(6, 6, 6)
-					head.Transparency = 1
-					head.CanCollide = false
-
-					local face = head:FindFirstChild("face")
-					if face then
-						face.Transparency = 1
-					end
-				else
-					-- Jogador morto: reseta modificações
-					if head:FindFirstChild("AimbotMod") then
-						head.Size = Vector3.new(1, 1, 1)
-						head.Transparency = 0
-						head.CanCollide = true
-
+			if Ativado then
+				-- Apenas modifica uma vez
+				if not head:FindFirstChild("AimbotMod") then
+					local mod = Instance.new("BoolValue")
+					mod.Name = "AimbotMod"
+					mod.Parent = head
+					if AimbotSettings.BigHead then
+						head.Size = Vector3.new(6, 6, 6)
+						head.Transparency = 1
 						local face = head:FindFirstChild("face")
-						if face then
-							face.Transparency = 0
-						end
-
-						head:FindFirstChild("AimbotMod"):Destroy()
+						if face then face.Transparency = 1 end
 					end
+					
+				end
+			else
+				-- Reset visual
+				if head:FindFirstChild("AimbotMod") then
+					head.Size = Vector3.new(1, 1, 1)
+					head.Transparency = 0
+					local face = head:FindFirstChild("face")
+					if face then face.Transparency = 0 end
+					head:FindFirstChild("AimbotMod"):Destroy()
 				end
 			end
 		end
@@ -2434,8 +2426,6 @@ RunService.RenderStepped:Connect(function(dt)
 		FOVCircle.Color = AimbotSettings.FOVColor
 	end
 end)
-
--- Interface de controle
 
 local ToggleAimbot = Misc:CreateToggle({
 	Name = "AimBot",
@@ -2456,9 +2446,18 @@ local ToggleTeamCheck = Misc:CreateToggle({
 	end,
 })
 
+local ToggleTeamCheck = Misc:CreateToggle({
+	Name = "Team Check",
+	CurrentValue = AimbotSettings.BigHead,
+	Flag = "BigHead",
+	Callback = function(Value)
+		AimbotSettings.BigHead = Value
+	end,
+})
+
 local SliderFOV = Misc:CreateSlider({
 	Name = "Fov Aim",
-	Range = {10, 200},
+	Range = {50, 200},
 	Increment = 10,
 	Suffix = "°",
 	CurrentValue = AimbotSettings.FOV,
