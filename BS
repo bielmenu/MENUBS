@@ -34,8 +34,8 @@ local Window = ArrayField:CreateWindow({
 	}
 })
 
-Window:Prompt({
-	Title = 'Interface Prompt',
+--[[Window:Prompt({
+	Title = 'Sej',
 	SubTitle = 'SubTitle',
 	Content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 	Actions = {
@@ -46,7 +46,7 @@ Window:Prompt({
 			end,
 		}
 	}
-})
+})]]
 
 local Tab = Window:CreateTab("Tab Example", 4483362458) -- Title, Image
 
@@ -55,13 +55,13 @@ local Section = Tab:CreateSection("Section Example",false) -- The 2nd argument i
 Section:Set("Section Example")
 
 ArrayField:Notify({
-	Title = "Notification Title",
-	Content = "Notification Content",
+	Title = "Biel Menu",
+	Content = "Seja Bem-Vindo Ao Nosso Menu!",
 	Duration = 6.5,
 	Image = 4483362458,
 	Actions = { -- Notification Buttons
 		Ignore = {
-			Name = "Okay!",
+			Name = "Ok",
 			Callback = function()
 				print("The user tapped Okay!")
 			end
