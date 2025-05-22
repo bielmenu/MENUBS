@@ -3471,6 +3471,7 @@ Img.BackgroundTransparency = 1
 
 Img.Image = "rbxassetid://11036884234"
 
+
 uiCorner.CornerRadius = UDim.new(0,8)
 
 Hide_UnHide.Active = true
@@ -3480,6 +3481,7 @@ Hide_UnHide.Draggable = true
 Hide_UnHide.BorderSizePixel = 0
 Hide_UnHide.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Hide_UnHide.Size = UDim2.new(0,40, 0,40)
+Img.Parent = Hide_UnHide
 Hide_UnHide.Parent = ArrayField
 
 function ArrayFieldLibrary:LoadConfiguration()
