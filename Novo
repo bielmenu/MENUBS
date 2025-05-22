@@ -910,7 +910,7 @@ local function loadScript()
 	end
 end
 
-local Veritem = Visuals:CreateButton({
+local Staffllalala = Visuals:CreateButton({
 	Name = "Staff List",
 	Callback = function()
 		loadstring(game:HttpGet('https://raw.githubusercontent.com/bielmenu/MENUBS/refs/heads/main/StaffList'))()
