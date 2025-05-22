@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "BETA 2.4.3"
+local versao = "BETA 2.4.4"
 
 
 
@@ -1097,29 +1097,31 @@ Visuals:CreateToggle({
 	end
 })
 
-ggetgenv().NoClipOnOff = false
+getgenv().NoClipOnOff = true
 
 game:GetService("RunService").Stepped:Connect(function()
 	local character = game.Players.LocalPlayer.Character
-	if not character then return end
+	for _, g in ipairs(character:GetChildren()) do
+		if g:IsA("BasePart") then
+			g.CanCollide = getgenv().NoClipOnOff
 
-	for _, part in ipairs(character:GetChildren()) do
-		if part:IsA("BasePart") then
-			if getgenv().NoClipOnOff then
-				part.CanCollide = false
-			else
-				part.CanCollide = true
-			end
 		end
 	end
 end)
+
+
 
 Visuals:CreateToggle({
 	Name = "Noclip",
 	CurrentValue = false,
 	Flag = "NoclipInfo",
 	Callback = function(Value)
-		getgenv().NoClipOnOff = Value
+		if Value == true then
+			getgenv().NoClipOnOff = false
+		else
+			getgenv().NoClipOnOff = true
+		end
+
 	end
 })
 
