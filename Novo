@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "BETA 2.3.7"
+local versao = "BETA 2.4"
 
 
 
@@ -910,12 +910,12 @@ local function loadScript()
 	end
 end
 
-local Veritem = Visuals:CreateButton({
+--[[local Veritem = Visuals:CreateButton({
 	Name = "Staff List",
 	Callback = function()
 		loadstring(game:HttpGet('https://raw.githubusercontent.com/bielmenu/MENUBS/refs/heads/main/StaffList'))()
 	end
-})
+})]]
 
 
 local Veritem = Visuals:CreateButton({
@@ -2399,7 +2399,7 @@ RunService.RenderStepped:Connect(function(dt)
 						local face = head:FindFirstChild("face")
 						if face then face.Transparency = 1 end
 					end
-					
+
 				end
 			else
 				-- Reset visual
