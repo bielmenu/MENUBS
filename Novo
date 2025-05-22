@@ -4,7 +4,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local versao = "BETA 2.4"
+local versao = "BETA 2.4.3"
 
 
 
@@ -910,12 +910,12 @@ local function loadScript()
 	end
 end
 
---[[local Veritem = Visuals:CreateButton({
+local Veritem = Visuals:CreateButton({
 	Name = "Staff List",
 	Callback = function()
 		loadstring(game:HttpGet('https://raw.githubusercontent.com/bielmenu/MENUBS/refs/heads/main/StaffList'))()
 	end
-})]]
+})
 
 
 local Veritem = Visuals:CreateButton({
@@ -1108,10 +1108,7 @@ game:GetService("RunService").Stepped:Connect(function()
 			if getgenv().NoClipOnOff then
 				part.CanCollide = false
 			else
-				-- Noclip ativado: apenas Torso e HumanoidRootPart colidem
-				if part.Name == "Torso" or part.Name == "HumanoidRootPart" then
-					part.CanCollide = true
-				end
+				part.CanCollide = true
 			end
 		end
 	end
