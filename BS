@@ -51,6 +51,8 @@ local Window = ArrayField:CreateWindow({
 local Tab = Window:CreateTab("Main", 4483362458)
 
 local Section = Tab:CreateSection("Revistar",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+Section:Set("Revistar")
+
 
 local function deletarNotifyDeErro()
 	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -72,10 +74,10 @@ end
 
 local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
 
-getgenv().PuxarCarai = false
+_G.PuxarCarai = false
 
 while true do
-	if getgenv().PuxarCarai then
+	if _G.PuxarCarai then
 	
 	local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
 
@@ -128,7 +130,7 @@ local Toggle = Tab:CreateToggle({
 	CurrentValue = false,
 	Flag = "PuxarGG", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-		getgenv().PuxarCarai = Value
+		_G.PuxarCarai = Value
 	end,
 })
 
