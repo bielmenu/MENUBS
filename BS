@@ -48,31 +48,87 @@ local Window = ArrayField:CreateWindow({
 	}
 })]]
 
-local Tab = Window:CreateTab("Tab Example", 4483362458) -- Title, Image
+local Tab = Window:CreateTab("Main", 4483362458)
 
-local Section = Tab:CreateSection("Section Example",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+local Section = Tab:CreateSection("Revistar",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
-Section:Set("Section Example")
+local function deletarNotifyDeErro()
+	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-ArrayField:Notify({
-	Title = "Biel Menu",
-	Content = "Seja Bem-Vindo Ao Nosso Menu!",
-	Duration = 6.5,
-	Image = 4483362458,
-	Actions = { -- Notification Buttons
-		Ignore = {
-			Name = "Ok",
-			Callback = function()
-				print("The user tapped Okay!")
+	for _, gui in ipairs(playerGui:GetChildren()) do
+		if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+			local frame = gui:FindFirstChild("Frame")
+			if frame then
+				for _, child in ipairs(frame:GetChildren()) do
+					if child:IsA("TextLabel") and child.Text:match("^Error #%d+") then
+						child:Destroy() -- Remove toda a notificação
+						print("Notificação de erro removida:", child.Text)
+					end
+				end
 			end
-		},
-	},
-})
-local Button = Tab:CreateButton({
-	Name = "Button Example",
-	Interact = 'Click',
-	Callback = function()
-		-- The function that takes place when the button is pressed
+		end
+	end
+end
+
+local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
+
+getgenv().PuxarCarai = false
+
+while true do
+	if getgenv().PuxarCarai then
+	
+	local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
+
+	if revistaInfo and revistaInfo.Value ~= nil then
+		local invTarget = revistaInfo.Value:FindFirstChild("Inv")
+
+		if invTarget then
+			local items = invTarget:GetChildren()
+
+			for i, item in ipairs(items) do
+				local args = {
+					"mudaInv",
+					tostring(i),
+					item.Name,
+					1
+				}
+
+				local itemGui = outroCont:FindFirstChild(item.Name, true)
+
+				if itemGui and itemGui:FindFirstChild("Qnt") and itemGui.Qnt:IsA("TextLabel") then
+					local text = itemGui.Qnt.Text
+
+					if text:sub(1, 1) == "x" then
+						text = text:sub(2)
+					end
+
+					local qtd = tonumber(text)
+					if qtd and qtd >= 1 then
+						args[4] = qtd
+					else
+						args[4] = 1
+					end
+				end
+
+				task.spawn(function()
+					local invRequest = game.ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
+					invRequest:InvokeServer(unpack(args))
+				end)
+			end
+		end
+	end
+	
+	deletarNotifyDeErro()
+	end
+	task.wait(.1)
+end
+
+local Toggle = Tab:CreateToggle({
+	Name = "Puxar Tudo - Novo",
+	CurrentValue = false,
+	Flag = "PuxarGG", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		getgenv().PuxarCarai = Value
 	end,
 })
 
