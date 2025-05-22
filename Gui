@@ -3472,7 +3472,7 @@ Img.BackgroundTransparency = 1
 Img.Image = "rbxassetid://11036884234"
 
 Img.Position = UDim2.new(0.5,0, 0.5,0)
-Img.AnchorPoint = UDim.new(0.5,0.5)
+Img.AnchorPoint = Vector2.new(0.5,0.5)
 
 uiCorner.Parent = Hide_UnHide
 uiCorner.CornerRadius = UDim.new(0,8)
