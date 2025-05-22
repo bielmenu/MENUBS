@@ -168,8 +168,8 @@ local InfoPrompt = ArrayField.Info
 ArrayField.DisplayOrder = 100
 LoadingFrame.Version.Text = Release
 
-Topbar.Draggable = true
-Topbar.Active = true
+Main.Draggable = true
+Main.Active = true
 --Variables
 local request = (syn and syn.request) or (http and http.request) or http_request
 local CFileName = nil
