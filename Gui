@@ -168,7 +168,6 @@ local InfoPrompt = ArrayField.Info
 ArrayField.DisplayOrder = 100
 LoadingFrame.Version.Text = Release
 
-Main.Draggable = true
 
 --Variables
 local request = (syn and syn.request) or (http and http.request) or http_request
@@ -217,11 +216,11 @@ function ChangeTheme(ThemeName)
 	end
 
 end
-local function AddDraggingFunctionality(DragPoint, Main)
+--[[local function AddDraggingFunctionality(DragPoint, Main)
 	pcall(function()
 		local Dragging, DragInput, MousePos, FramePos = false,false,false,false
 		DragPoint.InputBegan:Connect(function(Input)
-			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Dragging = true
 				MousePos = Input.Position
 				FramePos = Main.Position
@@ -246,7 +245,7 @@ local function AddDraggingFunctionality(DragPoint, Main)
 			end
 		end)
 	end)
-end
+end]]
 
 function BoolToText(Bool)
 	if Bool == true then
@@ -1221,8 +1220,9 @@ function ArrayFieldLibrary:CreateWindow(Settings)
 			end	
 		end
 	end)
-
-	AddDraggingFunctionality(Topbar,Main)
+	
+	Topbar.Draggable = true
+	--AddDraggingFunctionality(Topbar,Main)
 
 	if typeof(Settings.KeySettings.Key) == "string" then Settings.KeySettings.Key = {Settings.KeySettings.Key} end
 
