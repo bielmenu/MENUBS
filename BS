@@ -6,7 +6,7 @@ local Window = ArrayField:CreateWindow({
 	LoadingSubtitle = "by BS",
 	ConfigurationSaving = {
 		Enabled = true,
-		FolderName = game.PlaceId, -- Create a custom folder for your hub/game
+		FolderName = nil, -- Create a custom folder for your hub/game
 		FileName = "ArrayField"
 	},
 	Discord = {
@@ -14,7 +14,7 @@ local Window = ArrayField:CreateWindow({
 		Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
 		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
 	},
-	KeySystem = true, -- Set this to true to use our key system
+	KeySystem = false, -- Set this to true to use our key system
 	KeySettings = {
 		Title = "Key",
 		Subtitle = "Key System",
@@ -71,66 +71,61 @@ local function deletarNotifyDeErro()
 		end
 	end
 end
+local Button = Tab:CreateButton({
+	Name = "Puxar Tudo - Novo",
+	Interact = 'Ativar',
+	Callback = function()
 
-local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
+		local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
 
-_G.PuxarCarai = false
 
-while true do
-	if _G.PuxarCarai then
-	
-	local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
+		while true do
+			task.wait(.1)
+			local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
 
-	if revistaInfo and revistaInfo.Value ~= nil then
-		local invTarget = revistaInfo.Value:FindFirstChild("Inv")
+			if revistaInfo and revistaInfo.Value ~= nil then
+				local invTarget = revistaInfo.Value:FindFirstChild("Inv")
 
-		if invTarget then
-			local items = invTarget:GetChildren()
+				if invTarget then
+					local items = invTarget:GetChildren()
 
-			for i, item in ipairs(items) do
-				local args = {
-					"mudaInv",
-					tostring(i),
-					item.Name,
-					1
-				}
+					for i, item in ipairs(items) do
+						local args = {
+							"mudaInv",
+							tostring(i),
+							item.Name,
+							1
+						}
 
-				local itemGui = outroCont:FindFirstChild(item.Name, true)
+						local itemGui = outroCont:FindFirstChild(item.Name, true)
 
-				if itemGui and itemGui:FindFirstChild("Qnt") and itemGui.Qnt:IsA("TextLabel") then
-					local text = itemGui.Qnt.Text
+						if itemGui and itemGui:FindFirstChild("Qnt") and itemGui.Qnt:IsA("TextLabel") then
+							local text = itemGui.Qnt.Text
 
-					if text:sub(1, 1) == "x" then
-						text = text:sub(2)
-					end
+							if text:sub(1, 1) == "x" then
+								text = text:sub(2)
+							end
 
-					local qtd = tonumber(text)
-					if qtd and qtd >= 1 then
-						args[4] = qtd
-					else
-						args[4] = 1
+							local qtd = tonumber(text)
+							if qtd and qtd >= 1 then
+								args[4] = qtd
+							else
+								args[4] = 1
+							end
+						end
+
+						task.spawn(function()
+							local invRequest = game.ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
+							invRequest:InvokeServer(unpack(args))
+						end)
 					end
 				end
-
-				task.spawn(function()
-					local invRequest = game.ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
-					invRequest:InvokeServer(unpack(args))
-				end)
 			end
+			deletarNotifyDeErro()
+			
 		end
-	end
-	
-	deletarNotifyDeErro()
-	end
-	task.wait(.1)
-end
 
-local Toggle = Tab:CreateToggle({
-	Name = "Puxar Tudo - Novo",
-	CurrentValue = false,
-	Flag = "PuxarGG", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		_G.PuxarCarai = Value
+
 	end,
 })
 
