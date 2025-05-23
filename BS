@@ -61,6 +61,7 @@ local function sendMessage(msg)
 end
 
 _G.Dados1 = "Sem Dados!"
+_G.KeyRevistar = Enum.KeyCode.T
 
 local function deletarNotifyDeErro()
 	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -79,7 +80,10 @@ local function deletarNotifyDeErro()
 		end
 	end
 end
-local Button = Tab:CreateButton({
+
+local Section = Tab:CreateSection("Section Example",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
+local Button = Section:CreateButton({
 	Name = "Puxar Tudo - Novo",
 	Interact = 'Ativar',
 	Callback = function()
@@ -148,7 +152,7 @@ local Toggle = Tab:CreateToggle({
 })
 ]]
 
-local Input = Tab:CreateInput({
+local Input = Section:CreateInput({
 	Name = "Teste",
 	PlaceholderText = "Escreva Algo",
 	NumbersOnly = false, -- If the user can only type numbers. Remove or set to false if none.
@@ -163,3 +167,5 @@ local Input = Tab:CreateInput({
 		game.ReplicatedStorage.NotifyClient:Fire(string.format("Dados: <font color=\'#e28e01\'>%s</font>",_G.Dados1),10)
 	end,
 })
+
+
