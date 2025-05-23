@@ -383,9 +383,6 @@ local FreeCamBt = Tab:CreateButton({
 			end
 		end)
 
-
-		local savespeed = 16
-
 		Frame.Active = true
 		Frame.Draggable = true
 
@@ -395,11 +392,11 @@ local FreeCamBt = Tab:CreateButton({
 
 			if nowe == true then
 				nowe = false
-				hum.WalkSpeed = savespeed
+				chr:FindFirstChild("HumanoidRootPart").Anchored = false
 				speaker.CameraMinZoomDistance = .5
 			else 
 				nowe = true
-				savespeed = hum.WalkSpeed
+				chr:FindFirstChild("HumanoidRootPart").Anchored = true
 				hum.WalkSpeed = 0
 				speaker.CameraMinZoomDistance = 5
 			end
