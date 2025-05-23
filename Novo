@@ -1,4 +1,5 @@
 
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Players = game:GetService("Players")
@@ -347,6 +348,285 @@ local Button = rev:CreateButton({
 
 	end,
 })
+
+local Button = rev:CreateButton({
+	Name = "FreeCam (J)",
+	Callback = function()
+
+		local main = Instance.new("ScreenGui")
+		local Frame = Instance.new("Frame")
+		local up = Instance.new("TextButton")
+		local down = Instance.new("TextButton")
+		local onof = Instance.new("TextButton")
+		local plus = Instance.new("TextButton")
+		local speed = Instance.new("TextLabel")
+		local mine = Instance.new("TextButton")
+
+
+		local uiGG0 = Instance.new("UICorner")
+		uiGG0.CornerRadius = UDim.new(0, 4)
+		uiGG0.Parent = Frame
+
+		local uiGG = Instance.new("UICorner")
+		uiGG.CornerRadius = UDim.new(0, 4)
+		uiGG.Parent = onof
+
+		local uiGG2 = Instance.new("UICorner")
+		uiGG2.CornerRadius = UDim.new(0, 4)
+		uiGG2.Parent = mine
+		local uiGG2 = Instance.new("UICorner")
+		uiGG2.CornerRadius = UDim.new(0, 4)
+		uiGG2.Parent = plus
+
+		main.Name = "main"
+		main.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+		main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		main.ResetOnSpawn = false
+
+		Frame.Parent = main
+		Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Frame.BorderSizePixel = 0
+		Frame.BackgroundTransparency = 0.15
+		Frame.Position = UDim2.new(0,0,0,0)
+		Frame.Size = UDim2.new(0, 220, 0, 79)
+
+
+
+		onof.Name = "onof"
+		onof.Parent = Frame
+		onof.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		onof.AnchorPoint = Vector2.new(0.5, 0.5)
+		onof.Position = UDim2.new(0.5, 0, 0.36, 0)
+		onof.BorderSizePixel = 0
+
+
+		onof.Size = UDim2.new(0.86, 0, 0.355, 0)
+		onof.Font = Enum.Font.MontserratBold
+		onof.Text = "FreeCam (J)"
+		onof.BackgroundTransparency = 0.35
+		onof.TextColor3 = Color3.fromRGB(255, 255, 255)
+		onof.TextScaled = true
+
+
+		plus.Name = "plus"
+		plus.Parent = Frame
+		plus.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		plus.AnchorPoint = Vector2.new(0.5, 0.5)
+		plus.Position = UDim2.new(0.23, 0, 0.77, 0)
+		plus.Size = UDim2.new(0.325, 0, 0.3, 0)
+		plus.Font = Enum.Font.MontserratBold
+		plus.Text = "+"
+		plus.TextColor3 = Color3.fromRGB(255, 255, 255)
+		plus.BackgroundTransparency = 0.35
+		plus.TextScaled = true
+		plus.TextWrapped = true
+
+		speed.Name = "speed"
+		speed.Parent = Frame
+		speed.AnchorPoint = Vector2.new(0.5, 0)
+		speed.BackgroundTransparency = 1
+		speed.Position = UDim2.new(0.5, 0, 0.561, 0)
+		speed.Size = UDim2.new(0.15, 0, 0.4, 0)
+		speed.Font = Enum.Font.MontserratBold
+		speed.Text = "1"
+		speed.TextColor3 = Color3.fromRGB(255, 255, 255)
+		speed.TextScaled = true
+		speed.TextWrapped = true
+
+		mine.Name = "mine"
+		mine.Parent = Frame
+		mine.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		mine.AnchorPoint = Vector2.new(0.5, 0.5)
+		mine.Position = UDim2.new(0.767, 0, 0.77, 0)
+		mine.Size = UDim2.new(0.325, 0, 0.3, 0)
+		mine.Font = Enum.Font.MontserratBold
+		mine.BackgroundTransparency = 0.35
+		mine.Text = "–"
+		mine.TextColor3 = Color3.fromRGB(255, 255, 255)
+		mine.TextScaled = true
+		mine.TextWrapped = true
+
+		speeds = 1
+
+		local speaker = game:GetService("Players").LocalPlayer
+
+
+		local cam = workspace.CurrentCamera
+		local UIS = game:GetService("UserInputService")
+		local RS = game:GetService("RunService")
+		local onMobile = not UIS.KeyboardEnabled
+		local keysDown = {}
+		local rotating = false
+
+
+		local chr = game.Players.LocalPlayer.Character
+		local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+
+
+
+
+		nowe = false
+
+
+		local sens = .3
+
+		--speeds /= 10
+		if onMobile then sens*=2 end
+
+		local function renderStepped()
+			if not nowe then cam.CameraType = Enum.CameraType.Custom return end
+
+			cam.CameraType = Enum.CameraType.Scriptable
+			if rotating then
+				local delta = UIS:GetMouseDelta()
+				local cf = cam.CFrame
+				local yAngle = cf:ToEulerAngles(Enum.RotationOrder.YZX)
+				local newAmount = math.deg(yAngle)+delta.Y
+				if newAmount > 65 or newAmount < -65 then
+					if not (yAngle<0 and delta.Y<0) and not (yAngle>0 and delta.Y>0) then
+						delta = Vector2.new(delta.X,0)
+					end 
+				end
+				cf *= CFrame.Angles(-math.rad(delta.Y),0,0)
+				cf = CFrame.Angles(0,-math.rad(delta.X),0) * (cf - cf.Position) + cf.Position
+				cf = CFrame.lookAt(cf.Position, cf.Position + cf.LookVector)
+				if delta ~= Vector2.new(0,0) then cam.CFrame = cam.CFrame:Lerp(cf,sens) end
+				UIS.MouseBehavior = Enum.MouseBehavior.LockCurrentPosition
+			else
+				UIS.MouseBehavior = Enum.MouseBehavior.Default
+			end
+
+			if keysDown["Enum.KeyCode.W"] then
+				cam.CFrame *= CFrame.new(Vector3.new(0,0,-speeds))
+			end
+			if keysDown["Enum.KeyCode.A"] then
+				cam.CFrame *= CFrame.new(Vector3.new(-speeds,0,0))
+			end
+			if keysDown["Enum.KeyCode.S"] then
+				cam.CFrame *= CFrame.new(Vector3.new(0,0,speeds))
+			end
+			if keysDown["Enum.KeyCode.D"] then
+				cam.CFrame *= CFrame.new(Vector3.new(speeds,0,0))
+			end
+		end
+
+		RS.RenderStepped:Connect(renderStepped)
+
+		local validKeys = {"Enum.KeyCode.W","Enum.KeyCode.A","Enum.KeyCode.S","Enum.KeyCode.D"}
+
+		UIS.InputBegan:Connect(function(Input)
+			for i, key in pairs(validKeys) do
+				if key == tostring(Input.KeyCode) then
+					keysDown[key] = true
+				end
+			end
+			if Input.UserInputType == Enum.UserInputType.MouseButton2 or (Input.UserInputType == Enum.UserInputType.Touch and UIS:GetMouseLocation().X>(cam.ViewportSize.X/2)) then
+				rotating = true
+			end
+			if Input.UserInputType == Enum.UserInputType.Touch then
+				if Input.Position.X < cam.ViewportSize.X/2 then
+					touchPos = Input.Position
+				end
+			end
+		end)
+
+		UIS.InputEnded:Connect(function(Input)
+			for key, v in pairs(keysDown) do
+				if key == tostring(Input.KeyCode) then
+					keysDown[key] = false
+				end
+			end
+			if Input.UserInputType == Enum.UserInputType.MouseButton2 or (Input.UserInputType == Enum.UserInputType.Touch and UIS:GetMouseLocation().X>(cam.ViewportSize.X/2)) then
+				rotating = false
+			end
+			if Input.UserInputType == Enum.UserInputType.Touch and touchPos then
+				if Input.Position.X < cam.ViewportSize.X/2 then
+					touchPos = nil
+					keysDown["Enum.KeyCode.W"] = false
+					keysDown["Enum.KeyCode.A"] = false
+					keysDown["Enum.KeyCode.S"] = false
+					keysDown["Enum.KeyCode.D"] = false
+				end
+			end
+		end)
+
+		UIS.TouchMoved:Connect(function(input)
+			if touchPos then
+				if input.Position.X < cam.ViewportSize.X/2 then
+					if input.Position.Y < touchPos.Y then
+						keysDown["Enum.KeyCode.W"] = true
+						keysDown["Enum.KeyCode.S"] = false
+					else
+						keysDown["Enum.KeyCode.W"] = false
+						keysDown["Enum.KeyCode.S"] = true
+					end
+					if input.Position.X < (touchPos.X-15) then
+						keysDown["Enum.KeyCode.A"] = true
+						keysDown["Enum.KeyCode.D"] = false
+					elseif input.Position.X > (touchPos.X+15) then
+						keysDown["Enum.KeyCode.A"] = false
+						keysDown["Enum.KeyCode.D"] = true
+					else
+						keysDown["Enum.KeyCode.A"] = false
+						keysDown["Enum.KeyCode.D"] = false
+					end
+				end
+			end
+		end)
+
+		Frame.Active = true
+		Frame.Draggable = true
+
+		local function toggleF()
+
+			speaker.CameraMode = Enum.CameraMode.Classic
+
+			if nowe == true then
+				nowe = false
+				chr:FindFirstChild("HumanoidRootPart").Anchored = false
+				speaker.CameraMinZoomDistance = .5
+			else 
+				nowe = true
+				chr:FindFirstChild("HumanoidRootPart").Anchored = true
+				hum.WalkSpeed = 0
+				speaker.CameraMinZoomDistance = 5
+			end
+
+		end
+
+		onof.MouseButton1Down:connect(function()
+			toggleF()
+		end)
+
+		plus.MouseButton1Down:connect(function()
+			speeds = speeds + 1
+			speed.Text = speeds
+
+			warn(speeds)
+		end)
+		mine.MouseButton1Down:connect(function()
+			if speeds == 1 then
+				speed.Text = speeds
+			else
+				speeds = speeds - 1
+				speed.Text = speeds
+			end
+
+
+		end)
+
+		game:GetService("UserInputService").InputBegan:Connect(function(input, gp)
+			if gp then return end -- se for do job (garota de programa) nao funcionara
+			if input.KeyCode == Enum.KeyCode.J then
+				toggleF()
+			end
+
+		end)
+
+
+	end,
+})
+
 
 local Button = rev:CreateButton({
 	Name = "Fly",
