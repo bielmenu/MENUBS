@@ -50,9 +50,17 @@ local Window = ArrayField:CreateWindow({
 
 local Tab = Window:CreateTab("Main", 4483362458)
 
-local Section = Tab:CreateSection("Revistar",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
-Section:Set("Revistar")
+--local Section = Tab:CreateSection("Revistar",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+--Section:Set("Revistar")
 
+local TextChatService = game:GetService("TextChatService")
+
+local function sendMessage(msg)
+	local channel = TextChatService:WaitForChild("TextChannels"):WaitForChild("RBXGeneral")
+	channel:SendAsync(msg)
+end
+
+_G.Dados1 = "Sem Dados!"
 
 local function deletarNotifyDeErro()
 	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -128,7 +136,7 @@ local Button = Tab:CreateButton({
 
 	end,
 })
-
+--[[
 local Toggle = Tab:CreateToggle({
 	Name = "Toggle Example",
 	CurrentValue = false,
@@ -136,5 +144,22 @@ local Toggle = Tab:CreateToggle({
 	Callback = function(Value)
 		-- The function that takes place when the toggle is pressed
 		-- The variable (Value) is a boolean on whether the toggle is true or false
+	end,
+})
+]]
+
+local Input = Tab:CreateInput({
+	Name = "Teste",
+	PlaceholderText = "Escreva Algo",
+	NumbersOnly = false, -- If the user can only type numbers. Remove or set to false if none.
+	CharacterLimit = 15, --max character limit. Remove or set to false
+	OnEnter = true, -- Will callback only if the user pressed ENTER while being focused on the the box.
+	RemoveTextAfterFocusLost = false, -- Speaks for itself.
+	Callback = function(Text)
+		_G.Dados1 = Text
+		
+		task.wait(.5)
+		
+		game.ReplicatedStorage.NotifyClient:Fire(string.format("Dados: <font color=\'#e28e01\'>%s</font>",_G.Dados1),10)
 	end,
 })
