@@ -1,9 +1,9 @@
 local ArrayField = loadstring(game:HttpGet('https://raw.githubusercontent.com/bielmenu/MENUBS/refs/heads/main/Gui'))()
 
 local Window = ArrayField:CreateWindow({
-	Name = "ArrayField Example Window",
-	LoadingTitle = "ArrayField Interface Suite",
-	LoadingSubtitle = "by Arrays",
+	Name = "💥Biel Menu Mini City - New💥",
+	LoadingTitle = "Biel Menu",
+	LoadingSubtitle = "by BS",
 	ConfigurationSaving = {
 		Enabled = true,
 		FolderName = nil, -- Create a custom folder for your hub/game
@@ -11,43 +11,136 @@ local Window = ArrayField:CreateWindow({
 	},
 	Discord = {
 		Enabled = false,
-		Invite = "sirius", -- The Discord invite code, do not include discord.gg/
+		Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
 		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
 	},
-	KeySystem = true, -- Set this to true to use our key system
+	KeySystem = false, -- Set this to true to use our key system
 	KeySettings = {
-		Title = "ArrayField",
+		Title = "Key",
 		Subtitle = "Key System",
-		Note = "Join the discord (discord.gg/sirius)",
-		FileName = "ArrayFieldsKeys",
-		SaveKey = false,
+		Note = "",
+		FileName = "Key", -- It is recommended to use something unique as other scripts using ArrayField may overwrite your key file
+		SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
 		GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like ArrayField to get the key from
-		Key = {"Hello",'Bye'},
 		Actions = {
 			[1] = {
-				Text = 'Click here to copy the key link',
+				Text = 'Click here to copy the key link <--',
 				OnPress = function()
-
+					print('Pressed')
 				end,
 			}
 		},
+		Key = {"Sla"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
 	}
 })
-local Tab = Window:CreateTab("Tab Example", 4483362458) -- Title, Image
-local Tab2 = Window:CreateTab("Tab Example 2") -- Title, Image
-local Section = Tab:CreateSection("Section Example",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
+local TextChatService = game:GetService("TextChatService")
+
+local function sendMessage(msg)
+	local channel = TextChatService:WaitForChild("TextChannels"):WaitForChild("RBXGeneral")
+	channel:SendAsync(msg)
+end
+
+_G.Dados1 = "Sem Dados!"
+_G.PuxarItems = {}
+_G.KeyRevistar = Enum.KeyCode.T
+
+local function deletarNotifyDeErro()
+	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+	for _, gui in ipairs(playerGui:GetChildren()) do
+		if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
+			local frame = gui:FindFirstChild("Frame")
+			if frame then
+				for _, child in ipairs(frame:GetChildren()) do
+					if child:IsA("TextLabel") and child.Text:match("^Error #%d+") then
+						child:Destroy() -- Remove toda a notificação
+						print("Notificação de erro removida:", child.Text)
+					end
+				end
+			end
+		end
+	end
+end
+
+
+local Tab = Window:CreateTab("Main", 4483362458)
+local Section = Tab:CreateSection("Revistar",true)
 Tab:CreateSpacing(nil,10)
 local Button = Tab:CreateButton({
-	Name = "Button Example",
-	Info = {
-		Title = 'This is a Button',
-		Description = 'This is a description for the button you know.',
-	},
-	Interact = 'Changable',
+	Name = "Auto Puxar Items - Novo",
+	Interact = 'Ativar',
 	Callback = function()
-		print('Pressed')
+	
+
+		local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
+
+
+		while true do
+			task.wait(.1)
+			local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
+
+			if revistaInfo and revistaInfo.Value ~= nil then
+				local invTarget = revistaInfo.Value:FindFirstChild("Inv")
+
+				if invTarget then
+					local items = invTarget:GetChildren()
+
+					for i, item in ipairs(items) do
+						local args = {
+							"mudaInv",
+							tostring(i),
+							item.Name,
+							1
+						}
+
+						local itemGui = outroCont:FindFirstChild(item.Name, true)
+
+						if itemGui and itemGui:FindFirstChild("Qnt") and itemGui.Qnt:IsA("TextLabel") then
+							local text = itemGui.Qnt.Text
+
+							if text:sub(1, 1) == "x" then
+								text = text:sub(2)
+							end
+
+							local qtd = tonumber(text)
+							if qtd and qtd >= 1 then
+								args[4] = qtd
+							else
+								args[4] = 1
+							end
+						end
+
+						task.spawn(function()
+							local invRequest = game.ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
+							invRequest:InvokeServer(unpack(args))
+						end)
+					end
+				end
+			end
+			deletarNotifyDeErro()
+
+		end
+	
 	end,
 })
+
+local ItemsDown = Tab:CreateDropdown({
+	Name = "Multi Selection",
+	Options = {"PARAFAL", "AR-15", "G3", "IA2", "Glock 17", "Hi Power", "Faca", "Natalina", 
+		"Tratamento", "Escdudo", "C4", "Skate", "Planta Limpa", "Planta Suja", 
+		"Plástico Pronto", "Plástico Vazio", "Agua", "Drink", "Pizza", "Hamburguer", 
+		"Cookie", "Dinamite", "Lockpick", "iPhone 14"},
+	CurrentOption = {} ,
+	MultiSelection = true,
+	Flag = "PuxarVC",
+	Callback = function(Option)
+		_G.PuxarItems = Option
+		
+		game.ReplicatedStorage.NotifyClient:Fire(string.format("Dados: <font color=\'#e28e01\'>%s</font>",_G.Dados1),10)
+	end,
+})
+
 Tab:CreateSpacing(nil,10)
 local Toggle = Tab:CreateToggle({
 	Name = "Toggle Example",
@@ -62,6 +155,289 @@ local Toggle = Tab:CreateToggle({
 		print(Value)
 	end,
 })
+Tab:CreateSpacing(nil,10)
+local FreeCamBt = Tab:CreateButton({
+	Name = "FreeCam",
+	Interact = 'Ativar',
+	Callback = function()
+
+
+		local main = Instance.new("ScreenGui")
+		local Frame = Instance.new("Frame")
+		local up = Instance.new("TextButton")
+		local down = Instance.new("TextButton")
+		local onof = Instance.new("TextButton")
+		local plus = Instance.new("TextButton")
+		local speed = Instance.new("TextLabel")
+		local mine = Instance.new("TextButton")
+
+
+		local uiGG0 = Instance.new("UICorner")
+		uiGG0.CornerRadius = UDim.new(0, 4)
+		uiGG0.Parent = Frame
+
+		local uiGG = Instance.new("UICorner")
+		uiGG.CornerRadius = UDim.new(0, 4)
+		uiGG.Parent = onof
+
+		local uiGG2 = Instance.new("UICorner")
+		uiGG2.CornerRadius = UDim.new(0, 4)
+		uiGG2.Parent = mine
+		local uiGG2 = Instance.new("UICorner")
+		uiGG2.CornerRadius = UDim.new(0, 4)
+		uiGG2.Parent = plus
+
+		main.Name = "main"
+		main.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+		main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		main.ResetOnSpawn = false
+
+		Frame.Parent = main
+		Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		Frame.BorderSizePixel = 0
+		Frame.BackgroundTransparency = 0.15
+		Frame.Position = UDim2.new(0,0,0,0)
+		Frame.Size = UDim2.new(0, 220, 0, 79)
+
+
+
+		onof.Name = "onof"
+		onof.Parent = Frame
+		onof.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		onof.AnchorPoint = Vector2.new(0.5, 0.5)
+		onof.Position = UDim2.new(0.5, 0, 0.36, 0)
+		onof.BorderSizePixel = 0
+
+
+		onof.Size = UDim2.new(0.86, 0, 0.355, 0)
+		onof.Font = Enum.Font.MontserratBold
+		onof.Text = "FreeCam (J)"
+		onof.BackgroundTransparency = 0.35
+		onof.TextColor3 = Color3.fromRGB(255, 255, 255)
+		onof.TextScaled = true
+
+
+		plus.Name = "plus"
+		plus.Parent = Frame
+		plus.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		plus.AnchorPoint = Vector2.new(0.5, 0.5)
+		plus.Position = UDim2.new(0.23, 0, 0.77, 0)
+		plus.Size = UDim2.new(0.325, 0, 0.3, 0)
+		plus.Font = Enum.Font.MontserratBold
+		plus.Text = "+"
+		plus.TextColor3 = Color3.fromRGB(255, 255, 255)
+		plus.BackgroundTransparency = 0.35
+		plus.TextScaled = true
+		plus.TextWrapped = true
+
+		speed.Name = "speed"
+		speed.Parent = Frame
+		speed.AnchorPoint = Vector2.new(0.5, 0)
+		speed.BackgroundTransparency = 1
+		speed.Position = UDim2.new(0.5, 0, 0.561, 0)
+		speed.Size = UDim2.new(0.15, 0, 0.4, 0)
+		speed.Font = Enum.Font.MontserratBold
+		speed.Text = "1"
+		speed.TextColor3 = Color3.fromRGB(255, 255, 255)
+		speed.TextScaled = true
+		speed.TextWrapped = true
+
+		mine.Name = "mine"
+		mine.Parent = Frame
+		mine.BackgroundColor3 = Color3.fromRGB(85, 0, 127)
+		mine.AnchorPoint = Vector2.new(0.5, 0.5)
+		mine.Position = UDim2.new(0.767, 0, 0.77, 0)
+		mine.Size = UDim2.new(0.325, 0, 0.3, 0)
+		mine.Font = Enum.Font.MontserratBold
+		mine.BackgroundTransparency = 0.35
+		mine.Text = "–"
+		mine.TextColor3 = Color3.fromRGB(255, 255, 255)
+		mine.TextScaled = true
+		mine.TextWrapped = true
+
+		speeds = 1
+
+		local speaker = game:GetService("Players").LocalPlayer
+
+
+		local cam = workspace.CurrentCamera
+		local UIS = game:GetService("UserInputService")
+		local RS = game:GetService("RunService")
+		local onMobile = not UIS.KeyboardEnabled
+		local keysDown = {}
+		local rotating = false
+
+
+		local chr = game.Players.LocalPlayer.Character
+		local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+
+
+
+
+		nowe = false
+
+
+		local sens = .3
+
+		--speeds /= 10
+		if onMobile then sens*=2 end
+
+		local function renderStepped()
+			if not nowe then cam.CameraType = Enum.CameraType.Custom return end
+
+			cam.CameraType = Enum.CameraType.Scriptable
+			if rotating then
+				local delta = UIS:GetMouseDelta()
+				local cf = cam.CFrame
+				local yAngle = cf:ToEulerAngles(Enum.RotationOrder.YZX)
+				local newAmount = math.deg(yAngle)+delta.Y
+				if newAmount > 65 or newAmount < -65 then
+					if not (yAngle<0 and delta.Y<0) and not (yAngle>0 and delta.Y>0) then
+						delta = Vector2.new(delta.X,0)
+					end 
+				end
+				cf *= CFrame.Angles(-math.rad(delta.Y),0,0)
+				cf = CFrame.Angles(0,-math.rad(delta.X),0) * (cf - cf.Position) + cf.Position
+				cf = CFrame.lookAt(cf.Position, cf.Position + cf.LookVector)
+				if delta ~= Vector2.new(0,0) then cam.CFrame = cam.CFrame:Lerp(cf,sens) end
+				UIS.MouseBehavior = Enum.MouseBehavior.LockCurrentPosition
+			else
+				UIS.MouseBehavior = Enum.MouseBehavior.Default
+			end
+
+			if keysDown["Enum.KeyCode.W"] then
+				cam.CFrame *= CFrame.new(Vector3.new(0,0,-speeds))
+			end
+			if keysDown["Enum.KeyCode.A"] then
+				cam.CFrame *= CFrame.new(Vector3.new(-speeds,0,0))
+			end
+			if keysDown["Enum.KeyCode.S"] then
+				cam.CFrame *= CFrame.new(Vector3.new(0,0,speeds))
+			end
+			if keysDown["Enum.KeyCode.D"] then
+				cam.CFrame *= CFrame.new(Vector3.new(speeds,0,0))
+			end
+		end
+
+		RS.RenderStepped:Connect(renderStepped)
+
+		local validKeys = {"Enum.KeyCode.W","Enum.KeyCode.A","Enum.KeyCode.S","Enum.KeyCode.D"}
+
+		UIS.InputBegan:Connect(function(Input)
+			for i, key in pairs(validKeys) do
+				if key == tostring(Input.KeyCode) then
+					keysDown[key] = true
+				end
+			end
+			if Input.UserInputType == Enum.UserInputType.MouseButton2 or (Input.UserInputType == Enum.UserInputType.Touch and UIS:GetMouseLocation().X>(cam.ViewportSize.X/2)) then
+				rotating = true
+			end
+			if Input.UserInputType == Enum.UserInputType.Touch then
+				if Input.Position.X < cam.ViewportSize.X/2 then
+					touchPos = Input.Position
+				end
+			end
+		end)
+
+		UIS.InputEnded:Connect(function(Input)
+			for key, v in pairs(keysDown) do
+				if key == tostring(Input.KeyCode) then
+					keysDown[key] = false
+				end
+			end
+			if Input.UserInputType == Enum.UserInputType.MouseButton2 or (Input.UserInputType == Enum.UserInputType.Touch and UIS:GetMouseLocation().X>(cam.ViewportSize.X/2)) then
+				rotating = false
+			end
+			if Input.UserInputType == Enum.UserInputType.Touch and touchPos then
+				if Input.Position.X < cam.ViewportSize.X/2 then
+					touchPos = nil
+					keysDown["Enum.KeyCode.W"] = false
+					keysDown["Enum.KeyCode.A"] = false
+					keysDown["Enum.KeyCode.S"] = false
+					keysDown["Enum.KeyCode.D"] = false
+				end
+			end
+		end)
+
+		UIS.TouchMoved:Connect(function(input)
+			if touchPos then
+				if input.Position.X < cam.ViewportSize.X/2 then
+					if input.Position.Y < touchPos.Y then
+						keysDown["Enum.KeyCode.W"] = true
+						keysDown["Enum.KeyCode.S"] = false
+					else
+						keysDown["Enum.KeyCode.W"] = false
+						keysDown["Enum.KeyCode.S"] = true
+					end
+					if input.Position.X < (touchPos.X-15) then
+						keysDown["Enum.KeyCode.A"] = true
+						keysDown["Enum.KeyCode.D"] = false
+					elseif input.Position.X > (touchPos.X+15) then
+						keysDown["Enum.KeyCode.A"] = false
+						keysDown["Enum.KeyCode.D"] = true
+					else
+						keysDown["Enum.KeyCode.A"] = false
+						keysDown["Enum.KeyCode.D"] = false
+					end
+				end
+			end
+		end)
+
+
+		local savespeed = 16
+
+		Frame.Active = true
+		Frame.Draggable = true
+
+		local function toggleF()
+
+			speaker.CameraMode = Enum.CameraMode.Classic
+
+			if nowe == true then
+				nowe = false
+				hum.WalkSpeed = savespeed
+				speaker.CameraMinZoomDistance = .5
+			else 
+				nowe = true
+				savespeed = hum.WalkSpeed
+				hum.WalkSpeed = 0
+				speaker.CameraMinZoomDistance = 5
+			end
+
+		end
+
+		onof.MouseButton1Down:connect(function()
+			toggleF()
+		end)
+
+		plus.MouseButton1Down:connect(function()
+			speeds = speeds + 1
+			speed.Text = speeds
+
+			warn(speeds)
+		end)
+		mine.MouseButton1Down:connect(function()
+			if speeds == 1 then
+				speed.Text = speeds
+			else
+				speeds = speeds - 1
+				speed.Text = speeds
+			end
+
+
+		end)
+
+		game:GetService("UserInputService").InputBegan:Connect(function(input, gp)
+			if gp then return end -- se for do job (garota de programa) nao funcionara
+			if input.KeyCode == Enum.KeyCode.J then
+				toggleF()
+			end
+
+		end)
+
+	end,
+})
+
 Tab:CreateSpacing(nil,10)
 local ColorPicker = Tab:CreateColorPicker({
 	Name = "Color Picker",
@@ -130,7 +506,7 @@ local MultiSelectionDropdown = Tab:CreateDropdown({
 	MultiSelection = true,
 	Flag = "Dropdown1",
 	Callback = function(Option)
-		print(Option)
+		
 	end,
 })
 local SingleSelection = Tab:CreateDropdown({
