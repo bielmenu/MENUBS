@@ -1,9 +1,9 @@
 local ArrayField = loadstring(game:HttpGet('https://raw.githubusercontent.com/bielmenu/MENUBS/refs/heads/main/Gui'))()
 
 local Window = ArrayField:CreateWindow({
-	Name = "💥Biel Menu Mini City - New💥",
-	LoadingTitle = "Biel Menu",
-	LoadingSubtitle = "by BS",
+	Name = "ArrayField Example Window",
+	LoadingTitle = "ArrayField Interface Suite",
+	LoadingSubtitle = "by Arrays",
 	ConfigurationSaving = {
 		Enabled = true,
 		FolderName = nil, -- Create a custom folder for your hub/game
@@ -11,161 +11,223 @@ local Window = ArrayField:CreateWindow({
 	},
 	Discord = {
 		Enabled = false,
-		Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+		Invite = "sirius", -- The Discord invite code, do not include discord.gg/
 		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
 	},
-	KeySystem = false, -- Set this to true to use our key system
+	KeySystem = true, -- Set this to true to use our key system
 	KeySettings = {
-		Title = "Key",
+		Title = "ArrayField",
 		Subtitle = "Key System",
-		Note = "",
-		FileName = "Key", -- It is recommended to use something unique as other scripts using ArrayField may overwrite your key file
-		SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+		Note = "Join the discord (discord.gg/sirius)",
+		FileName = "ArrayFieldsKeys",
+		SaveKey = false,
 		GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like ArrayField to get the key from
+		Key = {"Hello",'Bye'},
 		Actions = {
 			[1] = {
-				Text = 'Click here to copy the key link <--',
+				Text = 'Click here to copy the key link',
 				OnPress = function()
-					print('Pressed')
+
 				end,
 			}
 		},
-		Key = {"Sla"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
 	}
 })
-
---[[Window:Prompt({
-	Title = 'Sej',
-	SubTitle = 'SubTitle',
-	Content = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-	Actions = {
-		Accept = {
-			Name = 'Accept',
-			Callback = function()
-				print('Pressed')
-			end,
-		}
-	}
-})]]
-
-local Tab = Window:CreateTab("Main", 4483362458)
-
---local Section = Tab:CreateSection("Revistar",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
---Section:Set("Revistar")
-
-local TextChatService = game:GetService("TextChatService")
-
-local function sendMessage(msg)
-	local channel = TextChatService:WaitForChild("TextChannels"):WaitForChild("RBXGeneral")
-	channel:SendAsync(msg)
-end
-
-_G.Dados1 = "Sem Dados!"
-_G.KeyRevistar = Enum.KeyCode.T
-
-local function deletarNotifyDeErro()
-	local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-	for _, gui in ipairs(playerGui:GetChildren()) do
-		if gui.Name == "NotifyGui" and gui:IsA("ScreenGui") then
-			local frame = gui:FindFirstChild("Frame")
-			if frame then
-				for _, child in ipairs(frame:GetChildren()) do
-					if child:IsA("TextLabel") and child.Text:match("^Error #%d+") then
-						child:Destroy() -- Remove toda a notificação
-						print("Notificação de erro removida:", child.Text)
-					end
-				end
-			end
-		end
-	end
-end
-
+local Tab = Window:CreateTab("Tab Example", 4483362458) -- Title, Image
+local Tab2 = Window:CreateTab("Tab Example 2") -- Title, Image
 local Section = Tab:CreateSection("Section Example",false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
-
-local Button = Section:CreateButton({
-	Name = "Puxar Tudo - Novo",
-	Interact = 'Ativar',
+Tab:CreateSpacing(nil,10)
+local Button = Tab:CreateButton({
+	Name = "Button Example",
+	Info = {
+		Title = 'This is a Button',
+		Description = 'This is a description for the button you know.',
+	},
+	Interact = 'Changable',
 	Callback = function()
-
-		local outroCont = game.Players.LocalPlayer.PlayerGui:WaitForChild("BackpackNova"):WaitForChild("Inventario"):WaitForChild("Outro").conteudo
-
-
-		while true do
-			task.wait(.1)
-			local revistaInfo = game.Players.LocalPlayer:FindFirstChild("RevistaPlayer")
-
-			if revistaInfo and revistaInfo.Value ~= nil then
-				local invTarget = revistaInfo.Value:FindFirstChild("Inv")
-
-				if invTarget then
-					local items = invTarget:GetChildren()
-
-					for i, item in ipairs(items) do
-						local args = {
-							"mudaInv",
-							tostring(i),
-							item.Name,
-							1
-						}
-
-						local itemGui = outroCont:FindFirstChild(item.Name, true)
-
-						if itemGui and itemGui:FindFirstChild("Qnt") and itemGui.Qnt:IsA("TextLabel") then
-							local text = itemGui.Qnt.Text
-
-							if text:sub(1, 1) == "x" then
-								text = text:sub(2)
-							end
-
-							local qtd = tonumber(text)
-							if qtd and qtd >= 1 then
-								args[4] = qtd
-							else
-								args[4] = 1
-							end
-						end
-
-						task.spawn(function()
-							local invRequest = game.ReplicatedStorage:WaitForChild("Modules"):WaitForChild("InvRemotes"):WaitForChild("InvRequest")
-							invRequest:InvokeServer(unpack(args))
-						end)
-					end
-				end
-			end
-			deletarNotifyDeErro()
-			
-		end
-
-
+		print('Pressed')
 	end,
 })
---[[
+Tab:CreateSpacing(nil,10)
 local Toggle = Tab:CreateToggle({
 	Name = "Toggle Example",
+	Info = {
+		Title = 'Slider template',
+		Image = '12735851647',
+		Description = 'Just a slider for stuff',
+	},
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-		-- The function that takes place when the toggle is pressed
-		-- The variable (Value) is a boolean on whether the toggle is true or false
+		print(Value)
 	end,
 })
-]]
+Tab:CreateSpacing(nil,10)
+local ColorPicker = Tab:CreateColorPicker({
+	Name = "Color Picker",
+	Color = Color3.fromRGB(2,255,255),
+	Flag = "ColorPicker1",
+	Callback = function(Value)
+		print(Value)
+	end
+})
+Tab:CreateSpacing(nil,10)
+local Slider = Tab:CreateSlider({
+	Name = "Slider Example",
+	Range = {0, 100},
+	Increment = 10,
+	Suffix = "Bananas",
+	CurrentValue = 10,
+	Flag = "Slider1",
+	Callback = function(Value)
+		print(Value)
+	end,
+})
+Tab:CreateSpacing(nil,10)
+local Keybind = Tab:CreateKeybind({
+	Name = "Keybind Example",
+	CurrentKeybind = "Q",
+	HoldToInteract = false,
+	Flag = "Keybind1",
+	Callback = function(Keybind)
 
-local Input = Section:CreateInput({
-	Name = "Teste",
-	PlaceholderText = "Escreva Algo",
-	NumbersOnly = false, -- If the user can only type numbers. Remove or set to false if none.
-	CharacterLimit = 15, --max character limit. Remove or set to false
-	OnEnter = true, -- Will callback only if the user pressed ENTER while being focused on the the box.
-	RemoveTextAfterFocusLost = false, -- Speaks for itself.
+	end,
+})
+Tab:CreateSpacing(nil,10)
+local Section2 = Tab:CreateSection("Inputs Examples",true)
+Tab:CreateInput({
+	Name = "Numbers Only",
+	PlaceholderText = "Amount",
+	NumbersOnly = true,
+	OnEnter = true,
+	RemoveTextAfterFocusLost = true,
 	Callback = function(Text)
-		_G.Dados1 = Text
-		
-		task.wait(.5)
-		
-		game.ReplicatedStorage.NotifyClient:Fire(string.format("Dados: <font color=\'#e28e01\'>%s</font>",_G.Dados1),10)
+		print(Text)
 	end,
 })
+Tab:CreateInput({
+	Name = "11 Characters Limit",
+	PlaceholderText = "Text",
+	CharacterLimit = 11,
+	RemoveTextAfterFocusLost = true,
+	Callback = function(Text)
+		print(Text)
+	end,
+})
+Tab:CreateInput({
+	Name = "No RemoveTextAfterFocusLost",
+	PlaceholderText = "Input",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(Text)
+		print(Text)
+	end,
+})
+local Section3= Tab:CreateSection("Dropdown Examples",true)
+local MultiSelectionDropdown = Tab:CreateDropdown({
+	Name = "Multi Selection",
+	Options = {"Option 1","Option 2",'Option 3'},
+	CurrentOption = {"Option 1","Option 3"} ,
+	MultiSelection = true,
+	Flag = "Dropdown1",
+	Callback = function(Option)
+		print(Option)
+	end,
+})
+local SingleSelection = Tab:CreateDropdown({
+	Name = "Single Selection",
+	Options = {"Option 1","Option 2"},
+	CurrentOption = "Option 1",
+	MultiSelection = false,
+	Flag = "Dropdown2",
+	Callback = function(Option)
+		print(Option)
+	end,
+})
+local Label = Tab:CreateLabel("Thanks for using Arrayfield, there were alot of issues but here we are!",Section)
+local Paragraph = Tab:CreateParagraph({Title = "Paragraph Example", Content = "Paragraph Example"},Section)
+local Sets = Tab:CreateSection('Set Functions',false)
+local SButton
+SButton = Tab:CreateButton({
+	Name = "Button Example",
+	Interact = 'Interact',
+	SectionParent = Sets,
+	Callback = function()
+		SButton:Set(nil,'New Interaction')
+	end
+})
+Tab:CreateButton({
+	Name = "Dropdown Set",
+	Interact = 'Interact',
+	SectionParent = Sets,
+	Callback = function()
+		SingleSelection:Set('Option 1')
+	end
+})
 
+local LockTesting = Tab:CreateSection('Lockdown Section',false)
+local ToLock = {}
+Tab:CreateToggle({
+	Name = "Lockdown",
+	SectionParent = LockTesting,
+	CurrentValue = false,
+	Callback = function(Value)
+		if Value then
+			for _,v in ToLock do
+				v:Lock('Locked')
+			end
+		else
+			for _,v in ToLock do
+				v:Unlock('Locked')
+			end
+		end
+	end,
+})
+Tab:CreateSpacing(LockTesting)
+ToLock.Button = Tab:CreateButton({
+	SectionParent = LockTesting,
+	Name = "Button Example",
+	Interact = 'Interact',
+	Callback = function()
+		print('Pressed')
+	end,
+})
+ToLock.Toggle = Tab:CreateToggle({
+	SectionParent = LockTesting,
+	Name = "Toggle Example",
+	CurrentValue = false,
+	Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		print(Value)
+	end,
+})
+ToLock.ColorPicker = Tab:CreateColorPicker({
+	Name = "Color Picker",
+	SectionParent = LockTesting,
+	Color = Color3.fromRGB(2,255,255),
+	Flag = "ColorPicker2",
+	Callback = function(Value)
+		print(Value)
+	end
+})
+ToLock.Slider = Tab:CreateSlider({
+	SectionParent = LockTesting,
+	Name = "Slider Example",
+	Range = {0, 100},
+	Increment = 10,
+	Suffix = "Bananas",
+	CurrentValue = 10,
+	Flag = "Slider2",
+	Callback = function(Value)
+		print(Value)
+	end,
+})
+ToLock.Keybind = Tab:CreateKeybind({
+	Name = "Keybind Example",
+	CurrentKeybind = "Q",
+	HoldToInteract = false,
+	SectionParent = LockTesting,
+	Flag = "Keybind2",
+	Callback = function(Keybind)
 
+	end,
+})
